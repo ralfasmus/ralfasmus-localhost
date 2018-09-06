@@ -54,7 +54,8 @@ class View {
         $data = array("instance-html" => $resultHtml);
         $data["instances-json"] = $resultData;
         header('Content-Type:json');
-        return json_encode($data);
+        $encoded = json_encode($data);
+        return($encoded);
       }
     } else {
       // Ergebnis als JSON

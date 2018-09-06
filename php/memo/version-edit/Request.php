@@ -11,7 +11,13 @@ class Request extends ObjectAbstract {
   private $messages = array();
   private $messageLevel = 'debug';
 
-  /**
+
+    static public function log($text) {
+        $logFile = Conf::get("LOG_FILE_NAME_BASE") . "/log.txt";
+        file_put_contents($logFile, "$text\r\n", FILE_APPEND);
+    }
+
+    /**
    * POST/GET Request verarbeiten.
    */
   public function processRequest($action) {

@@ -294,3 +294,8 @@ function copyToClipboard(id) {
 function removeVorlageString(str) {
   return str.replace(' #vorlage ', '').replace('#vorlage ', '').replace(' #vorlage', '').replace('#vorlage', '');
 }
+
+function updateLists() {
+  filterUpdateAll();
+  summenUpdateAll();
+}

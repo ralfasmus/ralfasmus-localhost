@@ -237,8 +237,7 @@ function deleteInstance(instance) {
     success: (function (data, textStatus, jqXHR) {
       logInfo("Deleted Instance: " + textStatus);
       $(instance).replaceWith('');
-      filterUpdateAll();
-      summenUpdateAll();
+      updateLists();
     }),
     error: (function (jqXHR, textStatus, errorThrown) {
       logError("Deleted Instance: " + textStatus + errorThrown);
@@ -341,8 +340,7 @@ function updateInstanceData(instance, instanceData, loadInsideViews) {
     bindInstanceEvents(instance);
     loadViews(instance);
   } else {
-    filterUpdateAll();
-    summenUpdateAll();
+    updateLists();
   }
 }
 

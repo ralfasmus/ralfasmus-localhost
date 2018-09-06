@@ -83,8 +83,7 @@ function loadView(viewElement) {
       }
       updateInstancesInitial(instances, instancesData, true);
       bindListEvents(viewElement);
-      filterUpdateAll();
-      summenUpdateAll();
+      updateLists();
       berechneAutoCompleteListen();
       if (--loadingCounter == 0) {
         showStatus("Daten geladen.", true);
@@ -93,7 +92,7 @@ function loadView(viewElement) {
 
     }),
     error: (function (jqXHR, textStatus, errorThrown) {
-      logError("Loaded View: " + textStatus + errorThrown);
+      logError("Error loading View: " + dataView + " Status: " + textStatus + errorThrown + " ResponseURL:" + jqXHR.responseURL + " ResponseText: " + jqXHR.responseText);
       displayErrors(jqXHR, 'html', false);
     }),
     complete: // after succss/error

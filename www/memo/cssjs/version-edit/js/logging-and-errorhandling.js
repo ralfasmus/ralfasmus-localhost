@@ -1,7 +1,7 @@
 
 function logError(s) {
   if (logLevel > 0) {
-    logError(s);
+      console.error(s);
   }
 }
 
