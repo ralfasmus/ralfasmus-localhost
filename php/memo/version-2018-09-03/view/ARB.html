@@ -1,0 +1,85 @@
+<div class="row"
+     id="IDCOUNT"
+     data-datum=""
+     data-element="instance"
+     data-instance-id="ARBid"
+     data-instance-type="ARB">
+
+  <div class = "col-md-1 prop-datum">
+    <div class = "input-group">
+      <input type = "text"
+             name = "datum"
+             data-element="datum"
+             class = "datum form-control bg D">
+      <span class = "input-group-addon  btn id-to-clipboard" data-element="id-to-clipboard-button">id</span >
+    </div>
+  </div>
+
+  <div class = "col-md-9 width70 prop-name focus" title="">
+    <div class = "input-group">
+      <span class = "input-group-addon  btn duplicate" data-element="duplicate-button">DUP</span >
+      <input type = "text"
+             name = "name"
+             data-element="name"
+             class = "autocomplete ARB name on-change-update-autocomplete form-control bg N">
+      <span class = "input-group-addon  btn mark1" data-element="mark1-button"  title="Markieren / Markierung löschen">M<sub>ark</sub></span >
+      <span class = "input-group-addon  btn kaz_kann_spaeter" data-element="kaz_kann_spaeter-button"  title="Später in KAZ eingeben">L<sub>ATER</sub></span >
+      <span class = "input-group-addon  btn save" data-element="save-button">S<sub>AVE</sub></span >
+      <span class = "input-group-addon  btn delete" data-element="delete-button" title="Löschen!">D<sub>EL</sub></span >
+      <span class = "input-group-addon  btn archive" data-element="archive-button"  title="Archivieren und hier löschen! Sichtbar dann nur in trackarchive.localhost">A<sub>RCH</sub></span >
+    </div>
+  </div>
+
+  <div class = "col-md-1 prop-stunden">
+    <div class = "input-group">
+      <input type = "text"
+             name = "stunden"
+             data-element="stunden"
+             class = "form-control number-right bg h">
+    </div>
+  </div>
+
+  <div class = "col-md-1 prop-kaz">
+    <div class = "input-group">
+      <span class = "input-group-addon btn copy-h-nach-kaz-trigger"
+            title="Übernehme Stunden nach KAZ und kopiere in die Zwischenablage: Text ab erster @@ bis zur nächsten @@ oder bis zum Ende">
+        &raquo;</span>
+      <span class = "input-group-addon btn copy-h-nach-kaz-trigger mit-datum"
+            title="Übernehme Stunden nach KAZ und kopiere in die Zwischenablage: Datum + Text ab erster @@ bis zur nächsten @@ oder bis zum Ende">
+        &raquo;</span>
+      <input type = "text"
+             name = "kaz"
+             data-element="kaz"
+             class = "form-control number-right bg K">
+    </div>
+  </div>
+
+  <div class = "col-md-1 prop-archive hidden">
+    <div class = "input-group">
+      <input type = "text"
+             name = "archive"
+             data-element="archive"
+             class = ""
+             value="0">
+    </div>
+  </div>
+  
+  <div class = "col-md-1 prop-kaz_kann_spaeter hidden">
+    <div class = "input-group">
+      <input type = "text"
+             name = "kaz_kann_spaeter"
+             data-element="kaz_kann_spaeter"
+             class = ""
+             value="0">
+    </div>
+  </div>
+  <div class = "col-md-1 prop-mark1 hidden">
+      <div class = "input-group">
+        <input type = "text"
+               name = "mark1"
+               data-element="mark1"
+               class = ""
+               value="0">
+      </div>
+  </div>
+</div>

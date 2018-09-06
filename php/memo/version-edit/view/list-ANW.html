@@ -1,0 +1,52 @@
+<div class="list-parent" data-list-instance-type='ANW'>
+  <div class="row filterzeile">
+    <div class = "col-md-1" title="heute gestern hwoche vwoche hmonat vmonat hjahr vjahr tt.mm.jjjj">
+      <div class = "input-group">
+        <span class = "input-group-addon filter-counter" data-selector-attribute="data-select-datum"
+              title="DIESEN Filter matchende Elemente / gesamt">
+          <sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+        <input class="filter accepting-input form-control" type = "text" name = "filter-anwesenheit-datum" data-selector-attribute="data-select-datum"
+               value="" placeholder = "..."   title="Filtere nach Datum">
+      </div>
+    </div>
+    <div class = "col-md-2">
+      <div class = "input-group">
+        <span class = "input-group-addon  btn neu" data-element="neu-button">NEU</span >
+        <input type = "text"
+               name = "xxx"
+               class = ""
+               disabled="disabled"
+               value="">
+      </div>
+    </div>
+    <div class = "col-md-1 summe stunden" title="Summe Stunden">
+      <div class = "input-group">
+        <input type = "text"
+               name = "summe-stunden"
+               class = "form-control bg S"
+               disabled="disabled"
+               value="">
+      </div>
+    </div>
+    <div class = "col-md-5">
+      <div class = "input-group">
+        <span class = "input-group-addon filter-counter" data-selector-attribute="data-select-bemerkung" title="DIESEN Filter matchende Elemente / gesamt">
+          <sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+        <input class = "filter accepting-input form-control" type = "text" name = "filter-anwesenheit-bemerkung"
+               data-selector-attribute="data-select-bemerkung" value="" placeholder = "... Filter: Bemerkung ..."
+               title="Filtere nach Bemerkung">
+        <span class = "input-group-addon  btn showtext" data-text-column-separator="tab" title="Datum, h, Text: separaiert durch TAB, in der aktuellen Sortierung ausgeben">Text/tab</span >
+        <span class = "input-group-addon  btn showtext" data-text-column-separator=";" title="Datum, h, Text: separaiert durch ;, in der aktuellen Sortierung ausgeben">Text/csv</span >
+
+        <span class = "input-group-addon" title="ALLE Filter matchende Elemente / gesamt"><sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+        <span class = "input-group-addon  btn accepting-click selektierte-loeschen" title="ALLE! sichtbaren löschen!">Löschen!</span >
+        <span class = "input-group-addon  btn accepting-click selektierte-archivieren" title="ALLE! sichtbaren archivieren und hier löschen! Sichtbar dann nur in trackarchive.localhost">Archivieren!</span >
+
+      </div>
+    </div>
+  </div>
+  <div data-loop="ANW" data-view="ANW.html" data-sort-direction="ascending" data-load-events='page-load'>
+  </div>
+
+</div>
+<h1 class="loading-message" style="margin:auto; width:300px; margin-top:200px;">Lade Daten ...</h1>

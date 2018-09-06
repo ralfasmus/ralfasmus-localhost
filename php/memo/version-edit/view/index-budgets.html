@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    @include="head.include.html"
+    <link rel="icon" type="image/png" href="icon16x16track.png" />
+  </head>
+  <body>
+    <div id="page" class="index-budgets  container-fluid">
+      @include="page.top.include.html"
+      <div class="row">
+        @include="top.menu.include.html"
+      </div>
+      <div data-view="list-BUD.html" data-load-events="page-load">
+
+      </div>
+    </div>
+  </body>
+</html>

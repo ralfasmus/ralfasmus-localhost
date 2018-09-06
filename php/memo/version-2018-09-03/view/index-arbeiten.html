@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    @include="head.include.html"
+    <link rel="icon" type="image/png" href="icon16x16track.png" />
+  </head>
+  <body>
+    <a id="pagetop"></a>
+    <a id="pagearbeit"></a>
+    <div id="page" class="index-arbeiten container-fluid">
+      @include="page.top.include.html"
+      <div class="row">
+        @include="track.bottom.menu.include.html"
+        @include="top.menu.arbeiten.include.html"
+      </div>
+      <div class="row track-differenzen">
+        @include="track.differenzen.include.html"
+      </div>
+
+      <div id="lasttouched"><span>Zuletzt bearbeitet: </span><span class="lastid"></span><div class="lastinstance"></div></div>
+
+      <div class="row" id="copytokaz">
+        <div class = "col-md-6"><strong>ARBEIT</strong></div>
+        <div class = "col-md-4">
+          <div class = "input-group">
+            <span class = "input-group-addon btn copy-to-clipboard-trigger">
+              &raquo;</span>
+            <!-- max. 60 Zeichen in KAZ Bemerkung -->
+            <input size="60" maxlength="60" type="text" />
+          </div>
+        </div>
+      </div>
+      <div data-view="list-ARB.html" data-load-events="page-load">
+      </div>
+
+      <a id="pagebudgets"></a>
+      <div class="row">
+        @include="track.bottom.menu.include.html"
+      </div>
+      <h2>Budgets</h2>
+      <div data-view="list-BUD.html" data-load-events="page-load">
+
+      </div>
+
+      <a id="pageanwesenheit"></a>
+      <div class="row">
+        @include="track.bottom.menu.include.html"
+      </div>
+      <div class="row track-differenzen">
+        @include="track.differenzen.include.html"
+      </div>
+      <h2>Anwesenheit <span class="small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4:15...6h -15' &nbsp;&nbsp;/&nbsp;&nbsp; 6:15...7h -30' &nbsp;&nbsp;/&nbsp;&nbsp; ab 7:15h -45'</span></h2>
+      <div data-view="list-ANW.html" data-load-events="page-load">
+
+      </div>
+
+      <br><br>
+    </div>
+  </body>
+</html>

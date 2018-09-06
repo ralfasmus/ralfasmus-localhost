@@ -1,0 +1,70 @@
+<div class="row"
+     id="IDCOUNT"
+     data-element="instance"
+     data-instance-id="ANWid"
+     data-instance-type="ANW">
+
+  <div class = "col-md-1 prop-datum">
+    <div class = "input-group">
+      <input type = "text"
+             name = "datum"
+             data-element="datum"
+             class = "datum form-control">
+    </div>
+  </div>
+
+  <div class = "col-md-2 prop-zeiten focus">
+    <div class = "input-group">
+      <input type = "text"
+             name = "zeiten"
+             data-element="zeiten"
+             class = "form-control">
+      <span class = "input-group-addon">
+        von - bis</span>
+    </div>
+  </div>
+
+  <div class = "col-md-1 prop-stunden">
+    <div class = "input-group">
+      <input type = "text"
+             name = "stunden"
+             data-element="stunden"
+             class = "form-control">
+      <span class = "input-group-addon">
+        h</span>
+    </div>
+  </div>
+
+  <div class = "col-md-4 prop-bemerkung" title="">
+    <div class = "input-group">
+      <span class = "input-group-addon  btn schon_in_kaz" data-element="schon_in_kaz-button"  title="In KAZ eingegeben">KAZ</span >
+      <span class = "input-group-addon  btn save" data-element="save-button">S<sub>ave</sub></span >
+      <input type = "text"
+             name = "bemerkung"
+             data-element="bemerkung"
+             class = "autocomplete form-control">
+      <span class = "input-group-addon  btn delete" data-element="delete-button">DEL</span >
+      <span class = "input-group-addon  btn archive" data-element="archive-button"  title="Archivieren und hier löschen! Sichtbar dann nur in trackarchive.localhost">A<sub>RCH</sub></span >
+
+    </div>
+  </div>
+
+  <div class = "col-md-1 prop-archive hidden">
+    <div class = "input-group">
+      <input type = "text"
+             name = "archive"
+             data-element="archive"
+             class = ""
+             value="0">
+    </div>
+  </div>
+  <div class = "col-md-1 prop-schon_in_kaz hidden">
+    <div class = "input-group">
+      <input type = "text"
+             name = "schon_in_kaz"
+             data-element="schon_in_kaz"
+             class = ""
+             value="0">
+    </div>
+  </div>
+</div>
