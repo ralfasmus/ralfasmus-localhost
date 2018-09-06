@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    @include="head.include.html"
+    <link rel="icon" type="image/png" href="icon16x16track.png" />
+  </head>
+  <body>
+    <a id="pagetop"></a>
+    <a id="pagearbeit"></a>
+    <div id="page" class="index-arbeiten container-fluid">
+      @include="page.top.include.html"
+      <div class="row">
+        @include="track.bottom.menu.include.html"
+        @include="top.menu.include.html"
+      </div>
+      <div class="row track-differenzen">
+        @include="track.differenzen.include.html"
+      </div>
+      <h2>Arbeit</h2>
+      <div data-view="list-ARB.html" data-load-events="page-load">
+
+      </div>
+
+      <a id="pagebudgets"></a>
+      <div class="row">
+        @include="track.bottom.menu.include.html"
+      </div>
+      <h2>Budgets</h2>
+      <div data-view="list-BUD.html" data-load-events="page-load">
+
+      </div>
+
+      <a id="pageanwesenheit"></a>
+      <div class="row">
+        @include="track.bottom.menu.include.html"
+      </div>
+      <div class="row track-differenzen">
+        @include="track.differenzen.include.html"
+      </div>
+      <h2>Anwesenheit</h2>
+      <div data-view="list-ANW.html" data-load-events="page-load">
+
+      </div>
+
+      <br><br>
+    </div>
+  </body>
+</html>

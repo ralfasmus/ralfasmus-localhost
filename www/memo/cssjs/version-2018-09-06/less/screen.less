@@ -1,0 +1,461 @@
+// lessc /c/asmus/vhosts/trackmonat.localhost/project/public/less/asm.less  /c/asmus/vhosts/trackmonat.localhost/project/public/css/asm.css
+
+
+  @light-yellow : #ffa;
+  @lighter-yellow : #ffe9aa;
+  @arbDefaultColor: #1c5803;
+  @KazKannSpaeterFontColor: #c78c01;
+  @SchonInKazFontColor: #129804;
+  @mark1FontColor: #f54444;
+  @mark1BackgroundColor: #fff9b3;
+  @mygreen1: #4cae4c;
+  @mygreen2: #4B974B;
+
+
+.mark() {
+  font-weight: bold!important;
+  color: @mark1FontColor!important;
+  background-color: @mark1BackgroundColor!important;
+}
+
+.list-parent[data-list-instance-type="ARB"] {
+  .col-md-1 {
+    width : 9.5%; // schmale Spalten etwas breiter - statt Bootstrap: width: 8.33333333%;
+  }
+  .width70 {
+    width : 71%; // Name Spalte etwas schmaler - statt Bootstrap: width: 70%;
+  }
+}
+
+  // Kleine Backgrounds in den Zellen-Ecken:
+  .smallBackgrounds() {
+    .bg {
+      background-repeat: no-repeat;
+      background-position: right top;
+      &.sortieren.active.sort-up {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='19px' width='10px'><text x='0' y='12' fill='grey' font-size='12'>&#x21D3;</text></svg>");
+      }
+      &.sortieren.active.sort-down {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='19px' width='10px'><text x='0' y='12' fill='grey' font-size='12'>&#x21D1;</text></svg>");
+      }
+      &.sortieren {
+        background-image: none;
+      }
+      &.filter.active,
+      &.filter-counter.active {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='19px' width='10px'><text x='0' y='12' fill='black' font-size='12'>f</text></svg>");
+      }
+      &.filter.active.e,
+      &.filter-counter.active.e{
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='19px' width='10px'><text x='0' y='12' fill='black' font-size='12'>e</text></svg>");
+      }
+      &.S {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='19px' width='10px'><text x='0' y='12' fill='black' font-size='12'>∑</text></svg>");
+      }
+      &.A {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='9px' width='10px'><text x='0' y='9' fill='grey' font-size='9'>A</text></svg>");
+      }
+      &.h {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='19px' width='10px'><text x='0' y='12' fill='grey' font-size='12'>h</text></svg>");
+      }
+      &.B {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='9px' width='10px'><text x='0' y='9' fill='grey' font-size='9'>B</text></svg>");
+      }
+      &.K {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='19px' width='10px'><text x='0' y='12' fill='grey' font-size='12'>K</text></svg>");
+      }
+      &.N {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='9px' width='10px'><text x='0' y='9' fill='grey' font-size='9'>N</text></svg>");
+      }
+      &.Z {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='9px' width='10px'><text x='0' y='9' fill='grey' font-size='9'>Z</text></svg>");
+      }
+      &.D {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='9px' width='10px'><text x='0' y='9' fill='grey' font-size='9'>D</text></svg>");
+      }
+      
+    }
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  // Aktivierte Filter oder Sortierung: rot
+  .active {
+    border: 1px solid red;
+  }
+  
+  .ui-autocomplete {
+    width:1400px;
+    overflow:visible;
+  }
+  .ui-autocomplete, .ui-datepicker {
+    //position: absolute;
+    //cursor: default;
+    //background: white;
+    padding:10px;
+    //border: 1px solid gray;
+    //z-index:30 !important;
+  }
+  
+  
+  #page {
+  
+    &.index-notes {
+      background-color: transparent;
+    }
+  
+    &.index-arbeiten a[href*=index-arbeiten],
+    &.index-anwesenheit a[href*=index-anwesenheit],
+    &.index-budgets a[href*=index-budgets],
+    &.index-notes a[href*=index-notes],
+    &.index-budgets-mit-arbeiten a[href*=budgets-mit-arbeiten],
+    &.index-all a[href*=index-all]
+    
+    {
+      font-weight:bold;
+      color: darkred;
+    }
+    
+    margin: 5px 5px 0 5px;
+    .container-fluid {
+      clear:both;
+    }
+    
+    .bottom-menu-include {
+      .btn {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+    }
+    
+    .list-parent {
+      z-index:0;
+      .row {
+        &.empty20 * {
+          height:20px;
+        }
+        &.empty40 * {
+          height:40px;
+        }
+        // Kopf und Instanz-Zeilen:
+        .smallBackgrounds();
+        .filter .input-group-addon.smallfont {
+          padding-left: 3px;
+          padding-right:3px;
+        }
+        .filter-counter[data-selector-attribute="any"] {
+          color: darkred;
+        }
+        
+        // Gewisse Zaheln immer rechts und Platz fuer small background lassen:
+        .number-right {
+          text-align: right;
+          padding-right:20px;
+        }
+        
+        // Filterzeile
+        &.filterzeile {
+            .btn {
+                &[data-selector-attribute="data-select-mark1"] {
+                    color: @mark1FontColor;
+                }
+                &[data-selector-attribute="data-select-kaz_kann_spaeter"] {
+                    color: @KazKannSpaeterFontColor;
+                }
+                &[data-selector-attribute="data-select-kaz"] {
+                    color: @SchonInKazFontColor;
+                }
+            }
+        }
+        
+        //Instanz-Zeilen:
+        &[data-element=instance] {
+          
+          &:hover {
+            background-color: #e4f5e5;
+            input {
+              background-color: @lighter-yellow;
+            }
+          }
+          input:focus {
+            background-color: @light-yellow;
+          }
+          
+          
+          &.saved {
+            & [data-element=save-button] {
+              color:red;
+            }
+            input {
+              border:1px solid red;
+            }
+          }
+          
+          &.edit-instance {
+            margin-top:10px;
+            margin-bottom:10px;
+            padding-top:10px;
+            padding-bottom:10px;
+            background-color:#b0e69d;
+            [data-element=edit-button] {
+              color:red;
+            }
+          }
+          // Stunden immer fett:
+          .prop-stunden input {
+            font-weight:bold;
+          }
+          
+          .prop-datum {
+            input {
+              text-align:center;
+            }
+            .btn {
+              padding:5px;
+            }
+          }
+  
+          &.mark1 {
+            .prop-name input {
+              .mark();
+            }
+            .btn.mark1, .btn.mark1 * {
+              .mark();
+            }
+          }
+          &[data-instance-type="ARB"] {
+            * {
+              color: @arbDefaultColor;
+            }
+            &.noch_nicht_in_kaz.kaz_kann_spaeter {
+              input, * {
+                color: @KazKannSpaeterFontColor;
+              }
+            }
+            &.schon_in_kaz {
+              input, * {
+                color: @SchonInKazFontColor;
+              }
+            }
+          }
+          &[data-instance-type="BUD"] {
+            * {
+              color: #993432;
+            }
+          }
+          &[data-instance-type="ANW"] {
+            &.red.nicht_in_kaz {
+              .prop-zeiten, .prop-stunden {
+                input {
+                  color: red;
+                }
+              }
+            }
+          }
+          &[data-instance-type="ARB"], &[data-instance-type="ANW"] {
+            &.schon_in_kaz {
+              input, * {
+                color : @SchonInKazFontColor;
+              }
+            }
+          }
+          
+          &[data-instance-type="NOT"], &[data-instance-type="SON"]  {
+            .prop-datum * {
+              font-size : 11px;
+            }
+            // editierbare Elemente nur zeigen wenn instance.edit-instance gesetzt.
+            // dann die nicht editierbaren equivalenten elemente ausblenden:
+            // wenn instance.with-text gesetzt ist, zeige text, sonst nicht:
+            .show-on-edit, .show-on-with-info, .show-on-with-text {
+              display: none;
+            }
+            &.edit-instance {
+              .show-on-edit {
+                display: block;
+              }
+              &.with-info {
+                .show-on-with-info,
+                .show-on-with-text {
+                  display:none;
+                }
+              }
+            }
+            &.has-no-info .with-info {
+              color: #ddd;
+            }
+            &.has-no-files .with-files {
+              color: #ddd;
+            }
+            &.has-no-text .with-all {
+              color: #ddd;
+            }
+            &.with-info, &.with-files, &.with-text  {
+              background-color: #ebffee;
+              /*
+              margin-top: 10px;
+              border-top: 10px solid @mygreen2;
+              border-bottom: 10px solid @mygreen2;
+              border-left: 10px solid @mygreen1;
+              border-right: 10px solid @mygreen1;
+              */
+              padding-top:10px;
+              padding-bottom:20px;
+              .prop-art *, .prop-datum, .prop-name input{
+                font-weight:bold;
+                color: #860000;
+              }
+            }
+            &.with-info, &.with-files {
+              .show-on-with-info {
+                display:block;
+              }
+            }
+            &.with-text {
+              .show-on-with-text {
+                display:block;
+              }
+            }
+          }
+        }
+      }
+      
+      // Sonstiges: Autocomplete etwas luftiger darstellen:
+      .ui-autocomplete .ui-menu-item {
+        padding:2px;
+        font-size: 1.1em;
+      }
+    }
+    
+    // Statusanzeige oben rechts:
+    #status {
+      font-size:18px;
+      margin-top:5px;
+      color:green;
+      &.error {
+        //transition: opacity 1s;
+        //-webkit-transition: opacity 1s;
+        //opacity: 1s;
+        color:red;
+        font-weight:bold;
+      }
+    }
+    
+    .track-differenzen {
+      * {
+        font-size: 12px;
+        color:gray;
+      }
+      .differenz {
+        color: green;
+        margin-right:10px;
+      }
+      .negative .differenz {
+        color:red;
+      }
+    }
+    
+    .son-ansicht {
+      .list-parent {
+        padding-top: 20px;
+        & > .row {
+          margin-bottom:20px;
+        }
+      }
+      .row.r1 .form-control {
+        background-color: #224606;
+        color: white;
+      }
+      .linkliste a input {
+        background-color: #224606;
+        margin-bottom: 10px;
+        padding:20px;
+      }
+      .prop-pos, .prop-name {
+        height: 60px;
+        background-color: #224606;
+        padding-top: 13px;
+        margin-bottom: 20px;
+        margin-top: 30px;
+      }
+      
+      * {
+        color: white;
+        background-color:black;
+        font-size:25px;
+        font-family: monospace;
+      }
+      input.form-control {
+        border:0;
+      }
+      .prop-name {
+        * {
+          font-size: 40px;
+          font-family: sans-serif;
+        }
+      }
+      .info * {
+        font-size:30px;
+        font-family: monospace;
+      }
+      a.big {
+        font-size:40px;
+        display:block;
+        background-color: darkred;
+        padding:10px;
+        
+      }
+    }
+    
+    #lasttouched {
+      margin-top: 15px;
+      * {
+        font-size: 11px;
+      }
+      .form-control {
+        height: 20px;
+      }
+      input {
+        border: 1px solid red;
+      }
+      .input-group-addon.btn {
+        visibility:hidden;
+      }
+    }
+    
+    h2 {
+      padding: 5px 0;
+    }
+    
+    #copytokaz {
+      clear:both;
+      margin-bottom: 10px;
+    }
+    
+    tr {
+      &.odd {
+        background-color: #eee;
+      }
+      &.strong {
+        font-weight:bold;
+      }
+      td {
+        padding: 6px 3px;
+        
+      }
+    }
+    span.small {
+      font-size: 14px;
+    }
+  }
+  
+  .index-budgets-statistik {
+    table tr:hover {
+      border: 1px solid darkgreen;
+    }
+    .btn sub {
+    
+    }
+  }

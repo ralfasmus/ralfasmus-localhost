@@ -1,0 +1,21 @@
+<div class="list-parent" data-list-instance-type='SON'>
+  <div class="row filterzeile">
+
+    <div class = "col-md-2 ">
+      <div class = "input-group">
+
+        <span class = "input-group-addon filter-counter" data-selector-attribute="any"
+              title="ALLE Filter matchende Elemente / gesamt">
+          <sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+
+        <input class = "filter accepting-input" size="16"  type = "text" name = "filter-note-name"
+               data-selector-attribute="data-select-name" value="" placeholder = "... Filter: Titel ..."
+               >
+      </div>
+    </div>
+  </div>
+  <div data-loop="SON" data-view="SON-LINKS.html" data-sort-direction="descending" data-load-events='page-load'>
+  </div>
+  <div data-loop="SON" data-view="SON-ANSICHT.html" data-sort-direction="descending" data-load-events='page-load'>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="list-parent" data-list-instance-type='NOT' style="z-index:0;">
+  <div class="row filterzeile">
+    <div class = "col-md-1" title="Filtere nach Datum: heute gestern hwoche vwoche hmonat vmonat hjahr vjahr tt.mm.jjjj">
+      <div class = "input-group">
+        <span class = "input-group-addon filter-counter" data-selector-attribute="data-select-datum"
+              title="DIESEN Filter matchende Elemente / gesamt">
+          <sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+        <input class="filter accepting-input form-control" type = "text" name = "filter-note-datum"
+               data-selector-attribute="data-select-datum" value="" placeholder = "...">
+      </div>
+    </div>
+
+
+    <div class = "col-md-2 ">
+      <div class = "input-group">
+
+        <input class = "filter autocomplete NOT art accepting-input" size="30" type = "text" name = "filter-note-art"
+               data-selector-attribute="data-select-art" value="" placeholder = "... Filter: Art ..."
+               title="Filtere nach Art"
+               >
+      </div></div>
+
+    <div class = "col-md-8 ">
+      <div class = "input-group">
+
+        <span class = "input-group-addon  btn neu" data-element="neu-button">NEU</span >
+        <span class = "input-group-addon filter-counter" data-selector-attribute="any"
+              title="ALLE Filter matchende Elemente / gesamt">
+          <sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+
+        <input class = "filter accepting-input" size="27" type = "text" name = "filter-note-everything"
+               data-selector-attribute="data-select-everything" value="" placeholder = "... Filter: Alles ..."
+               title="Filtere nach Titel,Text"
+               >
+        <input class = "filter accepting-input" size="16"  type = "text" name = "filter-note-name"
+               data-selector-attribute="data-select-name" value="" placeholder = "... Filter: Name ..."
+               >
+        <span class = "input-group-addon  btn sortieren accepting-click bg active sort-down"
+              data-sort-attribute="data-sort-art"  title="Sortiere nach Art + Name">A+N</span >
+        <span class = "input-group-addon  btn sortieren accepting-click bg sort-up"
+              data-sort-attribute="data-sort-id" title="Sortiere nach id">id</span >
+        <span class = "input-group-addon  btn sortieren accepting-click bg sort-down"
+              data-sort-attribute="data-sort-datum"  title="Sortiere nach Datum">D</span >
+        <span class = "input-group-addon  btn sortieren accepting-click bg sort-up"
+              data-sort-attribute="data-sort-name"  title="Sortiere nach Name">N</span >
+        <span class = "input-group-addon  btn filter accepting-click on-first-click-show-non-empty bg"
+              data-selector-attribute="data-select-mark1"   title="Filtere nach: De/Markierte">FM</span >
+        <span class = "input-group-addon  btn accepting-click selektierte-mark1" title="ALLE! sichtbaren De/Markieren!">Un/Mark!</span >
+        <span class = "input-group-addon  btn filter accepting-click on-first-click-show-non-empty bg"
+              data-selector-attribute="data-select-files"  title="Filtere nach verlinkten Files (e=empty f=full)">FF</span >
+        <span class = "input-group-addon  btn filter accepting-click on-first-click-show-non-empty bg"
+              data-selector-attribute="data-select-text"  title="Filtere nach Text (e=empty f=full)">FA</span >
+        
+        <span class = "input-group-addon  btn accepting-click selektierte-loeschen" title="ALLE! sichtbaren löschen!">Löschen!</span >
+        <span class = "input-group-addon  btn accepting-click selektierte-archivieren" title="ALLE! sichtbaren archivieren und hier löschen! Sichtbar dann nur in trackarchive.localhost">Archivieren!</span >
+      </div>
+    </div>
+  </div>
+  <div data-loop="NOT" data-view="NOT.html" data-sort-direction="descending" data-load-events='page-load'>
+  </div>
+</div>
+<h1 class="loading-message" style="margin:auto; width:300px; margin-top:200px;">Lade Daten ...</h1>

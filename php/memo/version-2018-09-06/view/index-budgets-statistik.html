@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    @include="head.include.html"
+    <link rel="icon" type="image/png" href="icon16x16track.png" />
+  </head>
+  <body>
+    <div id="page" class="index-budgets-statistik  container-fluid">
+      @include="page.top.include.html"
+      <div class="row">
+        @include="top.menu.include.html"
+      </div>
+      @include="php-statistik-m-j"
+      <pre>
+2017          WAS     JAHR    MONAT MONAT bei 6h
+
+unproduktiv:
+                   :     290h 18% (290/1590 h)
+mit Qualifikation  :     360h 21% (360/1660 h)
+mit LBA + Qualifikation: 420h 24% (420/1720 h)
+
+DVZ Veranst   22      11,75	  1     1
+Einarb NMA    28      0,25
+AusbildBetr   30      59,25	  5     80+
+ArbAbtBer     34      92,25	  7,5   7
+Quali/Lehrg   39      69,75	  6     6
+Verteilzeit   412622  190,25	16    12
+
+produktiv ca. 1300h:
+Land 411202   780,5	  65            50
+CMS Betrieb   411290  217,5	  18    14,5
+
+              400602  90,75
+              400673  91
+              400746  8,25
+              401116  11
+              410106  4,5
+              410836  1
+              411205  13,25
+              411556  15,75
+              411779  0,25
+              412601  36,5
+              412661  39,25
+              412776  4,25
+
+      </pre>
+    </div>
+  </body>
+</html>
