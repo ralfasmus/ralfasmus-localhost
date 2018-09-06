@@ -277,6 +277,7 @@ class View {
     if (stripos($html, "@include") !== FALSE) {
       $this->replaceIncludes($html);
     }
+    $html=str_replace( "APPLICATION_VERSION_CSSJS", APPLICATION_VERSION_CSSJS, $html);
     return $html;
   }
 

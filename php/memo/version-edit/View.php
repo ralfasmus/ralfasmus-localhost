@@ -42,6 +42,7 @@ class View {
       } else {
         $html = file_get_contents(PHP_DIR . "/view/$view");
         $html = $this->replaceIncludes($html);
+        $html=str_replace( "APPLICATION_VERSION_CSSJS", APPLICATION_VERSION_CSSJS, $html);
         //return $this->materializeLoopOrInstance($html);
         $material = $this->materializeLoopOrInstance($html);
         if (is_array($material)) {
@@ -266,7 +267,6 @@ class View {
           else {
             // .html Datei einbauen:
             $includeHtml = file_get_contents(PHP_DIR . "/view/$filename");
-            $includeHtml=str_replace( "APPLICATION_VERSION_CSSJS", APPLICATION_VERSION_CSSJS, $includeHtml);
           }
           $html = str_replace('@include="' . $filename . '"', $includeHtml, $html);
         } else {
