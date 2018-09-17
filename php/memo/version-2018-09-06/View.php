@@ -119,6 +119,7 @@ class View {
       foreach ($instances as $instance) {
         $h = $instance->getProperty(ARB::PROPERTY_STUNDEN, 0);
         $kaz = $instance->getProperty(ARB::PROPERTY_KAZ, 0);
+          Request::log($instance->getProperty(ARB::PROPERTY_DATUM, "01.01.1800"));
         list($tag, $monat, $jahr) = explode(".", $instance->getProperty(ARB::PROPERTY_DATUM, "01.01.1800"));
         if ($jahr >= "2017") {
           $jahre["" . $jahr] = "" . "$jahr";
@@ -176,6 +177,7 @@ class View {
     $arbInstances = Persistence::getInstances("ARB", "datum", false, "", true);
     foreach ($arbInstances as $instance) {
       $h = $instance->getProperty(ARB::PROPERTY_STUNDEN, 0);
+      Request::log($instance->getProperty(ARB::PROPERTY_DATUM, "01.01.1800"));
       list($tag, $monat, $jahr) = explode(".", $instance->getProperty(ARB::PROPERTY_DATUM, "01.01.1800"));
       if ($jahr >= 2017 && is_numeric($h)) {
         $jahrSumme["$jahr"] += $h;

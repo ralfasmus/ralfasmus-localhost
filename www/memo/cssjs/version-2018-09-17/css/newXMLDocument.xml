@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/" xmlns:ingrid="http://www.portalu.de/opensearch/extension/1.0" version="2.0">
+  <channel>
+    <title>ingrid OpenSearch: (Luft OR Klima)   datatype:default partner:mv ranking:score</title>
+    <link>http://metaver.de/search/opensearch/query?q=(Luft%20OR%20Klima)%20++datatype:default+partner:mv+ranking:score&amp;p=100&amp;h=10</link>
+    <description>Search results</description>
+    <opensearch:totalResults>3443</opensearch:totalResults>
+    <opensearch:startIndex>100</opensearch:startIndex>
+    <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+    <opensearch:Query role="request" searchTerms="(Luft OR Klima)   datatype:default partner:mv ranking:score"/>
+    <item xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
+      <title>Projektdetails - IOW</title>
+      <link>http://www.io-warnemuende.de/projektdetails/items/201.html</link>
+      <description> Projekte . Alphabetisch . AMBER . MikrOMIK . SUMSUN . Vibrio-&lt;em&gt;MV&lt;/em&gt; . Umweltüberwachung . Forschungsschiffe ...  Wilhelm Leibniz Konsortium Deutsche Meeresforschung Deutsches &lt;em&gt;Klima&lt;/em&gt;-Konsortium Total E-Quality</description>
+      <relevance:score>0.37555125</relevance:score>
+    </item>
+    <item xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
+      <title>Projektdetails - IOW</title>
+      <link>http://www.io-warnemuende.de/projektdetails/items/203.html</link>
+      <description> Projekte . Alphabetisch . AMBER . MikrOMIK . SUMSUN . Vibrio-&lt;em&gt;MV&lt;/em&gt; . Umweltüberwachung . Forschungsschiffe ...  Deutsches &lt;em&gt;Klima&lt;/em&gt;-Konsortium Total E-Quality Das IOW trägt das Prädikat Total E-Quality Mitgliedschaften</description>
+      <relevance:score>0.37555125</relevance:score>
+    </item>
+    <item xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
+      <title>Projektdetails - IOW</title>
+      <link>http://www.io-warnemuende.de/projektdetails/items/206.html</link>
+      <description> Projekte . Alphabetisch . AMBER . MikrOMIK . SUMSUN . Vibrio-&lt;em&gt;MV&lt;/em&gt; . Umweltüberwachung . Forschungsschiffe ...  Deutsches &lt;em&gt;Klima&lt;/em&gt;-Konsortium Total E-Quality Das IOW trägt das Prädikat Total E-Quality Mitgliedschaften</description>
+      <relevance:score>0.37555125</relevance:score>
+    </item>
+    <item xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
+      <title>Projektdetails - IOW</title>
+      <link>http://www.io-warnemuende.de/projektdetails/items/207.html</link>
+      <description> Projekte . Alphabetisch . AMBER . MikrOMIK . SUMSUN . Vibrio-&lt;em&gt;MV&lt;/em&gt; . Umweltüberwachung . Forschungsschiffe ...  Gottfried Wilhelm Leibniz Konsortium Deutsche Meeresforschung Deutsches &lt;em&gt;Klima&lt;/em&gt;-Konsortium Total E</description>
+      <relevance:score>0.37555125</relevance:score>
+    </item>
+    <item xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
+      <title>Projektdetails - IOW</title>
+      <link>http://www.io-warnemuende.de/projektdetails/items/21.html</link>
+      <description> Projekte . Alphabetisch . AMBER . MikrOMIK . SUMSUN . Vibrio-&lt;em&gt;MV&lt;/em&gt; . Umweltüberwachung . Forschungsschiffe ...  Deutsche Meeresforschung Deutsches &lt;em&gt;Klima&lt;/em&gt;-Konsortium Total E-Quality Das IOW trägt das Prädikat Total E</description>
+      <relevance:score>0.37555125</relevance:score>
+    </item>
+    <item xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
+      <title>Projektdetails - IOW</title>
+      <link>http://www.io-warnemuende.de/projektdetails/items/210.html</link>
+      <description> Projekte . Alphabetisch . AMBER . MikrOMIK . SUMSUN . Vibrio-&lt;em&gt;MV&lt;/em&gt; . Umweltüberwachung . Forschungsschiffe ...  Wissenschaftsgemeinschaft Gottfried Wilhelm Leibniz Konsortium Deutsche Meeresforschung Deutsches &lt;em&gt;Klima&lt;/em&gt;</description>
+      <relevance:score>0.37555125</relevance:score>
+    </item>
+    <item xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
+      <title>Projektdetails - IOW</title>
+      <link>http://www.io-warnemuende.de/projektdetails/items/211.html</link>
+      <description> Projekte . Alphabetisch . AMBER . MikrOMIK . SUMSUN . Vibrio-&lt;em&gt;MV&lt;/em&gt; . Umweltüberwachung . Forschungsschiffe ...  Wissenschaftsgemeinschaft Gottfried Wilhelm Leibniz Konsortium Deutsche Meeresforschung Deutsches &lt;em&gt;Klima&lt;/em&gt;</description>
+      <relevance:score>0.37555125</relevance:score>
+    </item>
+    <item xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
+      <title>Projektdetails - IOW</title>
+      <link>http://www.io-warnemuende.de/projektdetails/items/212.html</link>
+      <description> Projekte . Alphabetisch . AMBER . MikrOMIK . SUMSUN . Vibrio-&lt;em&gt;MV&lt;/em&gt; . Umweltüberwachung . Forschungsschiffe ...  Deutsches &lt;em&gt;Klima&lt;/em&gt;-Konsortium Total E-Quality Das IOW trägt das Prädikat Total E-Quality</description>
+      <relevance:score>0.37555125</relevance:score>
+    </item>
+    <item xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
+      <title>Projektdetails - IOW</title>
+      <link>http://www.io-warnemuende.de/projektdetails/items/213.html</link>
+      <description> Projekte . Alphabetisch . AMBER . MikrOMIK . SUMSUN . Vibrio-&lt;em&gt;MV&lt;/em&gt; . Umweltüberwachung . Forschungsschiffe ...  Leibniz Konsortium Deutsche Meeresforschung Deutsches &lt;em&gt;Klima&lt;/em&gt;-Konsortium Total E-Quality Das IOW trägt</description>
+      <relevance:score>0.37555125</relevance:score>
+    </item>
+    <item xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
+      <title>Projektdetails - IOW</title>
+      <link>http://www.io-warnemuende.de/projektdetails/items/214.html</link>
+      <description> Projekte . Alphabetisch . AMBER . MikrOMIK . SUMSUN . Vibrio-&lt;em&gt;MV&lt;/em&gt; . Umweltüberwachung . Forschungsschiffe ...  Konsortium Deutsche Meeresforschung Deutsches &lt;em&gt;Klima&lt;/em&gt;-Konsortium Total E-Quality Das IOW trägt</description>
+      <relevance:score>0.37555125</relevance:score>
+    </item>
+  </channel>
+</rss>
