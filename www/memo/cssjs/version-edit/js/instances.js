@@ -64,11 +64,24 @@ function calculateInstanceProperties(instance) {
   if ($(instance).attr('data-instance-type') == 'ANW') {
     updateDataSelectDatum(instance);
     var zeitenInput = $(instance).find('input[name=zeiten]').val();
-    var calculatedHours = anwesenheitVonZeiten(zeitenInput);
+    var start = getDateFromZeitraum(zeitenInput, true);
+    var end = getDateFromZeitraum(zeitenInput, false);
+    var calculatedHours = anwesenheitVonZeiten(start, end);
     if (calculatedHours != '') {
       $(instance).find('input[name=stunden]').val(calculatedHours);
+      // wenn Startzeit < 6.00 Uhr, die in KAZ einzutragende Zeit in das Feld bemerkung schreiben (nur wenn es leer ist)
+      var bemerkung = $(instance).find('input[name=bemerkung]').val();
+      if (bemerkung == '') {
+        var firstDate = new Date(0,0,0,6,0);
+          if (start < firstDate) {
+            kazEndDate = new Date(end);
+            kazEndDate.setMinutes(end.getMinutes() + diffInMinuten(start, firstDate));
+            bemerkung = 'In KAZ: 6.00' + '-' + kazEndDate.getHours() + '.' + (kazEndDate.getMinutes() == 0 ? '00' : kazEndDate.getMinutes());
+            $(instance).find('input[name=bemerkung]').val(bemerkung);
+          }
+      }
       $(instance).removeClass("red");
-      $(instance).addClass(anwesenheitCss(zeitenInput));
+      $(instance).addClass(anwesenheitCss(start, end));
       var schonInKaz = $(instance).find('input[name=schon_in_kaz]').val();
       $(instance).removeClass("schon_in_kaz");
       $(instance).addClass("nicht_in_kaz");
