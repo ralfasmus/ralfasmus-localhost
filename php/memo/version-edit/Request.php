@@ -11,21 +11,18 @@ class Request extends ObjectAbstract {
   private $messages = array();
   private $messageLevel = 'debug';
 
-
-    static public function log($text) {
-        $logFile = Conf::get("LOG_FILE_NAME_BASE") . "/log.txt";
-        file_put_contents($logFile, "$text\r\n", FILE_APPEND);
-    }
-
     /**
    * POST/GET Request verarbeiten.
    */
   public function processRequest($action) {
-    $id = $this->getRequest()->getProperty("data-instance-id", "");
+      $request = $this->getRequest();
+    $id = $request->getProperty("data-instance-id", "");
+
+    ObjectAbstract::log(ObjectAbstract::LOG_LEVEL_DEBUG, var_export($request, true));
     if ($id != "") {
       if ($action == "save") {
         $instance = Persistence::getOrCreateInstance($id);
-        foreach ($this->getRequest()->getProperties() as $name => $value) {
+        foreach ($request->getProperties() as $name => $value) {
           if ($instance->isPersistentProperty($name)) {
             //$this->addMessage("Verarbeite Feld $name=$value");
             $instance->setProperty($value, $name);
@@ -36,7 +33,7 @@ class Request extends ObjectAbstract {
       }
       if ($action == "delete") {
         $archive = false;
-        foreach ($this->getRequest()->getProperties() as $name => $value) {
+        foreach ($request->getProperties() as $name => $value) {
           $archive = $archive || ($name == "archive" && $value == "1");
         }
         Persistence::deleteInstance($id, $archive);

@@ -31,7 +31,23 @@ abstract class ObjectAbstract {
   // berechnete:
   const PROPERTY_DATUM_ID_SORT = "DatumE";
 
-  public function isPersistentProperty($name) {
+    const LOG_LEVEL_DEBUG = 4;
+    const LOG_LEVEL_ERROR = 1;
+    const LOG_LEVEL_OFF = 0;
+
+    /**
+     * Logged nach /log/...
+     * @param $logLevel ObjectAbstract::LOG_LEVEL_DEBUG | ...
+     * @param $text
+     */
+    public static function log($logLevel, $text) {
+        if($logLevel <= Conf::get('LOG_LEVEL', self::LOG_LEVEL_OFF)) {
+            $logFile = Conf::get("LOG_FILE_NAME_BASE") . "/log.txt";
+            file_put_contents($logFile, "$text\r\n", FILE_APPEND);
+        }
+    }
+
+    public function isPersistentProperty($name) {
     return false;
   }
 
@@ -163,5 +179,4 @@ abstract class ObjectAbstract {
     }
     return $id;
   }
-
 }

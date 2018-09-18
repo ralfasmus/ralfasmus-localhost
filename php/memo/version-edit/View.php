@@ -43,6 +43,7 @@ class View {
         $html = file_get_contents(PHP_DIR . "/view/$view");
         $html = $this->replaceIncludes($html);
         $html=str_replace( "APPLICATION_VERSION_CSSJS", APPLICATION_VERSION_CSSJS, $html);
+        $html=str_replace( "ARCHIVE_CLASS", Conf::isArchive() ? 'using_data_archive' : 'using_data', $html);
         //return $this->materializeLoopOrInstance($html);
         $material = $this->materializeLoopOrInstance($html);
         if (is_array($material)) {
@@ -278,6 +279,7 @@ class View {
       $this->replaceIncludes($html);
     }
     $html=str_replace( "APPLICATION_VERSION_CSSJS", APPLICATION_VERSION_CSSJS, $html);
+      $html=str_replace( "ARCHIVE_CLASS", Conf::isArchive() ? 'using_data_archive' : 'using_data', $html);
     return $html;
   }
 

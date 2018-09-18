@@ -6,16 +6,6 @@
      data-instance-type="NOT"
      data-initial-properties="JSON_PROPERTIES">
 
-  <div class = "col-md-1 prop-datum" id="NOTid">
-    <div class = "input-group">
-      <input type = "text"
-             name = "datum"
-             data-element="datum"
-             class = "datum form-control bg D">
-      <span class = "input-group-addon  btn id-to-clipboard" data-element="id-to-clipboard-button">id</span >
-      <span class = "input-group-addon  btn link-to-clipboard" data-element="link-to-clipboard-button">L</span >
-    </div>
-  </div>
 
   <div class = "col-md-2 prop-art focus" title="Leerzeichen eingeben, um die Auswahlliste zu sehen">
     <div class = "input-group">
@@ -31,18 +21,19 @@
     <div class = "input-group">
       <span class = "input-group-addon  btn with-files" title="Hat Dateien wenn schwarz">F</span>
       <span class = "input-group-addon  btn with-all" data-element="show-all-button"  title="Hat Text wenn schwarz">A</span>
+      <span class = "input-group-addon  btn save" data-element="save-button">SAVE</span >
+      <span class = "input-group-addon  btn edit" data-element="edit-button">EDIT</span >
       <input type = "text"
              name = "name"
              data-element="name"
              class = "form-control bg N autocomplete NOT name on-change-update-autocomplete">
       <span class = "input-group-addon  btn mark1" data-element="mark1-button"  title="Markieren / Markierung löschen">M<sub>ark</sub></span >
-      <span class = "input-group-addon  btn edit" data-element="edit-button">EDIT</span >
-      <span class = "input-group-addon  btn save" data-element="save-button">SAVE</span >
       <span class = "input-group-addon  btn duplicate" data-element="duplicate-button">DUP</span >
       <span class = "input-group-addon  btn delete" data-element="delete-button" title="Löschen!">D<sub>EL</sub></span >
-      <span class = "input-group-addon  btn archive" data-element="archive-button"  title="Archivieren und hier löschen! Sichtbar dann nur in trackarchive.localhost">A<sub>RCH</sub></span >
+      <span class = "input-group-addon  btn archive" data-element="archive-button"  title="Un/Archivieren und hier löschen!"><span class="un">Un-</span>A<sub>RCH</sub></span >
 
     </div>
+    
     <div class = "link-target-blank show-on-with-text text">
     </div>
     <div class = "link-target-blank show-on-with-text files">
@@ -72,7 +63,17 @@
              class = "form-control" />
     </div>
   </div>
-
+    
+    <div class = "col-md-1 prop-datum" id="NOTid">
+        <div class = "input-group">
+            <input type = "text"
+                   name = "datum"
+                   data-element="datum"
+                   class = "datum form-control bg D">
+            <span class = "input-group-addon  btn id-to-clipboard" data-element="id-to-clipboard-button">id</span >
+            <span class = "input-group-addon  btn link-to-clipboard" data-element="link-to-clipboard-button">L</span >
+        </div>
+    </div>
   <div class = "col-md-1 prop-archive hidden">
     <div class = "input-group">
       <span class = "input-group-addon">id : filename</span >
