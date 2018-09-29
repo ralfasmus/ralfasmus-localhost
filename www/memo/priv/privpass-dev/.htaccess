@@ -1,0 +1,9 @@
+RewriteEngine On
+RewriteRule ^$ index.html [L]
+RewriteCond %{REQUEST_FILENAME} !^.*\.(css|less|js|jpg|png|gif|tiff|pdf|xlsx|xls|docx|doc|ppt|pptx|htm|html).*$
+RewriteCond %{REQUEST_FILENAME} !^.*(jquery|summernote|moment).*$
+#sonst umleiten
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ index.php [NC,L]
