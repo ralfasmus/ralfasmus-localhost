@@ -3,12 +3,14 @@
 
  if(!defined("APPLICATION_VERSION_PHP")) {
      //define("APPLICATION_VERSION_PHP","version-edit");
-     define("APPLICATION_VERSION_PHP","version-2018-09-18");
+     define("APPLICATION_VERSION_PHP","version-2018-10-15");
+     //war: define("APPLICATION_VERSION_PHP","version-2018-09-18");
    //war: define("APPLICATION_VERSION_PHP","version-2018-09-06");
  }
  if(!defined("APPLICATION_VERSION_CSSJS")) {
      //define("APPLICATION_VERSION_CSSJS","version-edit");
-     define("APPLICATION_VERSION_CSSJS","version-2018-09-18");
+     define("APPLICATION_VERSION_CSSJS","version-2018-10-15");
+     // war: define("APPLICATION_VERSION_CSSJS","version-2018-09-18");
    //war: define("APPLICATION_VERSION_CSSJS","version-2018-09-17");
  }
 if(!defined("LOG_LEVEL")) {
