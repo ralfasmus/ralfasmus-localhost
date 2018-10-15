@@ -50,34 +50,39 @@ function diffInMinuten(start, end) {
 }
 
 /**
- *
- * @param {type} zeiten Bsp: 6-15.15
+ * Liefert Start- oder Endzeit eines Zeitraums. Wenn der Zeitraum nur die Startzeit enthaelt und
+ * diese gefragt ist, dann wird sie auch geliefert.
+ * @param {type} zeiten Bsp: 6-15.15 oder 6.00 oder 6.00-
  * @param getStartDate
  * @returns {*}
  */
 function getDateFromZeitraum(zeiten, getStartDate) {
 
-    if (!isString(zeiten)) {
+    if (!isString(zeiten) || zeiten == '') {
         return '';
     }
     var splitted = zeiten.split('-');
-    if (splitted.length != 2 || splitted[1] == '') {
-        return '';
-    }
     var t1 = splitted[0];
-    var t2 = splitted[1];
-
-    t1 = t1.indexOf('.') == -1 ? t1 + '.00' : t1;
-    t2 = t2.indexOf('.') == -1 ? t2 + '.00' : t2;
-    // Wenn irgendein Text drin steht : nicht berechnen
-    if (isNaN(t2) || isNaN(t1)) {
-        return '';
+    if (getStartDate) {
+        if (isNaN(t1)) {
+            return '';
+        }
+        t1 = t1.indexOf('.') == -1 ? t1 + '.00' : t1;
+        var t1a = t1.split('.');
+        var d1 = new Date(0, 0, 0, t1a[0], t1a[1]);
+        return d1;
+    } else {
+        if (splitted.length != 2 || splitted[1] == '') {
+            return '';
+        }
+        var t2 = splitted[1];
+        if (isNaN(t2)) {
+            return '';
+        }
+        t2 = t2.indexOf('.') == -1 ? t2 + '.00' : t2;
+        var t2a = t2.split('.');
+        var d2 = new Date(0, 0, 0, t2a[0], t2a[1]);
+        return d2;
     }
-
-    var t1a = t1.split('.');
-    var t2a = t2.split('.');
-    var d1 = new Date(0, 0, 0, t1a[0], t1a[1]);
-    var d2 = new Date(0, 0, 0, t2a[0], t2a[1]);
-    return getStartDate ? d1 : d2;
 }
 

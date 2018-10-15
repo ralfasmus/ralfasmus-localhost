@@ -3,6 +3,7 @@
  * @returns {undefined}
  */
 function summenUpdateAll() {
+  updateArbAnwJetztDifferenz();
   updateArbAnwDifferenz('heute');
   updateArbAnwDifferenz('gestern');
   updateArbAnwDifferenz('hwoche');
@@ -21,10 +22,38 @@ function summenUpdateAll() {
   });
 }
 
+function updateArbAnwJetztDifferenz() {
+    var diff = bisJetztZuBuchendeStunden();
+    updateTrackDifferenz('.arb-anw', 'jetzt', summarizeFieldValues(selectorInputElements('heute', 'ARB', 'stunden')),
+        diff);
+}
+
+/**
+ * Liefert die nach der in ANW heute gesetzten Startzeit bis JETZT notwendig zu buchenden (zu arbeitenden) Stunden.
+ * Dabei sind die Pausen abgezogen, die KAZ auch automatisch abzieht.
+ */
+function bisJetztZuBuchendeStunden() {
+    var zeitenInput = $(selectorInputElements('heute', 'ANW', 'zeiten')).val();
+    var startDate = getDateFromZeitraum(zeitenInput, true);
+    var diff = 0;
+    if(startDate != '') {
+        var startString = startDate.getHours() + '.' + startDate.getMinutes();
+        var jetztString = zeitJetztAufgerundet();
+        var zeitraumString = startString + '-' + jetztString;
+        var jetztDate = getDateFromZeitraum(zeitraumString, false);
+        diff = minutesToKaz(diffInMinuten(startDate, jetztDate)) / 60;
+    }
+    return diff;
+
+}
 
 function updateArbAnwDifferenz(zeitraum) {
+    var zuBuchendeStunden = summarizeFieldValues(selectorInputElements(zeitraum, 'ANW', 'stunden'));
+    if(zuBuchendeStunden == 0) {
+       zuBuchendeStunden = bisJetztZuBuchendeStunden();
+    }
   updateTrackDifferenz('.arb-anw', zeitraum, summarizeFieldValues(selectorInputElements(zeitraum, 'ARB', 'stunden')),
-          summarizeFieldValues(selectorInputElements(zeitraum, 'ANW', 'stunden')));
+          zuBuchendeStunden);
 }
 function updateAnwSollDifferenz(zeitraum) {
   var selector = selectorInputElements(zeitraum, 'ANW', 'stunden');

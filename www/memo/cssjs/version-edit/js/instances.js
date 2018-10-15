@@ -66,7 +66,7 @@ function calculateInstanceProperties(instance) {
     var zeitenInput = $(instance).find('input[name=zeiten]').val();
     var start = getDateFromZeitraum(zeitenInput, true);
     var end = getDateFromZeitraum(zeitenInput, false);
-    var calculatedHours = anwesenheitVonZeiten(start, end);
+    var calculatedHours = end == '' ? '' : anwesenheitVonZeiten(start, end);
     if (calculatedHours != '') {
       $(instance).find('input[name=stunden]').val(calculatedHours);
       // wenn Startzeit < 6.00 Uhr, die in KAZ einzutragende Zeit in das Feld bemerkung schreiben (nur wenn es leer ist)

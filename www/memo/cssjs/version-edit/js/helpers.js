@@ -218,6 +218,31 @@ function datumHeute() {
   return de;
 }
 
+/**
+ * Liefert aktuelle Zeit in der Form hh.mm aufgerundet auf volle 15 min.
+ * @returns {String}
+ */
+function zeitJetztAufgerundet() {
+    var jetzt = new Date();
+    var mm = jetzt.getMinutes();
+    var hh = jetzt.getHours();
+    if (mm <= 15) {
+        mm = '15';
+    } else if (mm <= 30) {
+        mm = '30';
+    } else if (mm <= 45) {
+        mm = '45';
+    } else if (mm > 45) {
+        mm = '00';
+        hh = hh+1;
+    }
+    if (hh < 10) {
+        hh = '0' + hh;
+    }
+    var de = hh + '.' + mm;
+    return de;
+}
+
 function showStatus(text, success) {
   $('#status').html(text);
   if (success) {
