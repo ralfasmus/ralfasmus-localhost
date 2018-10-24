@@ -1,9 +1,9 @@
 <?php
  // default versionen
 
-if(!defined("DEFAULT_VERSION_PHP")) {
-    // define("DEFAULT_VERSION_PHP","version-edit");
-    define("DEFAULT_VERSION_PHP","version-2018-10-24");
+if(!defined("ALLGEMEIN_VERSION_PHP")) {
+    // define("ALLGEMEIN_VERSION_PHP","version-edit");
+    define("ALLGEMEIN_VERSION_PHP","version-2018-10-24");
 }
 
  if(!defined("APPLICATION_VERSION_PHP")) {
@@ -23,4 +23,4 @@ if(!defined("LOG_LEVEL")) {
 // Verzeichnis fuer PHP-Klassen der Application: ralfwork.localhost/php/memo/version-XXXXXXXXX
 define('APPLICATION_PHP_DIR', ROOT_DIR . DIRECTORY_SEPARATOR . "php" . DIRECTORY_SEPARATOR . "memo" . DIRECTORY_SEPARATOR . APPLICATION_VERSION_PHP);
 // Verzeichnis fuer allgemeine Default PHP-Klassen : ralfwork.localhost/php/default/version-XXXXXXXXX
-define('DEFAULT_PHP_DIR', ROOT_DIR . DIRECTORY_SEPARATOR . "php" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . DEFAULT_VERSION_PHP);
+define('ALLGEMEIN_PHP_DIR_DIR', ROOT_DIR . DIRECTORY_SEPARATOR . "php" . DIRECTORY_SEPARATOR . "allgemein" . DIRECTORY_SEPARATOR . ALLGEMEIN_VERSION_PHP);
