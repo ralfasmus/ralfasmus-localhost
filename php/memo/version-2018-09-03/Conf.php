@@ -16,7 +16,7 @@ class Conf {
   }
 
   static private function getDataPathRoot() {
-      return APPLICATION_ROOT . "/data/memo/" . APPLICATION_NAME;
+      return ROOT_DIR . "/data/memo/" . APPLICATION_NAME;
   }
 
 }

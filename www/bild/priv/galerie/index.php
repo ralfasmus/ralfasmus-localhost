@@ -1,0 +1,63 @@
+<?php
+
+// Verzeichnis, in dem www, php u.a. liegt
+define("ROOT_DIR",dirname(realpath("."),4));
+define("APPLICATION_NAME",basename(realpath(".")));
+
+require_once("local.version.inc.php");
+require_once(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "index.inc.php");
+
+?><!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+  <!-- Image Gallery: http://unitegallery.net/index.php?page=documentation#installing_the_gallery -->
+  <!-- https://github.com/vvvmax/unitegallery -->
+  <!-- ----------------------------------------------------------------------------------------- --->
+		<!-- <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script> -->
+    <!-- <script type='text/javascript' src='/bild/cssjs/version-edit/unitegallery/js/jquery-11.0.min.js'></script> -->
+    <script src="/bild/cssjs/version-edit/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+
+		<script type='text/javascript' src='/bild/cssjs/version-edit/unitegallery/js/unitegallery.min.js'></script>
+
+		<link rel='stylesheet' href='/bild/cssjs/version-edit/unitegallery/css/unite-gallery.css' type='text/css' />
+		<script type='text/javascript' src='/bild/cssjs/version-edit/unitegallery/themes/default/ug-theme-default.js'></script>
+		<link rel='stylesheet' href='/bild/cssjs/version-edit/unitegallery/themes/default/ug-theme-default.css' type='text/css' />
+
+	</head>
+
+  <body>
+    <a id="pagetop"></a>
+    <div id="page" class="index-arbeiten container-fluid">
+
+      <div id="gallery" style="display:none;">
+
+        <img alt="Image 1 Title" src="/bild/priv/galerie/bilder/fa/2017/Jellyfish.jpg"
+          data-image="/bild/priv/galerie/bilder/fa/2017/Jellyfish.jpg"
+          data-description="Image 1 Description">
+
+        <img alt="Image 2 Title" src="/bild/priv/galerie/bilder/fa/2017/Koala.jpg"
+          data-image="/bild/priv/galerie/bilder/fa/2017/Koala.jpg"
+          data-description="Image 2 Description">
+
+        <img alt="Image 3 Title" src="/bild/priv/galerie/bilder/fa/2017/Penguins.jpg"
+          data-image="/bild/priv/galerie/bilder/fa/2017/Penguins.jpg"
+          data-description="Image 3 Description">
+
+      </div>
+
+    </div>
+    <script type="text/javascript">
+
+			jQuery(document).ready(function(){
+				jQuery("#gallery").unitegallery();
+			});
+
+		</script>
+  </body>
+</html>

@@ -10,14 +10,14 @@ class Conf {
       case "DATA_FILE_NAME_BASE" : $wert = self::getDataPathRoot() . ($archiveAccess ? "/data_archive" : "/data"); break;
       case "DATA_FILE_NAME_BACKUP_BASE" : $wert =  self::getDataPathRoot() . "/data_backup"; break;
       case "DATA_FILE_NAME_ARCHIVE_BASE" : $wert =  self::getDataPathRoot() . ($archiveAccess ? "/data_archive" : "/data_backup"); break;
-      case "LOG_FILE_NAME_BASE" : $wert = APPLICATION_ROOT . "/log/memo"; break;
+      case "LOG_FILE_NAME_BASE" : $wert = ROOT_DIR . "/log/memo"; break;
       default: ;
     }
     return $wert;
   }
 
   static private function getDataPathRoot() {
-      return APPLICATION_ROOT . "/data/memo/" . APPLICATION_NAME;
+      return ROOT_DIR . "/data/memo/" . APPLICATION_NAME;
   }
 
 }

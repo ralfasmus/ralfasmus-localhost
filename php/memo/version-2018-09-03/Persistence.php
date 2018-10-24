@@ -24,7 +24,7 @@ class Persistence extends ObjectAbstract {
     $filenameBase = Conf::get("DATA_FILE_NAME_BASE");
     $idx=1;
     foreach (glob($filenameBase . "/$instanceType/data_$instanceType*.data") as $filename) {
-      //  file_put_contents(APPLICATION_ROOT."/log/memo/log.txt", $idx++ . " Loading $filename" . "\r\n", FILE_APPEND);
+      //  file_put_contents(ROOT_DIR."/log/memo/log.txt", $idx++ . " Loading $filename" . "\r\n", FILE_APPEND);
       $instance = self::loadInstanceByFilename($filename);
       $add = !$filterBudget || ($instance->belongsTo($budget));
       if ($add) {

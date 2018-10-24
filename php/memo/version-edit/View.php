@@ -36,11 +36,11 @@ class View {
     if (stripos($view, ".html") !== FALSE) {
       if (stripos($view, "index") !== FALSE) {
         // Ergebnis als HTML
-        $html = file_get_contents(PHP_DIR . "/view/$view");
+        $html = file_get_contents(APPLICATION_PHP_DIR . "/view/$view");
         $html = $this->replaceIncludes($html);
         return $this->materializeLoopOrInstance($html);
       } else {
-        $html = file_get_contents(PHP_DIR . "/view/$view");
+        $html = file_get_contents(APPLICATION_PHP_DIR . "/view/$view");
         $html = $this->replaceIncludes($html);
         $html=str_replace( "APPLICATION_VERSION_CSSJS", APPLICATION_VERSION_CSSJS, $html);
         $html=str_replace( "ARCHIVE_CLASS", Conf::isArchive() ? 'using_data_archive' : 'using_data', $html);
@@ -267,7 +267,7 @@ class View {
           }
           else {
             // .html Datei einbauen:
-            $includeHtml = file_get_contents(PHP_DIR . "/view/$filename");
+            $includeHtml = file_get_contents(APPLICATION_PHP_DIR . "/view/$filename");
           }
           $html = str_replace('@include="' . $filename . '"', $includeHtml, $html);
         } else {
