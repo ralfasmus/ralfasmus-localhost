@@ -1,0 +1,144 @@
+<div class=""
+     id="IDCOUNT"
+     data-element="instance"
+     data-instance-id="BUDid"
+     data-instance-type="BUD"
+     data-select-stunden=""
+     data-select-name-bemerkung=""
+     data-sort-btotal=""
+     data-sort-id="">
+  <div class= "row BUD-row">
+
+    <div class = "col-md-5 prop-name focus" title="">
+      <div class = "input-group">
+        <span class = "input-group-addon  btn duplicate" data-instance-id="BUDid" data-element="duplicate-button">DUP</span >
+        <span class = "input-group-addon btn" data-instance-id="BUDid" data-element="name-addon"></span>
+        <input type = "text"
+               name = "name"
+               data-element="name"
+               data-instance-id="BUDid"
+               class = "autocompleteBemerkungBUD form-control">
+        <span class = "input-group-addon  btn save" data-instance-id="BUDid" data-element="save-button">SAVE</span >
+      </div>
+    </div>
+    <div class = "col-md-2 prop-keywords focus" title="">
+      <div class = "input-group">
+        <span class = "input-group-addon">Keys</span>
+        <input type = "text"
+               name = "keys"
+               data-element="keys"
+               data-instance-id="BUDid"
+               class = "form-control">
+      </div>
+    </div>
+
+    <div class = "col-md-1 prop-total PLACEHOLDER_ZEIGT">
+      <div class = "input-group">
+        <input type = "text"
+               name = "btotal"
+               data-element="btotal"
+               data-instance-id="BUDid"
+               class = "form-control">
+        <span class = "input-group-addon btn element-sort-trigger"
+              data-instance-id="BUDid"
+              data-sort-attribute="data-sort-btotal"
+              data-sort-ascending="false"
+              title="Sortierung: Budget Total (desc)">
+          h</span>
+      </div>
+    </div>
+    <div class = "col-md-1 prop-zeitraum"
+         title="total / m = monatlich / j = jährlich">
+      <div class = "input-group">
+        <input type = "text"
+               name = "zeitraum"
+               data-element="zeitraum"
+               data-instance-id="BUDid"
+               class = "form-control">
+        <span class = "input-group-addon"
+              data-instance-id="BUDid">
+          Zeitra.</span>
+      </div>
+    </div>
+    <div class = "col-md-1 prop-korrekturbemerkung"
+         title="Korrektur: - = abziehen">
+      <div class = "input-group">
+        <input type = "text"
+               name = "korrektur"
+               data-element="korrektur"
+               data-instance-id="BUDid"
+               class = "form-control">
+        <span class = "input-group-addon"
+              data-instance-id="BUDid">
+          Korr</span>
+      </div>
+    </div>
+    <div class = "col-md-2 prop-korrektur">
+      <div class = "input-group">
+        <span class = "input-group-addon"
+              data-instance-id="BUDid">
+          Korr-Bem:</span>
+        <input type = "text"
+               name = "korrekturbemerkung"
+               data-element="korrekturbemerkung"
+               data-instance-id="BUDid"
+               class = "form-control">
+        <span class = "input-group-addon  btn delete" data-instance-id="BUDid" data-element="delete-button">DEL</span >
+      </div>
+    </div>
+  </div>
+
+  <div class= "row empty20">
+    <div class = "col-md-12">
+    </div>
+  </div>
+
+  <div class="list-parent">
+    <div class="row">
+      <div class = "col-md-1 filter accepting-input" title="heute gestern hwoche vwoche hmonat vmonat hjahr vjahr tt.mm.jjjj">
+        <div class = "input-group">
+          <span class = "input-group-addon" title="DIESEN Filter matchende Elemente / gesamt"><sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+          <input type = "text" name = "filter-arbeit-datum" data-selector-attribute="data-select-datum" value="" class = "form-control" placeholder = "FilterInput">
+        </div>
+      </div>
+      <div class = "col-md-5 filter accepting-input">
+        <div class = "input-group">
+          <span class = "input-group-addon" title="DIESEN Filter matchende Elemente / gesamt"><sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+          <span class = "input-group-addon">Be</span>
+          <input type = "text" name = "filter-arbeit-name" data-selector-attribute="data-select-name" value="" class = "form-control" placeholder = "FilterInput">
+          <span class = "input-group-addon  btn showtext" data-separator='tab'>Text/tab</span >
+          <span class = "input-group-addon  btn showtext" data-separator=';'>Text/csv</span >
+          <span class = "input-group-addon" title="ALLE Filter matchende Elemente / gesamt"><sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+        </div>
+      </div>
+      <div class = "col-md-1 summe stunden filter accepting-click" title="Summe Stunden">
+        <div class = "input-group">
+          <span class = "input-group-addon btn click-filter-empty smallfont" data-selector-attribute="data-select-stunden" title="DIESEN Filter matchende Elemente / gesamt"><sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+          <input type = "text"
+                 name = "summe-stunden"
+                 class = "form-control bg S"
+                 disabled="disabled"
+                 value="">
+        </div>
+      </div>
+      <div class = "col-md-1 summe kaz filter accepting-click" title="Summe KAZ">
+        <div class = "input-group">
+          <span class = "input-group-addon btn click-filter-empty smallfont" data-selector-attribute="data-select-kaz" title="DIESEN Filter matchende Elemente / gesamt"><sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+          <input type = "text"
+                 name = "summe-kaz"
+                 class = "form-control bg S"
+                 disabled="disabled"
+                 value="">
+        </div>
+      </div>
+
+    </div>
+    <div data-loop="ARB" data-view="ARB.html" data-sort-direction="ascending" data-filter-budget-id="BUDid" data-load-events='page-load'>
+    </div>
+  </div>
+
+</div>
+<div class= "row empty40">
+  <div class = "col-md-12">
+  </div>
+</div>
