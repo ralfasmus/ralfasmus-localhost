@@ -43,7 +43,7 @@ class Fileset
     }
 
     public function getFilesHref() {
-        return $this->filesetBaseHref . "/" . $this->directoryName;
+        return $this->filesetBaseHref . $this->directoryName;
     }
 
     /**
@@ -70,7 +70,7 @@ class Fileset
         $files = array();
         $directories = array();
         foreach ($dirEntries as $dirOrFilename) {
-            if(!$dirOrFilename == "." && !$dirOrFilename == "..") {
+            if(!($dirOrFilename == "." || $dirOrFilename == "..")) {
                 if (is_dir( $directory . DIRECTORY_SEPARATOR . $dirOrFilename)) {
                     $directories[] = $dirOrFilename;
                 } else {
@@ -95,13 +95,13 @@ class Fileset
     public function html() {
        $this->scan();
        $request = $this->getRequest();
-       echo "<div id='gallery'>";
        echo "<h1>" . $this->getTitle() . "</h1>";
+       echo "<div id='gallery' style='display:none'>";
        foreach($this->filesets as $fileset) {
            $filesetTitle = $fileset->getTitle();
-           $url = $request->getProperty("REQUEST_URI");
-           $query = http_build_query(array("directory", $this->directoryName . "/" . $fileset->directoryname));
-           $href = parse_url($url, PHP_URL_PATH) . "?query";
+           $url = $_SERVER["REQUEST_URI"];
+           $query = http_build_query(array("directory" => $this->directoryName . "/" . $fileset->directoryName));
+           $href = parse_url($url, PHP_URL_PATH) . "?$query";
            echo "<h3><a href='$href'>$filesetTitle</a></h3>\n";
        }
        foreach($this->files as $file) {

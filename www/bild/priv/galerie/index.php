@@ -3,8 +3,8 @@
 // Verzeichnis, in dem www, php u.a. liegt
 define("ROOT_DIR",dirname(realpath("."),4));
 define("APPLICATION_NAME",basename(realpath(".")));
-define("BILDER_ROOT_DIR",dirname(realpath(".")) . DIRECTORY_SEPARATOR . "bilder");
-define("HREF_FILESETS_ROOT", "/bilder/");
+define("BILDER_ROOT_DIR",realpath(".") . DIRECTORY_SEPARATOR . "bilder");
+define("HREF_FILESETS_ROOT", "http://ralfwork.localhost:90/bild/priv/galerie/bilder");
 
 require_once("local.version.inc.php");
 require_once(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "index.inc.php");
@@ -39,7 +39,7 @@ require_once(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "index.inc.php");
         <h1>Test Anfang</h1>
         <?php
             $request = \Allgemein\Request::getSingleInstance();
-            $fileset = new Fileset(HREF_FILESETS_ROOT, BILDER_ROOT_DIR, $request->getProperty("directory", ""));
+            $fileset = new Fileset(HREF_FILESETS_ROOT, BILDER_ROOT_DIR, $request->getProperty("directory", "/"));
             $fileset->html();
         ?>
 

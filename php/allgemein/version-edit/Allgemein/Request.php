@@ -49,7 +49,7 @@ class Request  {
             $result = $properties[$key];
         }
         if (is_string($result) && $result == "exception") {
-            throw new Exception("Property $key hat keinen Wert in Objekt " . get_class($this));
+            throw new \Exception("Property $key hat keinen Wert in Objekt " . get_class($this));
         }
         return $result;
     }
