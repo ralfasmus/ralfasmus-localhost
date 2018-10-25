@@ -3,6 +3,8 @@
 // Verzeichnis, in dem www, php u.a. liegt
 define("ROOT_DIR",dirname(realpath("."),4));
 define("APPLICATION_NAME",basename(realpath(".")));
+define("BILDER_ROOT_DIR",dirname(realpath(".")) . DIRECTORY_SEPARATOR . "bilder");
+define("HREF_FILESETS_ROOT", "/bilder/");
 
 require_once("local.version.inc.php");
 require_once(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "index.inc.php");
@@ -33,22 +35,15 @@ require_once(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "index.inc.php");
 
   <body>
     <a id="pagetop"></a>
-    <div id="page" class="index-arbeiten container-fluid">
+    <div id="page" class=container-fluid">
+        <h1>Test Anfang</h1>
+        <?php
+            $request = \Allgemein\Request::getSingleInstance();
+            $fileset = new Fileset(HREF_FILESETS_ROOT, BILDER_ROOT_DIR, $request->getProperty("directory", ""));
+            $fileset->html();
+        ?>
 
-      <div id="gallery" style="display:none;">
-
-        <img alt="Image 1 Title" src="/bild/priv/galerie/bilder/fa/2017/Jellyfish.jpg"
-          data-image="/bild/priv/galerie/bilder/fa/2017/Jellyfish.jpg"
-          data-description="Image 1 Description">
-
-        <img alt="Image 2 Title" src="/bild/priv/galerie/bilder/fa/2017/Koala.jpg"
-          data-image="/bild/priv/galerie/bilder/fa/2017/Koala.jpg"
-          data-description="Image 2 Description">
-
-        <img alt="Image 3 Title" src="/bild/priv/galerie/bilder/fa/2017/Penguins.jpg"
-          data-image="/bild/priv/galerie/bilder/fa/2017/Penguins.jpg"
-          data-description="Image 3 Description">
-
+        <h1>Test Ende</h1>
       </div>
 
     </div>

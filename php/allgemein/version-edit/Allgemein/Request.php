@@ -6,6 +6,8 @@ class Request  {
 
     static private $singleInstance = null;
 
+    private $properties = array();
+
     /**
      * Erzeugt einen Request
      */
@@ -25,6 +27,8 @@ class Request  {
     public function getDecodedProperty($key, $default = "exception") {
         return rawurldecode($this->getProperty($key, $default));
     }
+
+
 
     public function isSubmit() {
         return $this->getProperty("submit", "nix submit") != "nix submit";
@@ -79,10 +83,6 @@ class Request  {
     public function setProperty($value, $key) {
         $wert = $this->trimPropertyValue($value);
         $this->properties[$key] = $wert;
-        if ($key == ObjectAbstract::PROPERTY_DATUM) {
-            $sortFeld = Zeit::datumYmdHis(Zeit::getDateTimeFromDatumField($wert)) . '_' . $this->getProperty(self::PROPERTY_ID, "");
-            $this->setProperty($sortFeld, ObjectAbstract::PROPERTY_DATUM_ID_SORT);
-        }
         return $wert;
     }
 
