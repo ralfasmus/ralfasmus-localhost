@@ -9,6 +9,9 @@ define("HREF_FILESETS_ROOT", "http://ralfwork.localhost:90/bild/priv/galerie/bil
 require_once("local.version.inc.php");
 require_once(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "index.inc.php");
 
+$request = \Allgemein\Request::getSingleInstance();
+$fileset = new Fileset(HREF_FILESETS_ROOT, BILDER_ROOT_DIR, $request->getProperty("directory", ""));
+
 ?><!DOCTYPE html>
 <html lang="de">
 
@@ -31,6 +34,7 @@ require_once(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "index.inc.php");
 		<script type='text/javascript' src='/bild/cssjs/version-edit/unitegallery/themes/default/ug-theme-default.js'></script>
 		<link rel='stylesheet' href='/bild/cssjs/version-edit/unitegallery/themes/default/ug-theme-default.css' type='text/css' />
 
+    <title><?php echo $fileset->getShortTitle(); ?></title>
 	</head>
 
   <body>
@@ -38,9 +42,7 @@ require_once(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "index.inc.php");
     <div id="page" class=container-fluid">
         <h1>Test Anfang</h1>
         <?php
-            $request = \Allgemein\Request::getSingleInstance();
-            $fileset = new Fileset(HREF_FILESETS_ROOT, BILDER_ROOT_DIR, $request->getProperty("directory", "/"));
-            $fileset->html();
+             $fileset->html();
         ?>
 
         <h1>Test Ende</h1>

@@ -81,6 +81,10 @@ class Fileset
         return array($files, $directories);
     }
 
+    public function getShortTitle() {
+        return str_ireplace("_", " ", $this->directoryName);
+    }
+
     private function getTitle() {
         return str_ireplace("_", " ", $this->directoryName);
     }
@@ -96,17 +100,20 @@ class Fileset
        $this->scan();
        $request = $this->getRequest();
        echo "<h1>" . $this->getTitle() . "</h1>";
-       echo "<div id='gallery' style='display:none'>";
        foreach($this->filesets as $fileset) {
-           $filesetTitle = $fileset->getTitle();
-           $url = $_SERVER["REQUEST_URI"];
-           $query = http_build_query(array("directory" => $this->directoryName . "/" . $fileset->directoryName));
-           $href = parse_url($url, PHP_URL_PATH) . "?$query";
-           echo "<h3><a href='$href'>$filesetTitle</a></h3>\n";
+            $filesetTitle = $fileset->getTitle();
+            $url = $_SERVER["REQUEST_URI"];
+            $query = http_build_query(array("directory" => $this->directoryName . "/" . $fileset->directoryName));
+            $href = parse_url($url, PHP_URL_PATH) . "?$query";
+            echo "<h3><a href='$href'>$filesetTitle</a></h3>\n";
        }
-       foreach($this->files as $file) {
-           $file->html();
+       if(sizeof($this->files) > 0) {
+           echo "<div id='gallery' style='display:none'>";
+           foreach($this->files as $file) {
+               $file->html();
+           }
+           echo "</div>";
+
        }
-       echo "</div>";
     }
 }
