@@ -1,0 +1,273 @@
+#ralf {
+  /* Link Farben */
+  /* Zeilen Farben */
+  /*.css-wechsel-b .prop-datum span.input-group-addon {
+    background-color: #fffbe0;
+  }
+  */
+  /* die sind unwichtig: */
+}
+#ralf.modus_kaz_eingabe .modus_arbeit_eingabe,
+#ralf.modus_arbeit_eingabe .modus_kaz_eingabe {
+  display: none;
+}
+#ralf .container-fluid {
+  clear: both;
+}
+#ralf .not-fixed-top {
+  padding-top: 150px;
+}
+#ralf .abc {
+  display: none;
+}
+#ralf input.saved {
+  border: 2px solid red;
+}
+#ralf .navbar-nav li {
+  margin-right: 5px;
+}
+#ralf .navbar-default {
+  background-color: white;
+  border-color: transparent;
+}
+#ralf .ui-autocomplete .ui-menu-item {
+  padding: 2px;
+  font-size: 1.1em;
+}
+#ralf nav button:hover {
+  background-color: #ff9;
+}
+#ralf nav button {
+  margin-top: 7px;
+}
+#ralf nav .notiz {
+  margin-top: 7px;
+  padding: 5px;
+  font-size: 1.2em;
+}
+#ralf nav .budgets {
+  color: #555555;
+}
+#ralf nav .kazen {
+  color: #a94442;
+}
+#ralf nav a.anwesenheiten {
+  color: royalblue;
+}
+#ralf nav .arbeiten {
+  color: #459b2f;
+}
+#ralf .css_page_BArchivKAZenArbeiten .row.quelle-new {
+  display: none;
+}
+#ralf .row .bg-stunden {
+  background-repeat: no-repeat;
+  background-position: right top;
+}
+#ralf .row .bg-stunden.A {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='9px' width='10px'><text x='0' y='9' fill='grey' font-size='9'>A</text></svg>");
+}
+#ralf .row .bg-stunden.B {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='9px' width='10px'><text x='0' y='9' fill='grey' font-size='9'>B</text></svg>");
+}
+#ralf .row .bg-stunden.K {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='9px' width='10px'><text x='0' y='9' fill='grey' font-size='9'>K</text></svg>");
+}
+#ralf .row .input-group-addon.asm-hide {
+  width: 0px;
+  padding: 0px;
+  border: 0px;
+}
+#ralf .row.budget-row .prop-name-full {
+  display: none;
+}
+#ralf .row.budget-row.name-gt-80 .prop-name-full {
+  font-size: 11px;
+  font-weight: normal;
+  display: block;
+}
+#ralf .row.budget-row .input-group-addon.zeitraum {
+  width: 70px;
+}
+#ralf .row.budget-row input,
+#ralf .row.budget-row * {
+  font-weight: bold;
+  color: #555555;
+}
+#ralf .row.budget-row.quelle-new .berechnet {
+  display: none;
+}
+#ralf .row.budget-row.quelle-new input,
+#ralf .row.budget-row.quelle-new.quelle-new * {
+  font-weight: bold;
+  color: #555555;
+}
+#ralf .row.budget-row.quelle-persistent .input-group-addon.zeitraum.total,
+#ralf .row.budget-row.quelle-persistent .input-group-addon.zeitraum.monatl,
+#ralf .row.budget-row.quelle-persistent .input-group-addon.zeitraum.jaehrl {
+  width: 0px;
+  padding: 0px;
+  border: 0px;
+}
+#ralf .row.budget-row.quelle-persistent.budget-zeitraum-Total input.Monatl,
+#ralf .row.budget-row.quelle-persistent.budget-zeitraum-Total input.Jaehrl {
+  display: none;
+}
+#ralf .row.budget-row.quelle-persistent.budget-zeitraum-Monatl input.Total,
+#ralf .row.budget-row.quelle-persistent.budget-zeitraum-Monatl input.Jaehrl {
+  display: none;
+}
+#ralf .row.budget-row.quelle-persistent.budget-zeitraum-Jaehrl input.Total,
+#ralf .row.budget-row.quelle-persistent.budget-zeitraum-Jaehrl input.Monatl {
+  display: none;
+}
+#ralf .row.kaz-row * {
+  color: #993432;
+}
+#ralf .row.kaz-row.quelle-new * {
+  color: #c97472;
+}
+#ralf .row.kaz-row.quelle-new .prop-stunden input {
+  font-weight: bold;
+  color: green;
+}
+#ralf .row.arbeit-row * {
+  color: #255b0f;
+}
+#ralf .row.arbeit-row.quelle-new * {
+  color: #559b4f;
+}
+#ralf .row.anwesenheit-row * {
+  color: #1539bb;
+}
+#ralf .row.anwesenheit-row.quelle-new * {
+  color: #5e90ff;
+}
+#ralf .liste .quelle-new .input-group-addon {
+  background: #fff;
+}
+#ralf .input-group-addon {
+  background: #eee;
+}
+#ralf .css_page_Budgets .budget-row .prop-name input {
+  color: darkgreen;
+}
+#ralf .css-wechsel-b .input-group-addon,
+#ralf .css-wechsel-b input {
+  border-color: #dfdbd0;
+  background-color: #faebcc;
+  /* #fffbf0 */
+}
+#ralf .row:hover * {
+  background-color: #eee;
+  font-weight: bold;
+}
+#ralf .col-lg-1.wide1 {
+  width: 10.5%;
+}
+#ralf .col-lg-1.wide2 {
+  width: 12.5%;
+}
+#ralf .font-monospace,
+#ralf .font-monospace {
+  /* ZB die berechnete Datums-Anzeige. */
+  font-family: Courier;
+}
+#ralf .with-related-items .related-item-nein.quelle-persistent * {
+  /*, .budget-row.empty-kaz * {*/
+  background-color: #d9eabd;
+}
+#ralf .prop-stunden input {
+  font-weight: bold;
+  color: green;
+}
+#ralf .arbeit-row.related-item-ja .prop-budget,
+#ralf .kaz-row.related-item-ja .prop-budget {
+  display: none;
+}
+#ralf .budget-display-at-end {
+  display: none;
+}
+#ralf .arbeit-row.related-item-ja .budget-display-at-end,
+#ralf .kaz-row.related-item-ja .budget-display-at-end {
+  display: inline;
+  padding-top: 7px;
+}
+#ralf .summen {
+  padding-bottom: 10px;
+}
+#ralf .summen .input-group-addon {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+#ralf .aa-minus .input-group-addon,
+#ralf .as-minus .input-group-addon,
+#ralf .ka-minus .input-group-addon {
+  color: red;
+}
+#ralf .datum-gesetzt-group.hervorgehoben * {
+  color: red;
+  font-weight: bold;
+}
+#ralf .datum-gesetzt-group.hervorgehoben .input-group * {
+  border: 1px solid red;
+}
+#ralf .dropdown-menu li {
+  display: block;
+  width: 350px;
+}
+#ralf .dropdown-menu button {
+  border: 0;
+  background: transparent;
+  margin: 2px 5px;
+}
+#ralf body {
+  padding: 100px 5px 0 5px;
+}
+#ralf .css_page_Arbeiten .row.summen .vormonat *,
+#ralf .css_page_Arbeiten .row.summen .gesamt *,
+#ralf .css_page_Arbeiten-per-Datum .row.summen .vormonat *,
+#ralf .css_page_Arbeiten-per-Datum .row.summen .gesamt *,
+#ralf .css_page_KAZen .row.summen *,
+#ralf .css_page_KAZen-per-Budget .row.summen * {
+  color: #ccc;
+}
+#ralf .arbeit-row .placeholder_zeigt_wert input[value=''],
+#ralf .kaz-row .placeholder_zeigt_wert input[value=''] {
+  background-color: #ff9;
+}
+#ralf .quelle-new input[value=''],
+#ralf .quelle-new .prop-datum input {
+  background-color: #ffa;
+}
+#ralf .quelle-new .input-group-addon {
+  font-weight: bold;
+}
+@media print {
+  #ralf * {
+    font-size: 10px;
+  }
+  #ralf .kaz-row .budget-display-at-end,
+  #ralf .kaz-row .input-group-addon {
+    display: none;
+  }
+  #ralf .kaz-row .col-md-1 {
+    width: 2.0cm;
+    float: left;
+  }
+  #ralf .kaz-row .col-md-2 {
+    width: 3.0cm;
+    float: left;
+  }
+  #ralf .kaz-row .col-md-3 {
+    width: 6.0cm;
+    float: left;
+  }
+  #ralf .kaz-row .col-md-6 {
+    width: 16.0cm;
+    float: left;
+  }
+  #ralf .kaz-row .col-md-6 input {
+    width: 16.0cm;
+  }
+}
