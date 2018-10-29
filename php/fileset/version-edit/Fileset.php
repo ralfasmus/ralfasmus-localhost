@@ -14,7 +14,7 @@ class Fileset
 
     const GET_KEY_DARSTELLUNG = "darstellung";
     const GET_KEY_LEVELS = "levels";
-    const GET_KEY_FILETITLE = "";
+    const GET_KEY_FILETITLE = "filetitle";
 
     /**
      * @var string Pfad ohne Name des Directories des Filesets ab/unterhalb /filesets/
@@ -29,7 +29,7 @@ class Fileset
     private $directoryName = "";
 
     /**
-     * @var string Fuer die Bildung eines Datei-hrefs die Basis bis zum directoryName des Filesets
+     * @var string Fuer die Bildung eines Datei-hrefs die Basis bis zum relativeDirectoryPath des Filesets
      * Bsp: http://www.xyz.de/fileset/priv/media/filesets
      */
     private $filesetBaseHref = "";
@@ -48,6 +48,10 @@ class Fileset
      */
     private $filesets = array();
 
+    /**
+     * @var bool schon gesacanned?
+     */
+    private $scanned = false;
     /**
      */
     public function __construct($filesetBaseHref, $filesetBaseDirectory, $relativeDirectoryPath, $directoryName)
@@ -68,7 +72,7 @@ class Fileset
     }
 
     public function addFileset($directoryName) {
-        $newFileset = new Fileset($this->getFilesHref(), $this->filesetBaseDirectory,
+        $newFileset = new Fileset($this->filesetBaseHref, $this->filesetBaseDirectory,
                 $this->directoryName == "" ? "" : $this->relativeDirectoryPath . "/" . $this->directoryName,
                 $directoryName);
         $this->filesets[] = $newFileset;
@@ -86,7 +90,7 @@ class Fileset
      * @return string Komplette href-Basis bis zu den Inhalten des Filesets
      */
     public function getFilesHref() {
-        return $this->filesetBaseHref . $this->relativeDirectoryPath . "/" . $this->directoryName;
+        return $this->filesetBaseHref . "/" . $this->relativeDirectoryPath . "/" . $this->directoryName;
     }
 
     /**
@@ -124,12 +128,15 @@ class Fileset
      * Durchsucht Sub Dirs und erstellt Child - Fileset Objekte.
      */
     private function scan() {
-        list($fileNames, $directoryNames) = $this->getFilesAndDirectories($this->getFilesetDirectory());
-        foreach($fileNames as $fileName) {
-            $newFile = $this->addFile($fileName);
-        }
-        foreach ($directoryNames as $directoryName) {
-            $newFileset = $this->addFileset($directoryName);
+        if(!$this->scanned) {
+            list($fileNames, $directoryNames) = $this->getFilesAndDirectories($this->getFilesetDirectory());
+            foreach ($fileNames as $fileName) {
+                $newFile = $this->addFile($fileName);
+            }
+            foreach ($directoryNames as $directoryName) {
+                $newFileset = $this->addFileset($directoryName);
+            }
+            $this->scanned = true;
         }
     }
 
@@ -184,6 +191,17 @@ class Fileset
         return str_ireplace("_", " ", $dir);
     }
 
+    public function subfilesetsHtml($levels = 1) {
+        $this->scan();
+        if($levels == 1) {
+            foreach($this->filesets as $fileset) {
+                $filesetTitle = $fileset->getTitle();
+                $href = $fileset->getFilesetHref();
+                echo "<h3><a href='$href'>$filesetTitle</a></h3>\n";
+            }
+        }
+    }
+
     /**
      * HTML fuer das Fileset ausgeben.
      *
@@ -193,18 +211,16 @@ class Fileset
     public function html($levels = 1) {
         $this->scan();
         if($levels == 1) {
+            foreach($this->files as $file) {
+                $file->html();
+            }
+        } else if($levels == 2) {
             foreach($this->filesets as $fileset) {
                 $filesetTitle = $fileset->getTitle();
                 $href = $fileset->getFilesetHref();
-                echo "<h3><a href='$href'>$filesetTitle</a></h3>\n";
+                //echo "<h3><a href='$href'>$filesetTitle</a></h3>\n";
+                $fileset->html($levels - 1);
             }
-        }
-        if(sizeof($this->files) > 0) {
-            echo "<div id='gallery' style='display:none'>";
-            foreach($this->files as $file) {
-                $file->html($this->getShortTitle());
-            }
-            echo "</div>";
         }
     }
 }

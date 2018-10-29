@@ -25,7 +25,7 @@ $filesetTitle           = $fileset->getTitle();
 $filesetShortTitle      = $fileset->getShortTitle();
 $pageTitle              = $filesetShortTitle;
 $darstellung            = $request->getProperty(Fileset::GET_KEY_DARSTELLUNG, "compact"); // unitegallery hat auch ein "default" schema!
-$levels                 = 0 + $request->getProperty(Fileset::GET_KEY_LEVELS, "1");
+$levels                 = 0 + $request->getProperty(Fileset::GET_KEY_LEVELS, 1);
 $cssjsPath              = "/fileset/cssjs/" . APPLICATION_VERSION_CSSJS;
 if ($levels > 1) {
     $request->setProperty("DIRNAME", Fileset::GET_KEY_FILETITLE);
@@ -45,8 +45,18 @@ require_once("include/$darstellung.head.1.inc.php");
             <a href="<?php echo $fileset->getFilesetHref(array(Fileset::GET_KEY_DARSTELLUNG => "tiles-nested")); ?>">tiles nested</a>
             <a href="<?php echo $fileset->getFilesetHref(array(Fileset::GET_KEY_DARSTELLUNG => "tiles-justified")); ?>">tiles justified</a>
             <a href="<?php echo $fileset->getFilesetHref(array(Fileset::GET_KEY_DARSTELLUNG => "grid")); ?>">grid</a>
+            |
+            <a href="<?php echo $fileset->getFilesetHref(array(Fileset::GET_KEY_LEVELS => "1")); ?>">1 Level</a>
+            <a href="<?php echo $fileset->getFilesetHref(array(Fileset::GET_KEY_LEVELS => "2")); ?>">2 Levels</a>
         </div>
-        <?php $fileset->html($levels); ?>
+        <div>
+            <?php
+            $fileset->subfilesetsHtml($levels); ?>
+        </div>
+        <div id='gallery'>
+            <?php
+            $fileset->html($levels); ?>
+        </div>
     </div>
 <?php
 require_once("include/$darstellung.body.1.inc.php");

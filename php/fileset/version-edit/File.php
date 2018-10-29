@@ -33,14 +33,19 @@ class File
         return str_ireplace(array(".jpg",".jpeg",".mp4",".mov",".png",".gif"),"", str_ireplace("_", " ", $fileName));
     }
 
+    private function getRequest() {
+        return \Allgemein\Request::getSingleInstance();
+    }
+
     /**
      * @return mixed
      */
-    private function getTitle($titlePattern) {
+    private function getTitle() {
+        $titlePattern = $this->getRequest()->getProperty(Fileset::GET_KEY_FILETITLE, "FILENAME");
         $titlePattern = str_ireplace("FILENAME2TITLE", self::fileName2Title($this->fileName), $titlePattern);
         $titlePattern = str_ireplace("FILENAME", $this->fileName, $titlePattern);
         $titlePattern = str_ireplace("DIRNAME", $this->fileset->getShortTitle(), $titlePattern);
-        $titlePattern = str_ireplace("DIRPATH", "", $this->fileset->getTitle(), $titlePattern);
+        $titlePattern = str_ireplace("DIRPATH",  $this->fileset->getTitle(), $titlePattern);
         return $titlePattern;
     }
 
@@ -55,9 +60,9 @@ class File
     /**
      * HTML fuer das File ausgeben.
      */
-    public function html($title) {
-        $title = $this->getTitle($title);
+    public function html() {
+        $title = $this->getTitle();
         $href = $this->getHref();
-        echo "<img alt='' src='$href' data-image='$href' data-description='$title'>\n";
+        echo "<img alt='$title' src='$href' data-image='$href' data-description='2nd $title'>\n";
     }
 }
