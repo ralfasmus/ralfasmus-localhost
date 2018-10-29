@@ -1,0 +1,13 @@
+.menu {
+    border-bottom: 1px solid #224606;
+    padding-bottom: 5px;
+}
+.menu a {
+    text-decoration: none;
+    margin: 0 10px;
+    font-family: sans-serif;
+}
+.title {
+    color: grey;
+    font-weight:bold;
+}
