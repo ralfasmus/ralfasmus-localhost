@@ -90,7 +90,7 @@ class Fileset
      * @return string Komplette href-Basis bis zu den Inhalten des Filesets
      */
     public function getFilesHref() {
-        return $this->filesetBaseHref . "/" . $this->relativeDirectoryPath . "/" . $this->directoryName;
+        return $this->filesetBaseHref . $this->relativeDirectoryPath . "/" . $this->directoryName;
     }
 
     /**
@@ -193,12 +193,10 @@ class Fileset
 
     public function subfilesetsHtml($levels = 1) {
         $this->scan();
-        if($levels == 1) {
             foreach($this->filesets as $fileset) {
                 $filesetTitle = $fileset->getTitle();
                 $href = $fileset->getFilesetHref();
                 echo "<h3><a href='$href'>$filesetTitle</a></h3>\n";
-            }
         }
     }
 
@@ -210,6 +208,9 @@ class Fileset
      */
     public function html($levels = 1) {
         $this->scan();
+        if(sizeof($this->filesets) == 0) {
+            $levels = 1;
+        }
         if($levels == 1) {
             foreach($this->files as $file) {
                 $file->html();
