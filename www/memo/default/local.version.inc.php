@@ -8,11 +8,11 @@ if(!defined("ALLGEMEIN_VERSION_PHP")) {
 
  if(!defined("APPLICATION_VERSION_PHP")) {
      //define("APPLICATION_VERSION_PHP","version-edit");
-     define("APPLICATION_VERSION_PHP","version-2018-10-24");
+     define("APPLICATION_VERSION_PHP","version-2018-11-29");
  }
  if(!defined("APPLICATION_VERSION_CSSJS")) {
      //define("APPLICATION_VERSION_CSSJS","version-edit");
-     define("APPLICATION_VERSION_CSSJS","version-2018-10-15");
+     define("APPLICATION_VERSION_CSSJS","version-2018-11-29");
  }
 if(!defined("LOG_LEVEL")) {
     define("LOG_LEVEL", 0); // ObjectAbstract::LOG_LEVEL_OFF

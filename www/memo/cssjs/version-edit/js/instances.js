@@ -193,6 +193,19 @@ function saveField(containedElement) {
   }
 }
 
+function my_anchorme(htmlString) {
+  return anchorme(htmlString,{
+        files: false,
+        attributes:[ // attributes is an array
+            // an object that describes the attribute
+            // will produce: class="link"
+            {
+                name:"target",
+                value:"_blank"
+            },
+        ]
+    });
+}
 
 /**
  * Sendet eine Instanz zum Speichern.
@@ -211,6 +224,8 @@ function saveInstance(instance) {
 
     if ($(instance).hasClass('edit-instance') && $(this).hasClass('editor')) {
       fieldNewValue = $(this).summernote('code');
+      fieldNewValue = my_anchorme(fieldNewValue);
+      $(".summernote").summernote("code", fieldNewValue);
       //alert(fieldNewValue);
     }
     formData[fieldName] = fieldNewValue;
