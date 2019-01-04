@@ -170,6 +170,14 @@ function bindInstanceEvents(instance) {
     saveInstance(getMyInstance(this));
   });
     /**
+     * Das aktuelle ANW-Objekt als ohne Pause setzen und speichern:
+     */
+    $(instance).find(".pause").on('click', function (event) {
+        var pause = $(getMyInstance(this)).find('input[name=pause]').val() == 1 ? 0 : 1;
+        $(getMyInstance(this)).find('input[name=pause]').val(pause);
+        saveInstance(getMyInstance(this));
+    });
+    /**
      * Das aktuelle ARB-Objekt als kaz_kann_spaeter setzen und speichern:
      * Wenn es aber schon eingegebene kaz-h hat, dann ist kaz_kann_spaeter immer 0.
      */

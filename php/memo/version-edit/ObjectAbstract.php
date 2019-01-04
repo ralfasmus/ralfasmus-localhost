@@ -14,6 +14,7 @@ abstract class ObjectAbstract {
   // presistente:
   const PROPERTY_ID = "id";
   const PROPERTY_BEMERKUNG = "bemerkung";
+  const PROPERTY_PAUSE = "pause";
   const PROPERTY_BTOTAL = "btotal";
   const PROPERTY_DATUM = "datum";
   const PROPERTY_DATUM_ARB_EINGETRAGEN_IN_KAZ = "datum_arbeit_eingetragen_in_kaz"; // datum, wann (zuletzt) in kaz eingetragen bzw. kaz-feld editiert wurde

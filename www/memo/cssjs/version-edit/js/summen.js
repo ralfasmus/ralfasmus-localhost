@@ -41,7 +41,9 @@ function bisJetztZuBuchendeStunden() {
         var jetztString = zeitJetztAufgerundet();
         var zeitraumString = startString + '-' + jetztString;
         var jetztDate = getDateFromZeitraum(zeitraumString, false);
-        diff = minutesToKaz(diffInMinuten(startDate, jetztDate)) / 60;
+        var arbeitMinutes = diffInMinuten(startDate, jetztDate);
+        var calculatedPauseMinutes = pauseMinutes(arbeitMinutes, '');
+        diff = (arbeitMinutes - calculatedPauseMinutes) / 60;
     }
     return diff;
 

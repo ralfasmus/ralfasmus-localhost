@@ -22,6 +22,7 @@ class ANW extends ObjectAbstract {
         self::PROPERTY_DATUM,
         self::PROPERTY_BEMERKUNG,
         self::PROPERTY_SCHON_IN_KAZ,
+            self::PROPERTY_PAUSE,
     ));
   }
 
@@ -43,6 +44,8 @@ class ANW extends ObjectAbstract {
                     ->addAttribute("value", $this->getProperty(self::PROPERTY_BEMERKUNG, "")));
     $this->addElement(Element::create(self::PROPERTY_STUNDEN)
                     ->addAttribute("value", $this->getProperty(self::PROPERTY_STUNDEN, "")));
+      $this->addElement(Element::create(self::PROPERTY_PAUSE)
+              ->addAttribute("value", $this->getProperty(self::PROPERTY_PAUSE, "15")));
     $this->addElement(Element::create(self::PROPERTY_ZEITEN)
                     ->addAttribute("value", $this->getProperty(self::PROPERTY_ZEITEN, "")));
     $this->addElement(Element::create(self::PROPERTY_DATUM)

@@ -66,17 +66,31 @@ function calculateInstanceProperties(instance) {
     var zeitenInput = $(instance).find('input[name=zeiten]').val();
     var start = getDateFromZeitraum(zeitenInput, true);
     var end = getDateFromZeitraum(zeitenInput, false);
-    var calculatedHours = end == '' ? '' : anwesenheitVonZeiten(start, end);
+    var diffMinutes = diffInMinuten(start, end);
+
+    var pauseInput = $(instance).find('input[name=pause]').val();
+    var calculatedPauseMinutes = pauseMinutes(diffMinutes, pauseInput);
+    if(pauseInput == '' && end != '') {
+        $(instance).find('input[name=pause]').val(calculatedPauseMinutes);
+    }
+
+    var calculatedHours = end == '' ? '' : (diffMinutes - calculatedPauseMinutes) / 60;
     if (calculatedHours != '') {
       $(instance).find('input[name=stunden]').val(calculatedHours);
       // wenn Startzeit < 6.00 Uhr, die in KAZ einzutragende Zeit in das Feld bemerkung schreiben (nur wenn es leer ist)
       var bemerkung = $(instance).find('input[name=bemerkung]').val();
-      if (bemerkung == '') {
+      var prefix = 'In KAZ:';
+      var postfix = ' :: ';
+      if (bemerkung.trim() == '' || bemerkung.startsWith(prefix)) {
+        var startIndex = bemerkung.search(postfix) + postfix.length;
+        var bemerkungManuell = bemerkung.trim().endsWith(postfix.trim()) ? '' : bemerkung.substr(startIndex, bemerkung.length - startIndex);
         var firstDate = new Date(0,0,0,6,0);
           if (start < firstDate) {
             kazEndDate = new Date(end);
             kazEndDate.setMinutes(end.getMinutes() + diffInMinuten(start, firstDate));
-            bemerkung = 'In KAZ: 6.00' + '-' + kazEndDate.getHours() + '.' + (kazEndDate.getMinutes() == 0 ? '00' : kazEndDate.getMinutes());
+            bemerkung = prefix + ' 6.00' + '-'
+                + kazEndDate.getHours() + '.' + (kazEndDate.getMinutes() == 0 ? '00' : kazEndDate.getMinutes())
+                + postfix + bemerkungManuell;
             $(instance).find('input[name=bemerkung]').val(bemerkung);
           }
       }

@@ -1,38 +1,28 @@
+
 /**
- * Berechnet aus einem Wert, der aus dem Feld "Zeiten" stammt, die Anwesenheit
- * in h
- * @param start Startzeit als Date
- * @param end Ende-Zeit als Date
- * @returns {Number|String} Zeit in h (Pause 45 min bereits abgezogen)
+ * Liefert Pausenminuten wie gesetzt oder berechnet, wenn Feld leer.
+ * @param {Number} diffMinutes Die Anwesenheit Differenz in Minuten. Bsp: 360
+ * @param {string} pauseMinutes Die eingetragene Pausenzeit in Minuten. Bsp: '15' oder ''
+ * @returns {Number} Pause in Minuten
  */
-/**
- *
- * @returns {number}
- */
-function anwesenheitVonZeiten(start, end) {
-  var diffMinutes = diffInMinuten(start, end);
-  return minutesToKaz(diffMinutes) / 60;
+function pauseMinutes(diffMinutes, pauseMinutes) {
+    var defaultSubMinutes = diffMinutes >= 435 ? 45 : (diffMinutes >= 375 ? 30 : (diffMinutes >= 255 ? 15 : 0));
+    var subMinutes = (pauseMinutes == '' ? defaultSubMinutes : pauseMinutes);
+    return subMinutes;
 }
 
 /**
- * Liefert Anwesenheit in Minuten abzueglich der abzuziehenden Pause.
- * @param {type} diffMinutes Die Anwesenheit Differenz in Minuten. Bsp: 360
- * @returns {Number}
- */
-function minutesToKaz(diffMinutes) {
-  var subMinutes = diffMinutes >= 435 ? 45 : (diffMinutes >= 375 ? 30 : (diffMinutes >= 255 ? 15 : 0));
-  return diffMinutes - subMinutes;
-}
-
-/**
- * Liefert in Abhaengigkeit von der abgezogenen Pause eine CSS Klasse.
+ * Liefert in Abhaengigkeit von der abgezogenen Pause eine CSS Klasse. Ist die berechnete Pause bei 15 min AZ weniger
+ * == 0 dann ROT.
  * @param start Startzeit als Date
  * @param end Ende-Zeit als Date
  * @returns {String} CSS Klasse für Anwesenheit Felder
  */
 function anwesenheitCss(start, end) {
   var diffMinutes = diffInMinuten(start, end);
-  return ((minutesToKaz(diffMinutes) == minutesToKaz(diffMinutes - 15)) ? "red" : "");
+  var calculatedPauseMinutes1 = pauseMinutes(diffMinutes, '');
+  var calculatedPauseMinutes2 = pauseMinutes(diffMinutes - 15, '');
+  return (calculatedPauseMinutes1 > calculatedPauseMinutes2) ? "red" : "";
 }
 
 /**
