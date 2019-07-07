@@ -13,6 +13,8 @@
 **/nbdist
 **/target
 
+**/Leichtathletik
+
 **/data*/**
 *.data
 **/conf/local.*
