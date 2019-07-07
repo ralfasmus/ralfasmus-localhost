@@ -1,4 +1,5 @@
 <div class="container-fluid item-type_textnote">
+    <p>Speichern erfolgt automatisch nach jedem Tastendruck!</p>
     <form data-id="REPLACED_BY_ITEM_id_VALUE">
         <div class="form-group row">
             <label for="label-name" class="col-form-label col-sm-1">Name</label>
@@ -17,7 +18,8 @@
             <label for="label-text">Text</label>
             <input name="text" class="form-control dvz-js-persistent dvz-js-summernote-editor" id="label-text" placeholder="...Text..." value='REPLACED_BY_ITEM_text_VALUE'></input>
         </div>
-        <input name="files" class="dvz-js-persistent" value='REPLACED_BY_ITEM_files_VALUE'>
+		<div class="form-group">
+			<input name="files" class="dvz-js-persistent" value='REPLACED_BY_ITEM_files_VALUE'>
         
                     
                     <input name="datum" class="dvz-js-persistent" value='REPLACED_BY_ITEM_datum_VALUE'>
@@ -28,6 +30,6 @@
         
         <input name="id" disabled="disabled" class="dvz-js-persistent" value='REPLACED_BY_ITEM_id_VALUE'>
         <input name="itemtype" type="hidden" class="dvz-js-persistent" value='textnote'>
-    
+		</div>
     </form>
 </div>

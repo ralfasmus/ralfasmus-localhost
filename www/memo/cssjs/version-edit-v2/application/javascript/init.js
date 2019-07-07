@@ -26,10 +26,19 @@ $(document).ready(function () {
         itemSave(this);
     });
 
-    $('a.dvz-js-delete-action').on('click', function (event) {
+    $('.dvz-js-delete-action').on('click', function (event) {
         var id = $(event.target).attr('data-id');
         itemDelete(id);
         $('.dvz-js-remove-on-delete-' + id).remove();
+        filterListUpdate();
+    });
+    $('.dvz-js-backup-action').on('click', function (event) {
+        var id = $(event.target).attr('data-id');
+        itemBackup(id);        
+    });
+    $('.dvz-js-hide-action').on('click', function (event) {
+        var id = $(event.target).attr('data-id');
+        $('.dvz-js-remove-on-hide-' + id).remove();
         filterListUpdate();
     });
 });

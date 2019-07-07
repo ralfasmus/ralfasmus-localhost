@@ -24,6 +24,14 @@ function itemSave(formDomNode) {
         //logInfo('Success. Instance ' + instanceId + ' saved.');
     }
 }
+/**
+ * Sendet einen AJAX Request zum Backup.
+ * @param {type} instance
+ * @returns {undefined}
+ */
+function itemBackup(id) {
+    return itemAction(id, 'backup');
+}
 
 /**
  * Sendet einen AJAX Request zum Loeschen und loescht die Instance aus dem DOM.
@@ -31,23 +39,32 @@ function itemSave(formDomNode) {
  * @returns {undefined}
  */
 function itemDelete(id) {
+    return itemAction(id, 'delete');
+}
+/**
+ * Sendet einen AJAX Request zum Loeschen und loescht die Instance aus dem DOM.
+ * @param {type} instance
+ * @returns {undefined}
+ */
+function itemAction(id, action) {
     var formData = {};
-    $.ajax({
+    $.ajax(
+	   'index.php?action=item-' + action + '&id=' + id, // the url where we want to POST
+	   {
         type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
-        url: 'index.php?action=item-delete&id=' + id, // the url where we want to POST
         data: formData, // our data object
         dataType: 'text', // what type of data do we expect back from the server
         encode: true,
         //async: false,
         success: (function (data, textStatus, jqXHR) {
-            console.log("Deleted Instance: " + textStatus + id);
+            console.log("SUCCESS: Instance " + action + ": " + textStatus + id);
         }),
         error: (function (jqXHR, textStatus, errorThrown) {
-            console.error("Deleted Instance: " + textStatus + errorThrown + id);
+            console.error("ERROR: Instance " + action + ": " + textStatus + errorThrown + id);
         }),
         complete: // after succss/error
             (function (jqXHR, textStatus) {
-                console.log('done');
+                console.log('Done.');
             })
     });
     return true;
@@ -60,9 +77,9 @@ function itemDelete(id) {
  */
 function saveInstanceForm(formData) {
     var dataInstanceId = formData['id'];
-    $.ajax({
+    $.ajax('index.php?action=item-save', // the url where we want to POST,
+	  {
         type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
-        url: 'index.php?action=item-save', // the url where we want to POST
         data: formData, // our data object
         dataType: 'text', // what type of data do we expect back from the server
         encode: true,

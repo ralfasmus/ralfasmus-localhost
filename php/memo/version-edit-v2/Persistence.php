@@ -29,16 +29,8 @@ class Persistence extends ObjectAbstract {
   public static function getInstances($itemType, $sortProperty, $descending) {
 
       $instances = array();
-      $status = self::request()->getStatus();
-      if(stripos($status, "active") !== false) {
-          self::loadInstances($itemType, "active", $instances);
-      }
-      if(stripos($status, "deleted") !== false) {
-          self::loadInstances($itemType, "deleted", $instances);
-      }
-      if(stripos($status, "backup") !== false) {
-          self::loadInstances($itemType, "backup", $instances);
-      }
+      $status = self::getStatus();
+      self::loadInstances($itemType, $status, $instances);
 
       $sortList = array();
       $instanceList = array();
@@ -69,7 +61,7 @@ class Persistence extends ObjectAbstract {
   }
 
   public static function newId() {
-     $newId = "active_id" . Zeit::datumYmdHis(Zeit::heute()) . "_" . Zeit::datumYmdH(Zeit::heute());
+     $newId = "id" . Zeit::datumYmdHis(Zeit::heute()) . "_" . Zeit::datumYmdH(Zeit::heute());
      return $newId;
   }
 
@@ -108,9 +100,12 @@ class Persistence extends ObjectAbstract {
     $instance->setProperties($properties);
     return $instance;
   }
-  static public function getPathAndFilename($id) {
-    list($path, $postfix) = explode("_", $id); // active|deleted|backup
-    return Conf::get("DATA_FILE_NAME_BASE") . "/$path/$id";
+  
+  static public function getPathAndFilename($id, $status="rEQuESTstaTus") {
+	  if ($status == "rEQuESTstaTus") {
+		  $status = self::getStatus();
+	  }
+      return Conf::get("DATA_FILE_NAME_BASE") . "/$status/$id";
   }
 
   /**
@@ -144,19 +139,23 @@ class Persistence extends ObjectAbstract {
   /**
    * Speichert eine vollstaendige Instanz.
    */
-  public static function saveInstance($instance) {
+  public static function saveInstance($instance, $status="rEQuESTstaTus") {
+	if ($status == "rEQuESTstaTus") {
+	 $status = self::getStatus();
+	}
     foreach ($instance->getProperties() as $name => $value) {
       $props[] = "$name" . self::DATA_FILE_NAME_VALUE_SEPARATOR . $value;
     }
     $content = implode(self::DATA_FILE_PROPERTY_SEPARATOR, $props);
-    $id = $instance->getProperty("id");
-    $filename = self::getPathAndFilename($id);
+    $filename = self::getPathAndFilename($instance->getProperty("id"), $status);
     file_put_contents($filename, $content);
   }
 
-  private static function getStatus($instance) {
-      list($status, $postfix) = explode("_", $instance->getProperty("id")); // active|deleted|backup
-      return $status;
+  /**
+     active|deleted|backup
+  */
+  private static function getStatus() {
+	  return self::request()->getStatus();
   }
 
 
@@ -164,11 +163,10 @@ class Persistence extends ObjectAbstract {
    * Loescht eine vollstaendige Instanz.
    */
   public static function deleteInstance($instance) {
-    $status = self::getStatus($instance);
-    $filename = self::getPathAndFilename($instance);
-    if($status == "active" || $status == "deleted") {
+    if(self::getStatus() != "backup") {
         self::backupInstance($instance);
     }
+	$filename = self::getPathAndFilename($instance->getProperty("id"));
     unlink($filename);
   }
 
@@ -176,13 +174,7 @@ class Persistence extends ObjectAbstract {
      * Erstellt Backup fuer eine active oder deleted oder backup Instanz.
      */
     public static function backupInstance($instance) {
-        list($status, $idFragment, $version) = explode("_", $instance->getProperty("id"));
-        if($status == "backup") {
-            $version = Zeit::datumYmdHis(Zeit::heute());
-        }
-        $newId = "backup_{$idFragment}_{$version}";
-        $instance->setProperty($newId, "id");
-        self::saveInstance($instance);
+        self::saveInstance($instance, "backup");
     }
 
     private static function request() {

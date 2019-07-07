@@ -15,11 +15,11 @@ cat lib/bootstrap-4.3.1/node_modules/bootstrap/dist/js/bootstrap.min.js >> js/mi
 echo "" >> js/min.js
 cat application/javascript/helpers.js >> js/min.js
 echo "" >> js/min.js
+cat application/javascript/ajax.js >> js/min.js
+echo "" >> js/min.js
 cat application/javascript/init.js >> js/min.js
 echo "" >> js/min.js
 cat application/javascript/events.js >> js/min.js
-echo "" >> js/min.js
-cat application/javascript/ajax.js >> js/min.js
 
 #cat site/js/globals.js >> js/min.js
 #cat site/js/logging-and-errorhandling.js >> js/min.js

@@ -11,7 +11,7 @@ abstract class ObjectAbstract {
   /**
    * Properties
    */
-  // presistente:
+  // persistente:
   const PROPERTY_ID = "id";
   const PROPERTY_BEMERKUNG = "bemerkung";
   const PROPERTY_PAUSE = "pause";
@@ -32,7 +32,7 @@ abstract class ObjectAbstract {
   // berechnete:
   const PROPERTY_DATUM_ID_SORT = "DatumE";
 
-    public function isPersistentProperty($name) {
+  public function isPersistentProperty($name) {
     return false;
   }
 
