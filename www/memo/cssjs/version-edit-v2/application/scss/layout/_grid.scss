@@ -1,0 +1,9 @@
+.dvz-itemlist__item {
+  .card-header {
+    @extend .p-0;
+    .dvz-itemlist-item__content {
+      @extend .col-8;
+      @extend .py-2;
+    }
+  }
+}

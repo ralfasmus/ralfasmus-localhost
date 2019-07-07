@@ -1,0 +1,50 @@
+<div class="list-parent" data-list-instance-type='NOT'>
+  <div class="row filterzeile">
+    <div class = "col-md-1" title="Filtere nach Datum: heute gestern hwoche vwoche hmonat vmonat hjahr vjahr tt.mm.jjjj">
+      <div class = "input-group">
+        <span class = "input-group-addon filter-counter" data-selector-attribute="data-select-datum"
+              title="DIESEN Filter matchende Elemente / gesamt">
+          <sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+        <input class="filter accepting-input form-control" type = "text" name = "filter-note-datum"
+               data-selector-attribute="data-select-datum" value="" placeholder = "...">
+      </div>
+    </div>
+
+
+    <div class = "col-md-7 ">
+      <div class = "input-group">
+        <input class = "filter accepting-input" type = "text" name = "filter-everything"
+               data-selector-attribute="data-select-everything" value="" placeholder = "... Filter: Alles ..."
+               title="Filtere nach allem möglichen"
+               >
+        <input class = "filter accepting-input" type = "text" name = "filter-name"
+               data-selector-attribute="data-select-name" value="" placeholder = "... Filter: Name ..."
+               >
+        <span class = "input-group-addon  btn sortieren accepting-click bg active sort-up"
+              data-sort-attribute="data-sort-id" title="Sortiere nach id">id</span >
+        <span class = "input-group-addon  btn sortieren accepting-click bg sort-down"
+              data-sort-attribute="data-sort-datum"  title="Sortiere nach Datum">D</span >
+
+        <span class = "input-group-addon  btn accepting-click selektierte-loeschen" title="ALLE! sichtbaren löschen!">Experimetell:Löschen!</span >
+        <span class = "input-group-addon  btn accepting-click selektierte-archivieren" title="ALLE! sichtbaren archivieren und hier löschen! Sichtbar dann nur in trackarchive.localhost">Experimetell:Archivieren!</span >
+        <span class = "input-group-addon filter-counter" data-selector-attribute="any"
+              title="ALLE Filter matchende Elemente / gesamt">
+          <sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+
+      </div>
+    </div>
+  </div>
+  <h2>Notizen</h2>
+  <div data-loop="NOT" data-view="NOT.html" data-sort-direction="descending" data-load-events='page-load'>
+    <h1 class="loading-message" style="margin:auto; width:300px; margin-top:200px;">Lade Daten ...</h1>
+  </div>
+  <h2>Arbeiten</h2>
+  <div data-loop="ARB" data-view="ARB.html" data-sort-direction="descending" data-load-events='page-load'>
+    <h1 class="loading-message" style="margin:auto; width:300px; margin-top:200px;">Lade Daten ...</h1>
+  </div>
+  <h2>Budgets</h2>
+  <div data-loop="BUD" data-view="BUD.html" data-sort-direction="descending" data-load-events='page-load'>
+  </div>
+
+</div>
+<h1 class="loading-message" style="margin:auto; width:300px; margin-top:200px;">Lade Daten ...</h1>

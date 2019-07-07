@@ -1,0 +1,16 @@
+.dvz-itemlist__item {
+  .card {
+    &:hover {
+      @extend .bg-light;
+    }
+  }
+  .card-header {
+    @extend .bg-white;
+    &:hover {
+      @extend .bg-light;
+    }
+    .dvz-itemlist-item__content {
+      cursor : pointer;
+    }
+  }
+}

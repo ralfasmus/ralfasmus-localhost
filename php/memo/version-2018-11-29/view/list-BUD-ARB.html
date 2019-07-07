@@ -1,0 +1,16 @@
+<div class="list-parent budgets">
+  <div class="row filterzeile">
+
+    <div class = "col-md-2 filter accepting-input" >
+      <div class = "input-group">
+        <span class = "input-group-addon btn reset"  title="DIESEN Filter matchende Elemente / gesamt"><sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+        <input type = "text" name = "filter-budget" data-selector-attribute="data-select-budget-name-bemerkung-keys" value="" class = "form-control" placeholder = "FilterInput">
+      </div>
+    </div>
+  </div>
+
+  <div data-loop="BUD" data-view="BUD-ARB.html" data-sort-direction="ascending" data-load-events='page-load'>
+  </div>
+
+</div>
+<h1 class="loading-message" style="margin:auto; width:300px; margin-top:200px;">Lade Daten ...</h1>

@@ -1,0 +1,32 @@
+<div class="list-parent" data-list-instance-type='SON'>
+  <div class="row filterzeile">
+
+    <div class = "col-md-9 ">
+      <div class = "input-group">
+
+        <span class = "input-group-addon  btn neu" data-element="neu-button">NEU</span >
+        <span class = "input-group-addon filter-counter" data-selector-attribute="any"
+              title="ALLE Filter matchende Elemente / gesamt">
+          <sup><span class="filter-selected-count"></span></sup>/<sub><span class="filter-total-count"></span></sub></span>
+
+        <input class = "filter accepting-input" size="16"  type = "text" name = "filter-note-name"
+               data-selector-attribute="data-select-name" value="" placeholder = "... Filter: Titel ..."
+               >
+        <span class = "input-group-addon  btn sortieren accepting-click bg active sort-up"
+              data-sort-attribute="data-sort-pos" title="Sortiere nach Position">Pos</span >
+        <span class = "input-group-addon  btn position-berechnen accepting-click"
+              title="Position Berechnen">!Pos</span >
+
+        <span class = "input-group-addon  btn sortieren accepting-click bg sort-down"
+              data-sort-attribute="data-sort-name"  title="Sortiere nach Name">N</span >
+
+        <span class = "input-group-addon  btn accepting-click all-with-info" title="Für alle Notizen die Info anzeigen">Info</span >
+
+        <span class = "input-group-addon  btn accepting-click selektierte-loeschen" title="ALLE! sichtbaren löschen!">Löschen!</span >
+      </div>
+    </div>
+  </div>
+  <div data-loop="SON" data-view="SON.html" data-sort-direction="descending" data-load-events='page-load'>
+  </div>
+</div>
+<h1 class="loading-message" style="margin:auto; width:300px; margin-top:200px;">Lade Daten ...</h1>

@@ -17,6 +17,8 @@
 
 **/data*/**
 *.data
+**/filesets
+
 **/conf/local.*
 # **/bootstrap-3.3.7-dist
 # **/jquery-ui-1.12.1.custom
