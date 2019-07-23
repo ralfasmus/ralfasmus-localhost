@@ -8,13 +8,13 @@ class Log {
 
     private static $logMessages = array(array(),array(),array(),array());
 
+    const LOG_LEVEL_DEBUG = 4;
     const LOG_LEVEL_INFO = 3;
     const LOG_LEVEL_ERROR = 1;
     const LOG_LEVEL_OFF = 0;
 
     /**
      * Logged nach /log/...
-     * @param $logLevel ObjectAbstract::LOG_LEVEL_DEBUG | ...
      * @param $text
      */
     private static function doLog($logLevel, $messageOrVariable) {
@@ -28,14 +28,49 @@ class Log {
     }
 
     public static function getConsoleLog() {
-        $messages = "";
-        foreach(self::$logMessages[1] as $message) {
-            $messages .= 'console.error("'. $message . '");';
+        function addMessages(array $messages, string $consoleCommand) : string {
+            $messagesConsoleHtml = '';
+            foreach($messages as $message) {
+                $message = str_replace("\n"," ", str_replace("'","\'", $message));
+                $messagesConsoleHtml .= "console.$consoleCommand('SERVER-LOG: $message');";
+            }
+            return $messagesConsoleHtml;
         }
-        foreach(self::$logMessages[3] as $message) {
-            $messages .= 'console.info("'. $message . '");';
+        $messagesConsoleHtml = "";
+        $messagesConsoleHtml .= addMessages(self::$logMessages[1], 'error');
+        $messagesConsoleHtml .= addMessages(self::$logMessages[3], 'info');
+
+        // DEBUG messages auch als info messages an Browser Console senden?
+        if(4 <= Conf::get('LOG_LEVEL', self::LOG_LEVEL_OFF)) {
+            $messagesConsoleHtml .= addMessages(self::$logMessages[4], 'info');
         }
-        return "<script>$messages</script>";
+        return "<script>$messagesConsoleHtml</script>";
+    }
+
+
+    public static function getHtmlLog() {
+        function addMessages2(array $messages, string $cssClass) : string {
+            $messagesHtml = '';
+            foreach($messages as $message) {
+                $message = str_replace("\\n","<br>", str_replace("'","\'", $message));
+                $messagesHtml .= "SERVER-LOG: $message<br>";
+            }
+            return "<div class='$cssClass'>$messagesHtml</div>";
+        }
+        $messagesHtml = "";
+        $messagesHtml .= addMessages2(self::$logMessages[1], 'error');
+        $messagesHtml .= addMessages2(self::$logMessages[3], 'info');
+
+        // DEBUG messages auch als info messages an Browser Console senden?
+        if(4 <= Conf::get('LOG_LEVEL', self::LOG_LEVEL_OFF)) {
+            $messagesHtml .= addMessages2(self::$logMessages[4], 'info');
+        }
+        return "<div class='ajaxresult'>$messagesHtml</div>";
+    }
+
+
+    public static function debug($messageOrVariable) {
+        self::doLog(4, $messageOrVariable);
     }
 
     public static function info($messageOrVariable) {
@@ -46,7 +81,7 @@ class Log {
         self::doLog(1, $messageOrVariable);
     }
 
-    static public function throwError(Throwable $throwable) {
+    static public function errorThrown(Throwable $throwable) {
         // https://trowski.com/2015/06/24/throwable-exceptions-and-errors-in-php7/
         // $message = $throwable->__toString()
         $first = str_replace("\\", "/", $throwable->getFile()) . ':' . $throwable->getLine() . ':' . $throwable->getMessage() . "\\n";

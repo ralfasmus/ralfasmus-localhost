@@ -2,224 +2,182 @@
 
 /**
  *
- * SingleInstance aktuelle Request.
+ * Aktueller Request.
  * @author asmusr
  */
-class Request extends ObjectAbstract {
+class Request implements Properties_Interface {
 
-  static private $singleInstance = null;
+    private const STATUS_DEFAULT = 'active';
+    // Request/Config Property zum Filtern der anzuzeigenden Items:
+    private const PROPERTY_FILTER_VIEWS                 = "filter-views";
+    // default action fuer Request ?index.php ohne weitere GET/POSTR Parameter
+    const REQUEST_ACTION_DEFAULT = 'homepage';
+
+    private $requestConfig = NULL;
+    private $requestStatus = self::STATUS_DEFAULT;
+
+    private $propertiesItemPersistent  = NULL;
+    private $propertiesItemBerechnet  = NULL;
+    private $propertiesRequest  = NULL;
+    private $propertiesAll      = NULL;
+
+    public function __construct(array $requestProperties = array()) {
+
+        $propertiesAll = new Properties();
+        foreach($requestProperties as $key => $propertyArray) {
+            $propertiesAll->setProperty($propertyArray, $key);
+        }
+        $propertiesGet = $propertiesAll->getProperty('get', array());
+        $propertiesPost = $propertiesAll->getProperty('post', array());
+
+        $this->propertiesItemPersistent = new Properties();
+        $this->propertiesItemBerechnet = new Properties();
+        $this->propertiesRequest = new Properties();
+
+        // POST ueberschreibt get. Muessen aber alles alphanumerische Schluessel sein.
+
+        foreach(array_merge($propertiesGet, $propertiesPost) as $name => $value) {
+            if(stripos($name, "item-persistent-") === 0) {
+                $this->propertiesItemPersistent->setProperty($value, str_replace('item-persistent-','', $name));
+            } else if(stripos($name, "item-berechnet-") === 0) {
+               $this->propertiesItemBerechnet->setProperty($value, str_replace('item-berechnet-','', $name));
+            } else {
+                // Request/Action Property
+                $this->propertiesRequest->setProperty($value, $name);
+            }
+        }
+
+        Log::debug('REQUEST PROPERTIES ITEM PERSISTENT:');
+        Log::debug($this->propertiesItemPersistent->getProperties());
+        Log::debug('REQUEST PROPERTIES ITEM BERECHNET:');
+        Log::debug($this->propertiesItemBerechnet->getProperties());
+        Log::debug('REQUEST PROPERTIES REQUEST:');
+        Log::debug($this->propertiesRequest->getProperties());
+    }
+
   private $messages = array();
   private $messageLevel = 'debug';
 
-
-    private function actionItemEdit()
-    {
-        $newId = Persistence::newId();
-        $instance = Persistence::getOrCreateInstance($this->getProperty("id", $newId));
-
-        // HTML
-        $html = file_get_contents(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "view/item-textnote-edit.html");
-        $properties = $instance->getProperties();
-        foreach($properties as $name => $value) {
-            $html = str_replace("REPLACED_BY_ITEM_{$name}_VALUE", $value, $html);
-        }
-        return $html;
+  /**
+   * Liefert den aktuellen Status, dessen Daten angezeigt werden.
+   * deleted | backup | active
+   */
+    public function getRequestStatus() : string {
+        return $this->getProperty('status', self::STATUS_DEFAULT, true);
     }
 
-    public function getStatus() {
-
-        // deleted | backup | active
-        return $this->getProperty("status", "active");
+    public function getConfig() : Item {
+        if (is_null($this->requestConfig)) {
+            $this->requestConfig = Persistence::loadOrCreateItem($this->getProperty("config-id", "defaultconfig"), $this);
+            $this->requestConfig = Persistence::updateItemFromRequest($this->requestConfig, $this->getPropertiesRequest());
+            // wenn in der Url explizit angegeben ist "saveconfig=yes", dann speichere die request properties aus der Url,
+            // wie z.B. filter-art oder filter-text oder filter-views persistent in der config. Sonst wirken sie sich zwar aus,
+            // werden aber erst mit dem naechsten Change+Save der Config gespeichert.
+            if($this->getProperty("saveconfig", "") == "yes") {
+                Persistence::itemSave($this->requestConfig, $this);
+            }
+        }
+        return $this->requestConfig;
     }
 
-    private function actionItemList()
-    {
+  public function getPropertiesItemPersistent() : Properties_Interface {
+    return $this->propertiesItemPersistent;
+  }
 
-        // Html Header der Liste REPLACED_BY_ITEMLIST_TEXTNOTE_HEADER_ITEM_CONFIG
+    public function getPropertiesRequest() : Properties_Interface {
+      return $this->propertiesRequest;
+    }
 
-        // HTML itemlist-textnote
-        $instance = Persistence::getOrCreateInstance($this->getProperty("config", ""));
-        $itemHtml = file_get_contents(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "view/itemlist-textnote-header-item-config.html");
-        $properties = $instance->getProperties();
-       foreach($properties as $name => $value) {
-            $itemHtml = str_replace("REPLACED_BY_ITEM_{$name}_VALUE", $value, $itemHtml);
-        }
+  public function getUpdatedActionItem() : Item {
+    $id = $this->getPropertiesItemPersistent()->getProperty("id");
+    $item = Persistence::loadOrCreateItem($id, $this);
+    $item = Persistence::updateItemFromRequest($item, $this->getPropertiesItemPersistent());
+    return $item;
+  }
 
-        // HTML itemlist-textnote
-        $instances = Persistence::getInstances("textnote", "name", false);
-        $result = file_get_contents(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "view/itemlist-textnote.html");
-        $result = str_replace("REPLACED_BY_ITEMLIST_TEXTNOTE_HEADER_ITEM_CONFIG", $itemHtml, $result);
-
-        $itemTemplate = file_get_contents(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "view/itemlist-textnote-item-textnote.html");
-        $itemsTextnote = "";
-        $nr = 0;
-        $maxnum = $this->getProperty("maxnum", 99999);
-        $firstnum = $this->getProperty("firstnum", 0);
-        $filter = $this->getProperty("filter", "");
+    public function getArtsList(array $items) : array {
         $arts = array();
-        foreach($instances as $instance) {
-            $nr++;
-            if($nr < $firstnum || $nr > $maxnum + $firstnum) continue;
-            $itemHtml = $itemTemplate;
-            $properties = $instance->getProperties();
-            $dataFilterTextValue = "";
-            foreach($properties as $name => $value) {
-                $dataFilterTextValue .= "$value ";
-            }
-            $properties["data-filter-text"] = html_entity_decode(str_replace(array('"', "'","&nbsp;"), array(" ", " ", " "), strip_tags($dataFilterTextValue)));
-            $properties["data-tooltip-html"] = str_replace('"', "'", $properties["text"]);
-            foreach($properties as $name => $value) {
-                $itemHtml = str_replace("REPLACED_BY_ITEM_{$name}_VALUE", $value, $itemHtml);
-                $itemHtml = str_replace("REPLACED_BY_ITEM_NR", $nr, $itemHtml);
-            }
-            if ($filter != "" && strpos($properties["data-filter-text"],$filter) === false) continue;
-            $itemsTextnote .= $itemHtml;
-
-            // arts liste
-            $art = $properties['art'];
+        foreach($items as $item) {
+            $art = $item->getProperty("art", "");
             $artArray = explode(" ", $art);
             foreach($artArray as $art) {
                 $arts[trim($art, " .")] = "";
             }
         }
         ksort($arts);
-        $artList = implode("</div><div class='dvz-js-artlist__item'>", array_keys($arts));
-        $result = str_replace("REPLACED_BY_ITEMS_TEXTNOTE", $itemsTextnote, $result);
-        $result = str_replace("REPLACED_BY_ARTS", "<div class='dvz-js-artlist__item'>$artList</div>", $result);
-
-        // JSON
-        /*
-        $data = array("instances-json" => array());
-        foreach($instances as $instance) {
-            $data["instances-json"][] = $instance->getProperties();
+        $artProperties = array();
+        foreach(array_keys($arts) as $art) {
+            if($art != "") {
+                $artProp = new Properties();
+                $artProp->setProperty($art, "name");
+                $artProp->setProperty("art", Properties_Interface::PROPERTY_VIEW);
+                $artProperties[] = $artProp;
+            }
         }
-        //$data["instances-json"] = $instances;
-        header('Content-Type:json');
-        $result = json_encode($data);
-        */
-
-        return $result;
+        return $artProperties;
     }
 
-    public function getResponse()  {
 
+    public function getBackupExtension() {
+        return $this->getProperty('backupextension', time(), true);
+    }
+
+    public function getItems() : array {
+        return Persistence::getItems($this->getProperty(self::PROPERTY_FILTER_VIEWS, "") , "name", false, $this->getRequestStatus());
+    }
+
+   /**
+    *
+    */
+    public function getResponse() :string {
         $html = "";
         try {
-            $action = $this->getProperty("action", "itemlist");
-            $html = file_get_contents(APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "view/index.html");
-
-            $bodyHtml = "";
-            switch ($action) {
-                case "item-edit" :
-                    $bodyHtml = $this->actionItemEdit();
-                    break;
-                case "item-delete" :
-                    $html = "REPLACED_BY_BODY_CONTENT";
-                    $bodyHtml = $this->processRequest($action);
-                    break;
-                case "item-save" :
-                    $html = "REPLACED_BY_BODY_CONTENT";
-                    $bodyHtml = $this->processRequest($action);
-                    break;
-                default:
-                    $bodyHtml = $this->actionItemList();
-            }
-
-            $html = str_replace("REPLACED_BY_BODY_CONTENT", $bodyHtml, $html);
-            $html = str_replace("REPLACED_BY_PAGE", $action, $html);
-
-            /* Config in HTML einfuegen. Config soll nur das HTML beeinflussen.
-             * wird config fuer actions wie save benoetigt. so muessen die Parameter clientseitig aus dem Config HTML ausgelesen
-             * und in die submitted Form integriert werden.
-             */
-            $configId = $this->getProperty("config", Persistence::newId());
-            $instance = Persistence::getOrCreateInstance($configId);
-            $properties = $instance->getProperties();
-            foreach ($properties as $name => $value) {
-                $html = str_replace("REPLACED_BY_CONFIG_{$name}_VALUE", $value, $html);
-            }
-            // Nicht ersetzte value="REPLACED_BY" HTML Attribute von Items leeren:
-            $html = preg_replace("/REPLACED_BY_CONFIG_([^_]*)_VALUE/i", "", $html);
-            $html = preg_replace("/REPLACED_BY_ITEM_([^_]*)_VALUE/i", "", $html);
-
+            $baseView = $this->getProperty('base-view', 'index-page');
+            $html = View::replacePlaceHolders($baseView, $this);
             Log::info("Done!!!");
         } catch (Throwable $throwable) {
-            Log::throwError($throwable);
+            Log::errorThrown($throwable);
         }
-        $html .= Log::getConsoleLog();
+        $html .= Log::getHtmlLog() . Log::getConsoleLog();
 
         return ($html);
     }
 
-    /**
-   * POST/GET Request verarbeiten.
+
+  // ############# INTERFACE PROPERTIES #################################
+
+  /**
+   * Betrachtet nur die Request/Action Properties, keine Item Properties.
    */
-  public function processRequest($action) {
-    $html="Processing Request on server ... ";
-    $request = $this;
-    $properties = $request->getProperties();
-    $id = $request->getProperty("id", "");
-    if ($id != "") {
-      $instance = Persistence::getOrCreateInstance($id);
-      $instance = Persistence::updateInstanceFromRequest($instance);
-      if ($action == "item-save") {
-        $html .= "SAVING";
-        Persistence::saveInstance($instance);
-        Persistence::backupInstance($instance);
-      }
-      if ($action == "item-delete") {
-        Persistence::deleteInstance($instance);
-      }
-      if ($action == "item-backup") {
-        Persistence::backupInstance($instance);
-      }
-      if ($action == "item-recover") {
-        //Persistence::deleteInstance($instance);
-      }
-    } else {
-        $html .= var_export($properties, true);
-    }
-    return $html;
-  }
-
-  public function addMessage($s) {
-    $this->messages[] = $s;
-  }
-
-  public function setMessageLevel($s) {
-    $this->messageLevel = $s;
-  }
-
-  public function getMessage() {
-    return implode("\n", $this->messages);
-  }
-
-  public function getMessageLevel() {
-    return $this->messageLevel;
+  public function getProperty(string $key, $default = "exception", bool $defaultOnEmpty = false) {
+    return $this->propertiesRequest->getProperty($key, $default, $defaultOnEmpty);
   }
 
   /**
-   * Erzeugt einen Request
+   * Siehe interface description.
    */
-  static public function getSingleInstance($requestProperties = array()) {
-    if (self::$singleInstance == null) {
-      self::$singleInstance = new Request();
-      foreach ($requestProperties["post"] as $name => $value) {
-        self::$singleInstance->setProperty($value, $name);
-      }
-      foreach ($requestProperties["get"] as $name => $value) {
-        self::$singleInstance->setProperty($value, $name);
-      }
-    }
-    return self::$singleInstance;
+  public function setProperties(array $properties){
+    throw new Exception('Es wurde versucht, die Properties des Requests nachtraeglich zu setzen. Properties des Requests sind die POST und GET Properties. Sie werden einmalig im Konstruktor gesetzt.');
   }
 
-  public function getDecodedProperty($key, $default = "exception") {
-    return rawurldecode(parent::getProperty($key, $default));
+  /**
+   * Siehe interface description.
+   */
+  public function getProperties() : array {
+    throw new Exception('Es wurde versucht, ein komplettes Set der Request Properties abzurufen. Properties des Requests sind die unterteilt in Persistente und berechnete Item Properties und Request Properties. Diese muessen mit den entsprechenden Methoden dediziert abgefragt werden.');
   }
 
-  public function isSubmit() {
-    return $this->getProperty("submit", "nix submit") != "nix submit";
+  /**
+   * Siehe interface description.
+   */
+  public function setProperty($value, string $key) {
+    throw new Exception('Es wurde versucht, die Properties des Requests nachtraeglich zu setzen. Properties des Requests sind die POST und GET Properties. Sie werden einmalig im Konstruktor gesetzt.');
   }
 
+  /**
+   * Betrachtet nur die Request/Action Properties, keine Item Properties.
+   */
+  public function getDecodedProperty(string $key, $default = "exception") : string {
+    return $this->propertiesRequest->getDecodedProperty($key, $default);
+  }
 }

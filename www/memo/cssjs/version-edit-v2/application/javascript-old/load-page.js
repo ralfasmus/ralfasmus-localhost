@@ -102,10 +102,10 @@ function berechneAutoCompleteListen() {
  * @param {type} elementFilter
  * @returns {undefined}
  */
-function berechneNameList(type) {
+function berechneNameList(view) {
 
   logDebug('Berechne Arbeit Name List.');
-  var names = $('[data-loop=' + type + '] [data-instance-type=' + type + '] input[name=name]').map(function () {
+  var names = $('[data-loop=' + type + '] [data-item-view=' + view + '] input[name=name]').map(function () {
     return $(this).val();
   }).get();
   var nameList = [];

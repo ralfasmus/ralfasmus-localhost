@@ -3,3 +3,17 @@
 div {
   border: 0px dotted gray;
 }
+
+.ajaxresult {
+    display:none;
+}
+
+.showajaxresult .ajaxresult {
+    display:block;
+    .error {
+        color: red;
+    }
+    .debug {
+        color: lightgray;
+    }
+}

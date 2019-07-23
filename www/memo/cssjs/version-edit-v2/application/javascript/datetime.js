@@ -8,32 +8,37 @@ function initMoment() {
 
 /**
  * Liefert den Inhalt des Feldes "datum" einer Instanz.
- * @param {type} instance
+ * @param {type} item
  * @returns {jQuery}
  */
-function getDatum(instance) {
-  return $(instance).find('input[name=datum]').val();
+function getDatum(item) {
+  return $(item).find('input[name=item-persistent-datetimesaved]').val();
 }
+
+function jetzt(momentFormat) {
+  return moment(Date.now()).format(momentFormat);
+}
+
 
 /**
  * Liefert ein Datum in der Form zum Sortieren, berechnet aus dem Inhalt
  * des Feldes "datum" einer Instanz.
- * @param {type} instance
- * @returns {String} z.B. 2017-06-30_instance_id
+ * @param {type} item
+ * @returns {String} z.B. 2017-06-30_item_id
  */
-function getSortDatum(instance) {
-  var datum = getDatum(instance);
+function getSortDatum(item) {
+  var datum = getDatum(item);
   var date = moment(datum, 'DD.MM.YYYY');
-  return date.format('YYYY-MM-DD') + '_' + $(instance).attr('data-instance-id');
+  return date.format('YYYY-MM-DD') + '_' + $(item).attr('data-item-id');
 }
 
 /**
  * Aktualisiert das data-select-datum Feld einer Instanz.
- * @param {type} instanceSelector
+ * @param {type} itemSelector
  * @returns {undefined}
  */
-function updateDataSelectDatum(instance) {
-  var datum = getDatum(instance);
+function updateDataSelectDatum(item) {
+  var datum = getDatum(item);
   var date = moment(datum, 'DD.MM.YYYY');
   var select = '';
   // heute:
@@ -47,5 +52,5 @@ function updateDataSelectDatum(instance) {
   select = select + (date.isSame(moment().subtract(1, 'week'), 'week') ? ' vwoche' : '');
   select = select + (date.isSame(moment().subtract(1, 'month'), 'month') ? ' vmonat' : '');
   select = select + (date.isSame(moment().subtract(1, 'year'), 'year') ? ' vjahr' : '');
-  $(instance).attr('data-select-datum', select);
+  $(item).attr('data-select-datum', select);
 }

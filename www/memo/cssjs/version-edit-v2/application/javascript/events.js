@@ -25,7 +25,7 @@ function filterListUpdate() {
             } else {
                 terms = [valueInput];
             }
-            var filterOutInstances = $(noteItems).filter("[" + thisSelectorAttribute + "]");
+            var filterOutItems = $(noteItems).filter("[" + thisSelectorAttribute + "]");
 
             for (termIndex = 0; termIndex < $(terms).length; termIndex++) {
                 var t = terms[termIndex];
@@ -35,10 +35,10 @@ function filterListUpdate() {
                     if (negate) {
                         t = t.substr(1);
                         var selectorIn = "[" + thisSelectorAttribute + "*='" + t + "']";
-                        $(filterOutInstances).filter(selectorIn).addClass("dvz-js-hidden");
+                        $(filterOutItems).filter(selectorIn).addClass("dvz-js-hidden");
                     } else {
                         var selectorNotIn = "[" + thisSelectorAttribute + "*='" + t + "']";
-                        $(filterOutInstances).filter(":not(" + selectorNotIn + ")").addClass("dvz-js-hidden");
+                        $(filterOutItems).filter(":not(" + selectorNotIn + ")").addClass("dvz-js-hidden");
                     }
                 }
             }
@@ -61,9 +61,9 @@ function filterListUpdate() {
                 : ($(filterElement).hasClass('on-first-click-show-empty') ? "=''" : "!=''");
             var thisSelectorAttribute = $(filterElement).attr('data-dvz-selector-attribute');
             var selectorOut = "[" + thisSelectorAttribute + selectorOutCompare + "]";
-            var filterOutInstances = $(noteItems).filter(selectorOut);
-            $(filterOutInstances).addClass("dvz-js-hidden");
-            outCount = $(filterOutInstances).length;
+            var filterOutItems = $(noteItems).filter(selectorOut);
+            $(filterOutItems).addClass("dvz-js-hidden");
+            outCount = $(filterOutItems).length;
         }
         if (selectorOutCompare === "!=''") {
             $(counterElement).addClass('e');
@@ -76,13 +76,13 @@ function filterListUpdate() {
     hideHiddenItems(noteItems);
 
     // update art liste
-    var artItems = $('.dvz-js-artlist__item');
+    var artItems = $('.dvz-js-artlist__art');
     $(artItems).addClass("dvz-js-hidden");
     $(noteItems).filter(':not(.dvz-js-hidden)').each(function () {
         var arts = $(this).attr('data-filter-art');
         if(isString(arts)) {
             var parameters = [arts];
-            console.log(arts);
+            console.info(arts);
             $(artItems).each(function () {
                 var arts = parameters[0];
                 var art = $(this).text();

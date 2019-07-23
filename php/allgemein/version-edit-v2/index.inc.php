@@ -10,6 +10,7 @@ error_reporting(E_ALL | E_STRICT);
 setlocale(LC_TIME, 'de_DE.utf8'); // Locale muss auf dem Server installiert sein (vbox!). Fuer Ausgabe Wochentag
 ini_set("display_startup_errors", "On");
 ini_set("display_errors", "On");
+ini_set("assert.exception", 1);
 // um ein Jahr ARB Daten zu verarbeiten, wird ein hoeheres memory limit benoetigt:
 ini_set('memory_limit', '4134217728');
 

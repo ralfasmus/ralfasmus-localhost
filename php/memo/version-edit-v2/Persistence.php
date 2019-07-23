@@ -1,184 +1,180 @@
 <?php
 
+/**
+ * Alle Funktionen zum persistenten Laden und Speichern von Items.
+ */
+class Persistence {
 
-class Persistence extends ObjectAbstract {
+
+  static private $itemsCache = array();
+  static private $itemsCacheIsValid = false;
 
   /**
-   * Fuer die Datei auf dem Filesystem.
+   * Laedt alle Items in den Cache, die dem status des requests entsprechen und mit den im Filter angegebenen views matchen.
+   *
+   * @param string $view
    */
-  const DATA_FILE_NAME_VALUE_SEPARATOR = "§";
-  const DATA_FILE_PROPERTY_SEPARATOR = "°";
-  const DATA_FILE_INSTANCE_SEPARATOR = "\n";
-
-
-  private static function loadInstances($itemType, $status, &$instances) {
-      $filenameBase = Conf::get("DATA_FILE_NAME_BASE");
-
-      foreach (glob($filenameBase . "/$status/*") as $filename) {
-          $instance = self::loadInstanceByFilename($filename);
-          if($instance->getProperty("itemtype", "") == $itemType) {
-              $instances[] = $instance;
+  private static function loadItems(string $filterViews, string $status) : array {
+      if(!self::$itemsCacheIsValid) {
+          $filenameBase = Conf::get("DATA_FILE_NAME_BASE");
+          foreach (glob($filenameBase . "/$status/*") as $filename) {
+              $item = self::loadItemByFilename($filename);
+              if($item->hasViewsMatchingFilterViews($filterViews)) {
+                  self::$itemsCache[] = $item;
+              }
           }
+          self::$itemsCacheIsValid = true;
       }
+      return self::$itemsCache;
   }
 
   /**
    * Liefert alle Instanzen sortiert.
    * @return type
    */
-  public static function getInstances($itemType, $sortProperty, $descending) {
+  public static function getItems(string $filterViews, string $sortProperty, bool $descending, string $status) : array {
 
-      $instances = array();
-      $status = self::getStatus();
-      self::loadInstances($itemType, $status, $instances);
+      $items = self::loadItems($filterViews, $status);
 
       $sortList = array();
-      $instanceList = array();
+      $itemList = array();
 
-      foreach ($instances as $instance) {
+      foreach ($items as $item) {
         if(is_array($sortProperty)) {
             $sortString = "";
             foreach($sortProperty as $prop) {
-                $sortString .= $instance->getProperty($prop, "") . " ...";
+                $sortString .= $item->getProperty($prop, "") . " ...";
             }
         } else {
-            $sortString = $instance->getProperty($sortProperty, "");
+            $sortString = $item->getProperty($sortProperty, "");
         }
-        $sortList[$instance->getId()] = $sortString;
-        $instanceList[$instance->getId()] = $instance;
-    }
+        $sortList[$item->getId()] = $sortString;
+        $itemList[$item->getId()] = $item;
+      }
 
-    if ($descending) {
-      arsort($sortList);
-    } else {
-      asort($sortList);
-    }
-    $result = array();
-    foreach ($sortList as $id => $key) {
-      $result[] = $instanceList[$id];
-    }
-    return $result;
-  }
-
-  public static function newId() {
-     $newId = "id" . Zeit::datumYmdHis(Zeit::heute()) . "_" . Zeit::datumYmdH(Zeit::heute());
-     return $newId;
-  }
-
-  static private function loadInstanceByFilename($filename) {
-    $instance = self::loadInstance(file_get_contents($filename));
-    return $instance;
-  }
-
-  public static function loadInstanceById($id) {
-    if ($id == "") {
-      return NULL;
-    }
-    $filename = self::getPathAndFilename($id);
-    if (!file_exists($filename)) {
-      return NULL;
-    }
-    return self::loadInstanceByFilename($filename);
+      if ($descending) {
+        arsort($sortList);
+      } else {
+        asort($sortList);
+      }
+      $result = array();
+      foreach ($sortList as $id => $key) {
+        $result[] = $itemList[$id];
+      }
+      return $result;
   }
 
   /**
-
+   *
+   *
    */
-  private static function loadInstance($instanceString) {
-    $properties = array();
-    foreach (explode(self::DATA_FILE_PROPERTY_SEPARATOR, $instanceString) as $prop) {
-      if (stripos($prop, self::DATA_FILE_NAME_VALUE_SEPARATOR) === FALSE) {
-        throw new Exception($prop);
+  static private function loadItemByFilename(string $filename) : Item {
+      $item = NULL;
+      try {
+        $item = self::loadItem(file_get_contents($filename));
+      } catch (Throwable $throwable) {
+        Log::error("Kann Datei $filename nicht finden.");
+        throw $throwable;
       }
-      list($name, $value) = explode(self::DATA_FILE_NAME_VALUE_SEPARATOR, $prop);
-      if (in_array($name, array("stunden", "kaz", "btotal"))) {
-        $value = $value == "" ? "" : number_format((float) $value, 2, '.', '');
-      }
-      $properties[$name] = $value;
-    }
-    $instance = self::createInstance($properties[self::PROPERTY_ID]);
-    $instance->setProperties($properties);
-    return $instance;
+      return $item;
   }
-  
-  static public function getPathAndFilename($id, $status="rEQuESTstaTus") {
-	  if ($status == "rEQuESTstaTus") {
-		  $status = self::getStatus();
-	  }
+
+  /**
+   * Laedt ein im aktuellen Status gespeichertes Item. Liefert NULL wenn keins gefunden.
+   */
+  public static function loadItemById(string $id, string $status) : ?Item {
+    if ($id == "" || is_null($id)) {
+      return NULL;
+    }
+    $filename = self::getPathAndFilename($id, $status);
+    if (!file_exists($filename)) {
+      return NULL;
+    }
+    return self::loadItemByFilename($filename);
+  }
+
+  /**
+   *
+   */
+  private static function loadItem(String $itemString) : Item {
+    $properties = json_decode($itemString, true);
+    $item = new Item($properties["id"]);
+    $item->setProperties($properties);
+    return $item;
+  }
+
+  /**
+   * Liefert Pfad und Dateiname zur Instanz, so dass sie daraus geladen
+   * werden kann. Der Status ist der aktuelle Status aus dem Request oder der explizit angegebene.
+   */
+  static public function getPathAndFilename(string $id, string $status) : string {
       return Conf::get("DATA_FILE_NAME_BASE") . "/$status/$id";
   }
 
   /**
-   * Erstellt einen neue Instanz. Die Instanz kann neu sein und aus den
-   * HTML Form Daten stammen oder sie stammt aus dem Laden der persistenten Objekte.
-   * @param type $id
+   * Erstellt oder laedt einen Instanz.
    */
-  static protected function createInstance($id) {
-    $instance = new NOT($id);
-    return $instance;
-  }
-
-  /**
-   * Erstellt einen neue Instanz. Die Instanz kann neu sein und aus den
-   * HTML Form Daten stammen oder sie stammt aus dem Laden der persistenten Objekte.
-   * @param type $id
-   */
-  static public function getOrCreateInstance($id) {
-    $instance = self::loadInstanceById($id);
-    $instance = $instance == NULL ? self::createInstance($id) : $instance;
-    return $instance;
-  }
-
-  public static function updateInstanceFromRequest($instance) {
-      foreach (self::request()->getProperties() as $name => $value) {
-          $instance->setProperty($value, $name);
+  static public function loadOrCreateItem(string $id, Request $request) : Item {
+      $item = self::loadItemById($id, $request->getRequestStatus());
+      if(is_null($item)) {
+        $item = new Item($id);
       }
-      return $instance;
+      return $item;
   }
 
   /**
-   * Speichert eine vollstaendige Instanz.
+   *
    */
-  public static function saveInstance($instance, $status="rEQuESTstaTus") {
-	if ($status == "rEQuESTstaTus") {
-	 $status = self::getStatus();
-	}
-    foreach ($instance->getProperties() as $name => $value) {
-      $props[] = "$name" . self::DATA_FILE_NAME_VALUE_SEPARATOR . $value;
-    }
-    $content = implode(self::DATA_FILE_PROPERTY_SEPARATOR, $props);
-    $filename = self::getPathAndFilename($instance->getProperty("id"), $status);
-    file_put_contents($filename, $content);
+  public static function updateItemFromRequest(Item $item, Properties_Interface $propertiesItemPersistent) {
+      foreach ($propertiesItemPersistent->getProperties() as $name => $value) {
+          $item->setProperty($value, $name);
+      }
+      return $item;
   }
 
   /**
-     active|deleted|backup
-  */
-  private static function getStatus() {
-	  return self::request()->getStatus();
+   * Speichert eine vollstaendige Instanz unter dem aktuellen Pfad.
+   */
+  public static function itemSaveToFile(Item $item, string $filename) {
+    $props = $item->getProperties();
+    file_put_contents("${filename}", json_encode($props, JSON_HEX_QUOT | JSON_HEX_TAG));
+    Log::debug("Saved Item to $filename");
   }
 
+     /**
+     *  Speichert eine vollstaendige Instanz.
+     */
+    public static function itemSave(Item $item, Request $request) {
+        $filename = self::getPathAndFilename($item->getId(), $request->getRequestStatus());
+        self::itemSaveToFile($item, $filename);
+        $filename = self::getPathAndFilename($item->getId(),"backup");
+        $filename .= $request->getProperty('backupextension', '_backup_zeit_unbekannt', true);
+        self::itemSaveToFile($item, $filename);
+    }
 
   /**
    * Loescht eine vollstaendige Instanz.
    */
-  public static function deleteInstance($instance) {
-    if(self::getStatus() != "backup") {
-        self::backupInstance($instance);
+  public static function itemDelete(Item $item, Request $request) {
+    // Item nach deleted kopieren
+    $filename = self::getPathAndFilename($item->getId(), "deleted");
+    self::itemSaveToFile($item, $filename);
+    // Item loeschen
+    try {
+	    $filename = self::getPathAndFilename($item->getId(), $request->getRequestStatus());
+        unlink($filename);
+	} catch (Throwable $throwable) {
+          Log::error("Kann Datei nicht loeschen.");
+          throw $throwable;
     }
-	$filename = self::getPathAndFilename($instance->getProperty("id"));
-    unlink($filename);
   }
 
     /**
      * Erstellt Backup fuer eine active oder deleted oder backup Instanz.
      */
-    public static function backupInstance($instance) {
-        self::saveInstance($instance, "backup");
-    }
-
-    private static function request() {
-        return Request::getSingleInstance();
+    public static function itemBackup(Item $item, Request $request) {
+        $filename = self::getPathAndFilename($item->getId() . $request->getBackupExtension(), "backup");
+        self::itemSaveToFile($item, $filename);
     }
 
 }
