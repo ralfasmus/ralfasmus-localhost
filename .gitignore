@@ -1,16 +1,3 @@
-# Netbeans
-# Netbeans muss neu gestartet werden, damit Aenderungen im .gitignore
-# in den Explorer Sichten wirksam werden
-# Netbeans Konfigurationsdateien duerfen nicht eingecheckt werden, da
-# sich in der Vergangenheit gelegentlich ihr Format geaendert hat.
-# So entstehen dann Probleme, wenn man eine neue Netbeans-Version
-# einsetzt. Ausserdem gibt es Entwickler, die nicht mit NB arbeiten.
-# Die waeren etwas genervt von diesen Dateien.
-**/nbproject
-**/build
-**/nbbuild
-**/nbdist
-**/target
 
 **/Leichtathletik
 
@@ -35,7 +22,6 @@
 **/nbproject
 **/build
 **/nbbuild
-**/dist
 **/nbdist
 **/target
 nbactions.xml
