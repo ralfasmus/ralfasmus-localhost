@@ -13981,6 +13981,13 @@ $(document).ready(function () {
     // Bootstrap tooltip:
     $('[data-toggle="tooltip"]').tooltip();
 
+    // Art anklicken und filter ergaenzen:
+    $('.dvz-js-artlist-art').on('click', function () {
+        art = $(this).attr('data-filter');
+        $('.dvz-js-liste-filter-art').val(art);
+        filterListUpdate();
+    });
+
     // einmal die Liste der Items entsprechend (voreingestellter) Filter aktualisieren:
     filterListUpdate();
     // Trigger: Aenderung im Filter-Feld = Liste aktualisieren
@@ -14166,26 +14173,28 @@ function filterListUpdate() {
     hideHiddenItems(noteItems);
 
     // update art liste
-    var artItems = $('.dvz-js-artlist__art');
-    $(artItems).addClass("dvz-js-hidden");
+    var artNodes= $('.dvz-js-artlist-art');
+    $(artNodes).addClass("dvz-js-hidden");
     $(noteItems).filter(':not(.dvz-js-hidden)').each(function () {
-        var arts = $(this).attr('data-filter-art');
-        if(isString(arts)) {
-            var parameters = [arts];
-            console.info(arts);
-            $(artItems).each(function () {
-                var arts = parameters[0];
-                var art = $(this).text();
-                if (arts.includes(art)) {
-                    $(this).removeClass('dvz-js-hidden');
-                }
+        var noteItemArts = $(this).attr('data-filter-art');
+        if(isString(noteItemArts)) {
+            var parameters = noteItemArts.split(' ');
+            $(artNodes).each(function () {
+                var artNode = this;
+                parameters.forEach(function(noteItemArt) {
+                    var artNodeArt = $(artNode).attr('data-filter');
+                    if (noteItemArt.startsWith(artNodeArt)) {
+                        $(artNode).removeClass('dvz-js-hidden');
+                    }
+
+                })
             }, parameters);
         }
     });
-    hideHiddenItems(artItems);
+    hideHiddenItems(artNodes);
 }
 
 function hideHiddenItems(itemList) {
     $(itemList).filter('.dvz-js-hidden').addClass("d-none");
     $(itemList).filter(':not(.dvz-js-hidden)').removeClass("d-none");
-}/*! build-hinweis: Datei generiert am 2019-07-21_05-25-39 von minifyjs.sh */
+}/*! build-hinweis: Datei generiert am 2019-07-23_08-59-03 von minifyjs.sh */

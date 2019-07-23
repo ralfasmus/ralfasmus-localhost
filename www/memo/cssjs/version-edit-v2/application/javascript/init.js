@@ -17,6 +17,13 @@ $(document).ready(function () {
     // Bootstrap tooltip:
     $('[data-toggle="tooltip"]').tooltip();
 
+    // Art anklicken und filter ergaenzen:
+    $('.dvz-js-artlist-art').on('click', function () {
+        art = $(this).attr('data-filter');
+        $('.dvz-js-liste-filter-art').val(art);
+        filterListUpdate();
+    });
+
     // einmal die Liste der Items entsprechend (voreingestellter) Filter aktualisieren:
     filterListUpdate();
     // Trigger: Aenderung im Filter-Feld = Liste aktualisieren

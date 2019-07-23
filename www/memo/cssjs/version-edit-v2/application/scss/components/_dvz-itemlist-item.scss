@@ -14,3 +14,13 @@
     }
   }
 }
+
+.artlist-entries {
+  .artlist__entry {
+    font-weight: bold;
+    &:hover {
+      cursor: pointer;
+      background-color: #f5e79e;
+    }
+  }
+}

@@ -8,12 +8,17 @@ div {
     display:none;
 }
 
-.showajaxresult .ajaxresult {
-    display:block;
-    .error {
-        color: red;
-    }
-    .debug {
-        color: lightgray;
+.showajaxresult {
+    margin-top: 50px;
+    padding: 10px;
+    .ajaxresult {
+        display:block;
+        color: #ccc;
+        .error {
+            color: red;
+        }
+        .debug {
+            color: #666;
+        }
     }
 }

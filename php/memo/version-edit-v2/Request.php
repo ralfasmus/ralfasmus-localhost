@@ -7,14 +7,17 @@
  */
 class Request implements Properties_Interface {
 
-    private const STATUS_DEFAULT = 'active';
+    /**
+     * Status des Requests
+     */
+    private const ITEM_STATUS_DEFAULT = 'active';
     // Request/Config Property zum Filtern der anzuzeigenden Items:
     private const PROPERTY_FILTER_VIEWS                 = "filter-views";
-    // default action fuer Request ?index.php ohne weitere GET/POSTR Parameter
+    // default action fuer Request ?index.php ohne weitere GET/POST Parameter
     const REQUEST_ACTION_DEFAULT = 'homepage';
 
     private $requestConfig = NULL;
-    private $requestStatus = self::STATUS_DEFAULT;
+    private $requestStatus = self::ITEM_STATUS_DEFAULT;
 
     private $propertiesItemPersistent  = NULL;
     private $propertiesItemBerechnet  = NULL;
@@ -63,7 +66,7 @@ class Request implements Properties_Interface {
    * deleted | backup | active
    */
     public function getRequestStatus() : string {
-        return $this->getProperty('status', self::STATUS_DEFAULT, true);
+        return $this->getProperty('status', self::ITEM_STATUS_DEFAULT, true);
     }
 
     public function getConfig() : Item {
@@ -101,7 +104,14 @@ class Request implements Properties_Interface {
             $art = $item->getProperty("art", "");
             $artArray = explode(" ", $art);
             foreach($artArray as $art) {
-                $arts[trim($art, " .")] = "";
+                $arts[trim($art, " ")] = "";
+                // jetzt die Art-Teile als weitere "Haupt-" Arts erzeugen:
+                $subarts = explode('.', $art);
+                foreach($subarts as $subart) {
+                    if($subart != "") {
+                        $arts[".$subart"] = "";
+                    }
+                }
             }
         }
         ksort($arts);
