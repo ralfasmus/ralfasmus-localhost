@@ -8,8 +8,8 @@ class View {
 
 
     /**
-     * Liefert fuer jedes der Properties-Objekte (z.B. Items) in $propertiesList das generierte HTML, wobei
-     * das passende Template fuer jedes item geladen wird und alle REPLACED_BY_[ITEM|CONFIG|PROPERTY]_property_VALUE
+     * Liefert fuer jedes der Properties-Objekte (z.B. Notes) in $propertiesList das generierte HTML, wobei
+     * das passende Template fuer jedes note geladen wird und alle REPLACED_BY_[ITEM|CONFIG|PROPERTY]_property_VALUE
      * Platzhalter durch die entsprechenden Werte des Properties-Objekts ersetzt werden.
      */
     static public function createHtml(string $placeHolder, array $propertiesList) : string {
@@ -66,16 +66,16 @@ class View {
             // # AJAX Action Requests: body-content (und andere PLACE_HOLDER)
             // #########################################################################
 
-            case 'itemsave' :
-                                            Persistence::itemSave($request->getUpdatedActionItem(), $request);
+            case 'notesave' :
+                                            Persistence::noteSave($request->getUpdatedActionNote(), $request);
                                             break;
-            case 'itemdelete' :
-                                            Persistence::itemDelete($request->getUpdatedActionItem(), $request);
+            case 'notedelete' :
+                                            Persistence::noteDelete($request->getUpdatedActionNote(), $request);
                                             break;
-            case 'itembackup' :
-                                            Persistence::itemBackup($request->getUpdatedActionItem(), $request);
+            case 'notebackup' :
+                                            Persistence::noteBackup($request->getUpdatedActionNote(), $request);
                                             break;
-            case 'itemrecover' :
+            case 'noterecover' :
                                             throw new Exception("Not Implemented");
                                             break;
 
@@ -83,20 +83,20 @@ class View {
             // # PAGE Requests: body-content (und andere PLACE_HOLDER)
             // #########################################################################
 
-            case 'itemlist-filter' :
+            case 'notelist-filter' :
                                             //@TODO view und filter
-                                            $items = $request->getItems();
-                                            $html = View::createHtml($placeHolder, $request->getArtsList($items));
+                                            $notes = $request->getNotes();
+                                            $html = View::createHtml($placeHolder, $request->getArtsList($notes));
                                             break;
-            case 'itemlist-items' :
+            case 'notelist-notes' :
                                             //@TODO view und filter
-                                            $items = $request->getItems();
+                                            $notes = $request->getNotes();
                                             // @TODO hier noch die Config filter auswerten
-                                            $html = View::createHtml($placeHolder, $items);
+                                            $html = View::createHtml($placeHolder, $notes);
                                             break;
-            case 'itemedit' :
-                                            $item = $request->getUpdatedActionItem();
-                                            $html = View::createHtml($placeHolder, array($item));
+            case 'noteedit' :
+                                            $note = $request->getUpdatedActionNote();
+                                            $html = View::createHtml($placeHolder, array($note));
                                             break;
             case 'body-content' :
                                             $action = $request->getProperty("action", Request::REQUEST_ACTION_DEFAULT);
@@ -108,9 +108,9 @@ class View {
         }
 
         // #### PLACE_HOLDER_CONFIG im Template ersetzen
-        $configItem = $request->getConfig();
-        $configItem->setProperty(Properties_Interface::PLACE_HOLDER_CONFIG, Properties_Interface::PLACE_HOLDER_PROPERTY_NAME);
-        $html = self::replacePlaceHoldersVALUE($html, $configItem);
+        $configNote = $request->getConfig();
+        $configNote->setProperty(Properties_Interface::PLACE_HOLDER_CONFIG, Properties_Interface::PLACE_HOLDER_PROPERTY_NAME);
+        $html = self::replacePlaceHoldersVALUE($html, $configNote);
 
          // #### PLACE_HOLDER_PROPERTY im Template ersetzen
         $regexp = "/REPLACED_BY_PROPERTY_([0-9a-zA-Z\-_]+)_VALUE/";
@@ -128,11 +128,11 @@ class View {
 
         /*
         // JSON:
-        $data = array("items-json" => array());
-        foreach($items as $item) {
-            $data["items-json"][] = $item->getProperties();
+        $data = array("notes-json" => array());
+        foreach($notes as $note) {
+            $data["notes-json"][] = $note->getProperties();
         }
-        //$data["items-json"] = $items;
+        //$data["notes-json"] = $notes;
         header('Content-Type:json');
         $result = json_encode($data);
         */

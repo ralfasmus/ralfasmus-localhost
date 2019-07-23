@@ -13758,11 +13758,11 @@ function initMoment() {
 
 /**
  * Liefert den Inhalt des Feldes "datum" einer Instanz.
- * @param {type} item
+ * @param {type} note
  * @returns {jQuery}
  */
-function getDatum(item) {
-  return $(item).find('input[name=item-persistent-datetimesaved]').val();
+function getDatum(note) {
+  return $(note).find('input[name=note-persistent-datetimesaved]').val();
 }
 
 function jetzt(momentFormat) {
@@ -13773,22 +13773,22 @@ function jetzt(momentFormat) {
 /**
  * Liefert ein Datum in der Form zum Sortieren, berechnet aus dem Inhalt
  * des Feldes "datum" einer Instanz.
- * @param {type} item
- * @returns {String} z.B. 2017-06-30_item_id
+ * @param {type} note
+ * @returns {String} z.B. 2017-06-30_note_id
  */
-function getSortDatum(item) {
-  var datum = getDatum(item);
+function getSortDatum(note) {
+  var datum = getDatum(note);
   var date = moment(datum, 'DD.MM.YYYY');
-  return date.format('YYYY-MM-DD') + '_' + $(item).attr('data-item-id');
+  return date.format('YYYY-MM-DD') + '_' + $(note).attr('data-note-id');
 }
 
 /**
  * Aktualisiert das data-select-datum Feld einer Instanz.
- * @param {type} itemSelector
+ * @param {type} noteSelector
  * @returns {undefined}
  */
-function updateDataSelectDatum(item) {
-  var datum = getDatum(item);
+function updateDataSelectDatum(note) {
+  var datum = getDatum(note);
   var date = moment(datum, 'DD.MM.YYYY');
   var select = '';
   // heute:
@@ -13802,7 +13802,7 @@ function updateDataSelectDatum(item) {
   select = select + (date.isSame(moment().subtract(1, 'week'), 'week') ? ' vwoche' : '');
   select = select + (date.isSame(moment().subtract(1, 'month'), 'month') ? ' vmonat' : '');
   select = select + (date.isSame(moment().subtract(1, 'year'), 'year') ? ' vjahr' : '');
-  $(item).attr('data-select-datum', select);
+  $(note).attr('data-select-datum', select);
 }
 
 /**
@@ -13810,90 +13810,90 @@ function updateDataSelectDatum(item) {
  * @param {type} formData
  * @returns {Boolean}
  */
-function saveItemForm(formData) {
-    formData['action'] = 'itemsave';
+function saveNotesForm(formData) {
+    formData['action'] = 'notesave';
     formData['backupextension'] = '_backup_' + jetzt('YYYY-MM-DD-HH');
     return executeAjax(formData);
 }
 
 /**
  * Sendet eine Instanz zum Speichern.
- * @param {type} item
+ * @param {type} note
  * @returns {undefined}
  */
-function itemSave(formDomNode) {
+function noteSave(formDomNode) {
     var formData = {};
-    // Felder des Items einsammeln
-    $(formDomNode).find('[name^=item-]').each(function () {
+    // Felder des Notes einsammeln
+    $(formDomNode).find('[name^=note-]').each(function () {
         var fieldName = $(this).attr('name');
         var fieldOldValue = $(this).attr('value');
         var fieldNewValue = $(this).val();
-        if(fieldName == 'item-persistent-datetimesaved') {
+        if(fieldName == 'note-persistent-datetimesaved') {
            fieldNewValue = jetzt('YYYY-MM-DD-HH-mm-ss');
            $(this).val(fieldNewValue);
         }
-        if ($(this).hasClass('dvz-js-summernote-editor')) {
+        if ($(this).hasClass('memo-js-summernote-editor')) {
             fieldNewValue = $(this).summernote('code');
             //alert(fieldNewValue);
         }
         formData[fieldName] = fieldNewValue;
-        console.info("Save Item Field: " + fieldName + "=" + fieldNewValue);
+        console.info("Save Notes Field: " + fieldName + "=" + fieldNewValue);
     });
 
     //console.info(formData);
     // Daten versenden
-    var success = saveItemForm(formData);
+    var success = saveNotesForm(formData);
     if (success) {
-        console.info('Success. Item saved.');
+        console.info('Success. Notes saved.');
     }
 }
 /**
- * Sendet einen AJAX Request zum Erzeugen eines neuen Items.
- * @param {type} item
+ * Sendet einen AJAX Request zum Erzeugen eines neuen Notes.
+ * @param {type} note
  * @returns {undefined}
  */
-function itemCreate(formData) {
+function noteCreate(formData) {
     var _jetzt = jetzt('YYYY-MM-DD-HH-mm-ss');
     // Felder-Defaults setzen
-    formData['item-persistent-datetimecreated'] = _jetzt;
-    formData['item-persistent-datetimesaved'] = _jetzt;
-    formData['item-persistent-text'] = '';
-    formData['item-persistent-art'] = '';
+    formData['note-persistent-datetimecreated'] = _jetzt;
+    formData['note-persistent-datetimesaved'] = _jetzt;
+    formData['note-persistent-text'] = '';
+    formData['note-persistent-art'] = '';
 
-    // Url fuer das window.open erstellen, dass nach dem Speichern des neuen Items ausgefuehrt werden soll,
-    // um das neue Item in einem neuen EDIT Browser-Fenster zu oeffnen
+    // Url fuer das window.open erstellen, dass nach dem Speichern des neuen Notes ausgefuehrt werden soll,
+    // um das neue Notes in einem neuen EDIT Browser-Fenster zu oeffnen
     var configId = $('#page').attr('data-config-id');
-    var itemId = formData['item-persistent-id'];
-    formData['nextpagetitle'] = 'NEW:' + itemId;
-    formData['nextpagehref'] = '?action=itemedit&config-id=' + configId + '&item-persistent-id=' + itemId;
+    var noteId = formData['note-persistent-id'];
+    formData['nextpagetitle'] = 'NEW:' + noteId;
+    formData['nextpagehref'] = '?action=noteedit&config-id=' + configId + '&note-persistent-id=' + noteId;
 
-    var success = saveItemForm(formData);
+    var success = saveNotesForm(formData);
     if (success) {
        // funktioniert hier nur, wenn PHP-seitig ein sleep eingebaut wird, um zu warten,
-       // bis das saveItemForm() oben serverseitig damit fertig geworden ist, das neue Item
+       // bis das saveNotesForm() oben serverseitig damit fertig geworden ist, das neue Notes
        // zu erzeugen und persistent zu speichern. Wurde besser geloest (siehe ececuteAjax):
        //
-       // window.open('?action=itemedit&config-id=' + configId + '&item-persistent-id=' + id, 'EDIT ' + id);
+       // window.open('?action=noteedit&config-id=' + configId + '&note-persistent-id=' + id, 'EDIT ' + id);
     }
 }
 /**
  * Sendet einen AJAX Request zum Backup.
- * @param {type} item
+ * @param {type} note
  * @returns {undefined}
  */
-function itemBackup(formData) {
-    formData['action'] = 'itembackup';
+function noteBackup(formData) {
+    formData['action'] = 'notebackup';
     formData['backupextension'] = '_backup_' + jetzt('YYYY-MM-DD-HH-mm-ss');
     return executeAjax(formData);
 }
 
 /**
- * Sendet einen AJAX Request zum Loeschen und loescht die Item aus dem DOM.
- * @param {type} item
+ * Sendet einen AJAX Request zum Loeschen und loescht die Notes aus dem DOM.
+ * @param {type} note
  * @returns {undefined}
  */
-function itemDelete(formData) {
-    formData['action'] = 'itemdelete';
+function noteDelete(formData) {
+    formData['action'] = 'notedelete';
     formData['backupextension'] = '_backup_' + jetzt('YYYY-MM-DD-HH-mm-ss');
     return executeAjax(formData);
 }
@@ -13901,7 +13901,7 @@ function itemDelete(formData) {
  * Sendet einen AJAX Request, um eine save|delete|backup Action auszufuehren.
  * Das HTML der Response wird am Ende der Seite eingebaut, damit gelieferte script tags ausgefuehrt werden.
  * So kann der Server indirekt etwas in die Browser-Konsole schreiben, z.B. PHP Stack Traces.
- * @param {type} item
+ * @param {type} note
  * @returns {undefined}
  */
 function executeAjax(formData) {
@@ -13929,7 +13929,7 @@ function executeAjax(formData) {
 
             console.info("SUCCESS: " + textStatus);
             // Wenn es eine formData['nextpagehref'] gibt, so soll das Oeffnen dieser Adresse als neues Browserfenster
-            // hier getriggert werden. Genutzt fuer create = save new item + open for edit
+            // hier getriggert werden. Genutzt fuer create = save new note + open for edit
             var nextPageHref = formData['nextpagehref'];
             if(typeof nextPageHref !== "undefined" && '' != nextPageHref && null != nextPageHref) {
                 var nextPageTitle = formData['nextpagetitle'];
@@ -13946,10 +13946,10 @@ function executeAjax(formData) {
             werden, um ueber diesen Weg einen Reiter zu oeffnen. Wurde anders geloest - siehe oben:
 
             var configId = $('#page').attr('data-config-id');
-            var id = formData['item-persistent-id'];
+            var id = formData['note-persistent-id'];
             var action = formData['action'];
             //if (EDIT action):
-            window.open('?action=itemedit&config-id=' + configId + '&item-persistent-id=' + id, 'EDIT ' + id);
+            window.open('?action=noteedit&config-id=' + configId + '&note-persistent-id=' + id, 'EDIT ' + id);
             */
         }),
         error: (function (jqXHR, textStatus, errorThrown) {
@@ -13969,8 +13969,11 @@ $(document).ready(function () {
     // Server Log Messages nach dem Laden der Seite anzeigen im DIV
     $('.showajaxresult').html($('.ajaxresult'));
 
+    // einmal die Liste der Notes entsprechend (voreingestellter) Filter aktualisieren:
+    filterListUpdate();
+
     // HTML Editor:
-    $('.dvz-js-summernote-editor').each(function () {
+    $('.memo-js-summernote-editor').each(function () {
         initSummerNote(this, $(this).attr('placeholder'));
         console.info('summernote initialisiert');
         if (isString($(this).val()) && '' !== $(this).val()) {
@@ -13982,29 +13985,27 @@ $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
     // Art anklicken und filter ergaenzen:
-    $('.dvz-js-artlist-art').on('click', function () {
+    $('.memo-js-artlist-art').on('click', function () {
         art = $(this).attr('data-filter');
-        $('.dvz-js-liste-filter-art').val(art);
+        $('.memo-js-liste-filter-art').val(art);
         filterListUpdate();
     });
 
-    // einmal die Liste der Items entsprechend (voreingestellter) Filter aktualisieren:
-    filterListUpdate();
     // Trigger: Aenderung im Filter-Feld = Liste aktualisieren
-    $('.dvz-js-liste-filter-text').on('keyup', function () {
+    $('.memo-js-liste-filter-text').on('keyup', function () {
         filterListUpdate();
     });
 
-    // Trigger: Taste im Item Form Feld = Form Change triggern
+    // Trigger: Taste im Notes Form Feld = Form Change triggern
     $('input').on('keyup', function (event) {
         $(this).change();
     });
 
-    // Trigger: Aenderung in der Item Form = Item speichern
+    // Trigger: Aenderung in der Notes Form = Notes speichern
     $('form').on('change', function (event) {
         // this uebergibt den form DOM node, event.target wuerde das INPUT oder andere Element uebergeben,
         // das original den Event fing.
-        itemSave(this);
+        noteSave(this);
     });
 
     // Trigger: Aenderung im hidden Feld #nextpage = neues Browserfenster oeffnen:
@@ -14016,39 +14017,39 @@ $(document).ready(function () {
     });
 
     // Trigger: Klick auf Button CREATE ITEM
-    $('.dvz-js-create-textnote-action').on('click', function (event) {
+    $('.memo-js-create-textnote-action').on('click', function (event) {
         event.preventDefault();
         var id = newId();
-        itemCreate({'item-persistent-id' : id, 'item-persistent-view' : 'textnote', 'item-persistent-possible-views' : 'textnote'});
+        noteCreate({'note-persistent-id' : id, 'note-persistent-view' : 'textnote', 'note-persistent-possible-views' : 'textnote'});
     });
 
-       // Trigger: Klick auf Button BACKUP ITEM
-        $('.dvz-js-backup-action').on('click', function (event) {
-            event.preventDefault();
-            var id = $(event.target).attr('data-id');
-            itemBackup({'item-persistent-id' : id});
-        });
+    // Trigger: Klick auf Button BACKUP ITEM
+    $('.memo-js-backup-action').on('click', function (event) {
+        event.preventDefault();
+        var id = $(event.target).attr('data-id');
+        noteBackup({'note-persistent-id' : id});
+    });
 
     // Trigger: Klick auf Button ITEM SAVE
-    $('.dvz-js-save-action').on('click', function (event) {
+    $('.memo-js-save-action').on('click', function (event) {
         event.preventDefault();
         $(this).change();
     });
 
     // Trigger: Klick auf Button ITEM DELETE
-    $('.dvz-js-delete-action').on('click', function (event) {
+    $('.memo-js-delete-action').on('click', function (event) {
         event.preventDefault();
         var id = $(event.target).attr('data-id');
-        itemDelete({'item-persistent-id' : id});
-        $('.dvz-js-remove-on-delete-' + id).remove();
+        noteDelete({'note-persistent-id' : id});
+        $('.memo-js-remove-on-delete-' + id).remove();
         filterListUpdate();
     });
 
     // Trigger: Klick auf Button ITEM HIDE
-    $('.dvz-js-hide-action').on('click', function (event) {
+    $('.memo-js-hide-action').on('click', function (event) {
         event.preventDefault();
         var id = $(event.target).attr('data-id');
-        $('.dvz-js-remove-on-hide-' + id).remove();
+        $('.memo-js-remove-on-hide-' + id).remove();
         filterListUpdate();
     });
 });
@@ -14087,7 +14088,7 @@ function initSummerNote(element, placeHolder) {
             }
             /*
             onChange: function (contents) {
-                var success = itemSave();
+                var success = noteSave();
             }
             */
         }
@@ -14103,11 +14104,11 @@ function initSummerNote(element, placeHolder) {
  * @returns {undefined}
  */
 function filterListUpdate() {
-    var noteItems = $(document).find('.dvz-js-itemlist__item');
-    $(noteItems).removeClass("dvz-js-hidden");
-    var totalCount = $(noteItems).length;
+    var notes = $(document).find('.memo-js-notelist__note');
+    $(notes).removeClass("memo-js-hidden");
+    var totalCount = $(notes).length;
     // Input Text Filter
-    var textFilters = $('.dvz-js-liste-filter-text');
+    var textFilters = $('.memo-js-liste-filter-text');
 
     for (filterIndex = 0; filterIndex < $(textFilters).length; filterIndex++) {
         var filterElement = $(textFilters)[filterIndex];
@@ -14122,7 +14123,7 @@ function filterListUpdate() {
             } else {
                 terms = [valueInput];
             }
-            var filterOutItems = $(noteItems).filter("[" + thisSelectorAttribute + "]");
+            var filterOutNotes = $(notes).filter("[" + thisSelectorAttribute + "]");
 
             for (termIndex = 0; termIndex < $(terms).length; termIndex++) {
                 var t = terms[termIndex];
@@ -14132,10 +14133,10 @@ function filterListUpdate() {
                     if (negate) {
                         t = t.substr(1);
                         var selectorIn = "[" + thisSelectorAttribute + "*='" + t + "']";
-                        $(filterOutItems).filter(selectorIn).addClass("dvz-js-hidden");
+                        $(filterOutNotes).filter(selectorIn).addClass("memo-js-hidden");
                     } else {
                         var selectorNotIn = "[" + thisSelectorAttribute + "*='" + t + "']";
-                        $(filterOutItems).filter(":not(" + selectorNotIn + ")").addClass("dvz-js-hidden");
+                        $(filterOutNotes).filter(":not(" + selectorNotIn + ")").addClass("memo-js-hidden");
                     }
                 }
             }
@@ -14143,7 +14144,7 @@ function filterListUpdate() {
     }
 
     // Click Filter
-    var clickFilters = $(document).find('.dvz-js-liste-filter-click');
+    var clickFilters = $(document).find('.memo-js-liste-filter-click');
     for (i = 0; i < $(clickFilters).length; i++) {
         var outCount = 0;
         var filterElement = $(clickFilters)[i];
@@ -14158,9 +14159,9 @@ function filterListUpdate() {
                 : ($(filterElement).hasClass('on-first-click-show-empty') ? "=''" : "!=''");
             var thisSelectorAttribute = $(filterElement).attr('data-dvz-selector-attribute');
             var selectorOut = "[" + thisSelectorAttribute + selectorOutCompare + "]";
-            var filterOutItems = $(noteItems).filter(selectorOut);
-            $(filterOutItems).addClass("dvz-js-hidden");
-            outCount = $(filterOutItems).length;
+            var filterOutNotes = $(notes).filter(selectorOut);
+            $(filterOutNotes).addClass("memo-js-hidden");
+            outCount = $(filterOutNotes).length;
         }
         if (selectorOutCompare === "!=''") {
             $(counterElement).addClass('e');
@@ -14170,31 +14171,31 @@ function filterListUpdate() {
             $(filterElement).removeClass('e');
         }
     }
-    hideHiddenItems(noteItems);
+    hideHiddenNotes(notes);
 
     // update art liste
-    var artNodes= $('.dvz-js-artlist-art');
-    $(artNodes).addClass("dvz-js-hidden");
-    $(noteItems).filter(':not(.dvz-js-hidden)').each(function () {
-        var noteItemArts = $(this).attr('data-filter-art');
-        if(isString(noteItemArts)) {
-            var parameters = noteItemArts.split(' ');
+    var artNodes= $('.memo-js-artlist-art');
+    $(artNodes).addClass("memo-js-hidden");
+    $(notes).filter(':not(.memo-js-hidden)').each(function () {
+        var noteNotesArts = $(this).attr('data-filter-art');
+        if(isString(noteNotesArts)) {
+            var parameters = noteNotesArts.split(' ');
             $(artNodes).each(function () {
                 var artNode = this;
-                parameters.forEach(function(noteItemArt) {
+                parameters.forEach(function(noteNotesArt) {
                     var artNodeArt = $(artNode).attr('data-filter');
-                    if (noteItemArt.startsWith(artNodeArt)) {
-                        $(artNode).removeClass('dvz-js-hidden');
+                    if (noteNotesArt.startsWith(artNodeArt)) {
+                        $(artNode).removeClass('memo-js-hidden');
                     }
 
                 })
             }, parameters);
         }
     });
-    hideHiddenItems(artNodes);
+    hideHiddenNotes(artNodes);
 }
 
-function hideHiddenItems(itemList) {
-    $(itemList).filter('.dvz-js-hidden').addClass("d-none");
-    $(itemList).filter(':not(.dvz-js-hidden)').removeClass("d-none");
-}/*! build-hinweis: Datei generiert am 2019-07-23_08-59-03 von minifyjs.sh */
+function hideHiddenNotes(noteList) {
+    $(noteList).filter('.memo-js-hidden').addClass("d-none");
+    $(noteList).filter(':not(.memo-js-hidden)').removeClass("d-none");
+}/*! build-hinweis: Datei generiert am 2019-07-23_10-55-25 von minifyjs.sh */

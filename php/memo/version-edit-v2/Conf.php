@@ -17,8 +17,8 @@ class Conf {
   }
 
     /**
-     * return wether the current application uses the data/ or the data_archive items.
-     * true if application is using data_archive/items.
+     * return wether the current application uses the data/ or the data_archive notes.
+     * true if application is using data_archive/notes.
      */
   static public function isArchive() {
       return strpos(VHOST_DOMAIN, "archiv") !== false;

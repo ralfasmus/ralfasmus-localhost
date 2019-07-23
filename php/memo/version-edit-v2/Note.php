@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Ein persistentes Item. Das kann auch ein Config-Item sein.
+ * Ein Note ist ein persistenter Container für Daten. Das kann auch ein Config-Note sein.
  */
-class Item implements Properties_Interface {
+class Note implements Properties_Interface {
 
-    // Moegliche views/templates zum Anzeigen eines Items:
+    // Moegliche views/templates zum Anzeigen eines Notes:
     private const PROPERTY_POSSIBLE_VIEWS       = "possible-views";
 
   private $properties = NULL;
@@ -15,7 +15,7 @@ class Item implements Properties_Interface {
    * @param type $id
    */
   public function __construct(string $id = '') {
-      assert(!empty($id), 'Kann Item nicht erzeugen, weil $id Parameter ungueltig ist');
+      assert(!empty($id), 'Kann Note nicht erzeugen, weil $id Parameter ungueltig ist');
       $this->properties = new Properties();
       $this->setProperty($id, 'id');
       $this->setProperty(Properties_Interface::PLACE_HOLDER_ITEM, Properties_Interface::PLACE_HOLDER_PROPERTY_NAME);
@@ -34,7 +34,7 @@ class Item implements Properties_Interface {
   }
 
   /**
-   * Liefert alle Views des Items als Komma separierter String mit mindestens einem , an Beginn und Ende:
+   * Liefert alle Views des Notes als Komma separierter String mit mindestens einem , an Beginn und Ende:
    * ,,v1,v2,
    */
   private function getAllViews() {
@@ -43,10 +43,10 @@ class Item implements Properties_Interface {
 
   public function hasViewsMatchingFilterViews(string $filterViews) : bool {
     // $filterViews sind die im Listen Filter-Feld "Views" mit " " (und) getrennt angegebenen Views
-    $itemViews = $this->getAllViews();
+    $noteViews = $this->getAllViews();
     $foundAll = true;
     foreach(explode(" ", $filterViews) as $filterView) {
-        $foundAll = $foundAll && stripos($itemViews, ",$filterView,") !== false;
+        $foundAll = $foundAll && stripos($noteViews, ",$filterView,") !== false;
     }
     return $foundAll;
   }

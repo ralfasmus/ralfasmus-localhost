@@ -6,11 +6,11 @@
  * @returns {undefined}
  */
 function filterListUpdate() {
-    var noteItems = $(document).find('.dvz-js-itemlist__item');
-    $(noteItems).removeClass("dvz-js-hidden");
-    var totalCount = $(noteItems).length;
+    var notes = $(document).find('.memo-js-notelist__note');
+    $(notes).removeClass("memo-js-hidden");
+    var totalCount = $(notes).length;
     // Input Text Filter
-    var textFilters = $('.dvz-js-liste-filter-text');
+    var textFilters = $('.memo-js-liste-filter-text');
 
     for (filterIndex = 0; filterIndex < $(textFilters).length; filterIndex++) {
         var filterElement = $(textFilters)[filterIndex];
@@ -25,7 +25,7 @@ function filterListUpdate() {
             } else {
                 terms = [valueInput];
             }
-            var filterOutItems = $(noteItems).filter("[" + thisSelectorAttribute + "]");
+            var filterOutNotes = $(notes).filter("[" + thisSelectorAttribute + "]");
 
             for (termIndex = 0; termIndex < $(terms).length; termIndex++) {
                 var t = terms[termIndex];
@@ -35,10 +35,10 @@ function filterListUpdate() {
                     if (negate) {
                         t = t.substr(1);
                         var selectorIn = "[" + thisSelectorAttribute + "*='" + t + "']";
-                        $(filterOutItems).filter(selectorIn).addClass("dvz-js-hidden");
+                        $(filterOutNotes).filter(selectorIn).addClass("memo-js-hidden");
                     } else {
                         var selectorNotIn = "[" + thisSelectorAttribute + "*='" + t + "']";
-                        $(filterOutItems).filter(":not(" + selectorNotIn + ")").addClass("dvz-js-hidden");
+                        $(filterOutNotes).filter(":not(" + selectorNotIn + ")").addClass("memo-js-hidden");
                     }
                 }
             }
@@ -46,7 +46,7 @@ function filterListUpdate() {
     }
 
     // Click Filter
-    var clickFilters = $(document).find('.dvz-js-liste-filter-click');
+    var clickFilters = $(document).find('.memo-js-liste-filter-click');
     for (i = 0; i < $(clickFilters).length; i++) {
         var outCount = 0;
         var filterElement = $(clickFilters)[i];
@@ -61,9 +61,9 @@ function filterListUpdate() {
                 : ($(filterElement).hasClass('on-first-click-show-empty') ? "=''" : "!=''");
             var thisSelectorAttribute = $(filterElement).attr('data-dvz-selector-attribute');
             var selectorOut = "[" + thisSelectorAttribute + selectorOutCompare + "]";
-            var filterOutItems = $(noteItems).filter(selectorOut);
-            $(filterOutItems).addClass("dvz-js-hidden");
-            outCount = $(filterOutItems).length;
+            var filterOutNotes = $(notes).filter(selectorOut);
+            $(filterOutNotes).addClass("memo-js-hidden");
+            outCount = $(filterOutNotes).length;
         }
         if (selectorOutCompare === "!=''") {
             $(counterElement).addClass('e');
@@ -73,31 +73,31 @@ function filterListUpdate() {
             $(filterElement).removeClass('e');
         }
     }
-    hideHiddenItems(noteItems);
+    hideHiddenNotes(notes);
 
     // update art liste
-    var artNodes= $('.dvz-js-artlist-art');
-    $(artNodes).addClass("dvz-js-hidden");
-    $(noteItems).filter(':not(.dvz-js-hidden)').each(function () {
-        var noteItemArts = $(this).attr('data-filter-art');
-        if(isString(noteItemArts)) {
-            var parameters = noteItemArts.split(' ');
+    var artNodes= $('.memo-js-artlist-art');
+    $(artNodes).addClass("memo-js-hidden");
+    $(notes).filter(':not(.memo-js-hidden)').each(function () {
+        var noteNotesArts = $(this).attr('data-filter-art');
+        if(isString(noteNotesArts)) {
+            var parameters = noteNotesArts.split(' ');
             $(artNodes).each(function () {
                 var artNode = this;
-                parameters.forEach(function(noteItemArt) {
+                parameters.forEach(function(noteNotesArt) {
                     var artNodeArt = $(artNode).attr('data-filter');
-                    if (noteItemArt.startsWith(artNodeArt)) {
-                        $(artNode).removeClass('dvz-js-hidden');
+                    if (noteNotesArt.startsWith(artNodeArt)) {
+                        $(artNode).removeClass('memo-js-hidden');
                     }
 
                 })
             }, parameters);
         }
     });
-    hideHiddenItems(artNodes);
+    hideHiddenNotes(artNodes);
 }
 
-function hideHiddenItems(itemList) {
-    $(itemList).filter('.dvz-js-hidden').addClass("d-none");
-    $(itemList).filter(':not(.dvz-js-hidden)').removeClass("d-none");
+function hideHiddenNotes(noteList) {
+    $(noteList).filter('.memo-js-hidden').addClass("d-none");
+    $(noteList).filter(':not(.memo-js-hidden)').removeClass("d-none");
 }

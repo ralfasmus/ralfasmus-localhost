@@ -1,4 +1,4 @@
-.dvz-itemlist__item {
+.dvz-notelist__note {
   .card {
     &:hover {
       @extend .bg-light;
@@ -9,7 +9,7 @@
     &:hover {
       @extend .bg-light;
     }
-    .dvz-itemlist-item__content {
+    .dvz-notelist-note__content {
       cursor : pointer;
     }
   }

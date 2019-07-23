@@ -4,90 +4,90 @@
  * @param {type} formData
  * @returns {Boolean}
  */
-function saveItemForm(formData) {
-    formData['action'] = 'itemsave';
+function saveNotesForm(formData) {
+    formData['action'] = 'notesave';
     formData['backupextension'] = '_backup_' + jetzt('YYYY-MM-DD-HH');
     return executeAjax(formData);
 }
 
 /**
  * Sendet eine Instanz zum Speichern.
- * @param {type} item
+ * @param {type} note
  * @returns {undefined}
  */
-function itemSave(formDomNode) {
+function noteSave(formDomNode) {
     var formData = {};
-    // Felder des Items einsammeln
-    $(formDomNode).find('[name^=item-]').each(function () {
+    // Felder des Notes einsammeln
+    $(formDomNode).find('[name^=note-]').each(function () {
         var fieldName = $(this).attr('name');
         var fieldOldValue = $(this).attr('value');
         var fieldNewValue = $(this).val();
-        if(fieldName == 'item-persistent-datetimesaved') {
+        if(fieldName == 'note-persistent-datetimesaved') {
            fieldNewValue = jetzt('YYYY-MM-DD-HH-mm-ss');
            $(this).val(fieldNewValue);
         }
-        if ($(this).hasClass('dvz-js-summernote-editor')) {
+        if ($(this).hasClass('memo-js-summernote-editor')) {
             fieldNewValue = $(this).summernote('code');
             //alert(fieldNewValue);
         }
         formData[fieldName] = fieldNewValue;
-        console.info("Save Item Field: " + fieldName + "=" + fieldNewValue);
+        console.info("Save Notes Field: " + fieldName + "=" + fieldNewValue);
     });
 
     //console.info(formData);
     // Daten versenden
-    var success = saveItemForm(formData);
+    var success = saveNotesForm(formData);
     if (success) {
-        console.info('Success. Item saved.');
+        console.info('Success. Notes saved.');
     }
 }
 /**
- * Sendet einen AJAX Request zum Erzeugen eines neuen Items.
- * @param {type} item
+ * Sendet einen AJAX Request zum Erzeugen eines neuen Notes.
+ * @param {type} note
  * @returns {undefined}
  */
-function itemCreate(formData) {
+function noteCreate(formData) {
     var _jetzt = jetzt('YYYY-MM-DD-HH-mm-ss');
     // Felder-Defaults setzen
-    formData['item-persistent-datetimecreated'] = _jetzt;
-    formData['item-persistent-datetimesaved'] = _jetzt;
-    formData['item-persistent-text'] = '';
-    formData['item-persistent-art'] = '';
+    formData['note-persistent-datetimecreated'] = _jetzt;
+    formData['note-persistent-datetimesaved'] = _jetzt;
+    formData['note-persistent-text'] = '';
+    formData['note-persistent-art'] = '';
 
-    // Url fuer das window.open erstellen, dass nach dem Speichern des neuen Items ausgefuehrt werden soll,
-    // um das neue Item in einem neuen EDIT Browser-Fenster zu oeffnen
+    // Url fuer das window.open erstellen, dass nach dem Speichern des neuen Notes ausgefuehrt werden soll,
+    // um das neue Notes in einem neuen EDIT Browser-Fenster zu oeffnen
     var configId = $('#page').attr('data-config-id');
-    var itemId = formData['item-persistent-id'];
-    formData['nextpagetitle'] = 'NEW:' + itemId;
-    formData['nextpagehref'] = '?action=itemedit&config-id=' + configId + '&item-persistent-id=' + itemId;
+    var noteId = formData['note-persistent-id'];
+    formData['nextpagetitle'] = 'NEW:' + noteId;
+    formData['nextpagehref'] = '?action=noteedit&config-id=' + configId + '&note-persistent-id=' + noteId;
 
-    var success = saveItemForm(formData);
+    var success = saveNotesForm(formData);
     if (success) {
        // funktioniert hier nur, wenn PHP-seitig ein sleep eingebaut wird, um zu warten,
-       // bis das saveItemForm() oben serverseitig damit fertig geworden ist, das neue Item
+       // bis das saveNotesForm() oben serverseitig damit fertig geworden ist, das neue Notes
        // zu erzeugen und persistent zu speichern. Wurde besser geloest (siehe ececuteAjax):
        //
-       // window.open('?action=itemedit&config-id=' + configId + '&item-persistent-id=' + id, 'EDIT ' + id);
+       // window.open('?action=noteedit&config-id=' + configId + '&note-persistent-id=' + id, 'EDIT ' + id);
     }
 }
 /**
  * Sendet einen AJAX Request zum Backup.
- * @param {type} item
+ * @param {type} note
  * @returns {undefined}
  */
-function itemBackup(formData) {
-    formData['action'] = 'itembackup';
+function noteBackup(formData) {
+    formData['action'] = 'notebackup';
     formData['backupextension'] = '_backup_' + jetzt('YYYY-MM-DD-HH-mm-ss');
     return executeAjax(formData);
 }
 
 /**
- * Sendet einen AJAX Request zum Loeschen und loescht die Item aus dem DOM.
- * @param {type} item
+ * Sendet einen AJAX Request zum Loeschen und loescht die Notes aus dem DOM.
+ * @param {type} note
  * @returns {undefined}
  */
-function itemDelete(formData) {
-    formData['action'] = 'itemdelete';
+function noteDelete(formData) {
+    formData['action'] = 'notedelete';
     formData['backupextension'] = '_backup_' + jetzt('YYYY-MM-DD-HH-mm-ss');
     return executeAjax(formData);
 }
@@ -95,7 +95,7 @@ function itemDelete(formData) {
  * Sendet einen AJAX Request, um eine save|delete|backup Action auszufuehren.
  * Das HTML der Response wird am Ende der Seite eingebaut, damit gelieferte script tags ausgefuehrt werden.
  * So kann der Server indirekt etwas in die Browser-Konsole schreiben, z.B. PHP Stack Traces.
- * @param {type} item
+ * @param {type} note
  * @returns {undefined}
  */
 function executeAjax(formData) {
@@ -123,7 +123,7 @@ function executeAjax(formData) {
 
             console.info("SUCCESS: " + textStatus);
             // Wenn es eine formData['nextpagehref'] gibt, so soll das Oeffnen dieser Adresse als neues Browserfenster
-            // hier getriggert werden. Genutzt fuer create = save new item + open for edit
+            // hier getriggert werden. Genutzt fuer create = save new note + open for edit
             var nextPageHref = formData['nextpagehref'];
             if(typeof nextPageHref !== "undefined" && '' != nextPageHref && null != nextPageHref) {
                 var nextPageTitle = formData['nextpagetitle'];
@@ -140,10 +140,10 @@ function executeAjax(formData) {
             werden, um ueber diesen Weg einen Reiter zu oeffnen. Wurde anders geloest - siehe oben:
 
             var configId = $('#page').attr('data-config-id');
-            var id = formData['item-persistent-id'];
+            var id = formData['note-persistent-id'];
             var action = formData['action'];
             //if (EDIT action):
-            window.open('?action=itemedit&config-id=' + configId + '&item-persistent-id=' + id, 'EDIT ' + id);
+            window.open('?action=noteedit&config-id=' + configId + '&note-persistent-id=' + id, 'EDIT ' + id);
             */
         }),
         error: (function (jqXHR, textStatus, errorThrown) {

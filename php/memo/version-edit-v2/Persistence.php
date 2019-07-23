@@ -1,55 +1,55 @@
 <?php
 
 /**
- * Alle Funktionen zum persistenten Laden und Speichern von Items.
+ * Alle Funktionen zum persistenten Laden und Speichern von Notes.
  */
 class Persistence {
 
 
-  static private $itemsCache = array();
-  static private $itemsCacheIsValid = false;
+  static private $notesCache = array();
+  static private $notesCacheIsValid = false;
 
   /**
-   * Laedt alle Items in den Cache, die dem status des requests entsprechen und mit den im Filter angegebenen views matchen.
+   * Laedt alle Notes in den Cache, die dem status des requests entsprechen und mit den im Filter angegebenen views matchen.
    *
    * @param string $view
    */
-  private static function loadItems(string $filterViews, string $status) : array {
-      if(!self::$itemsCacheIsValid) {
+  private static function loadNotes(string $filterViews, string $status) : array {
+      if(!self::$notesCacheIsValid) {
           $filenameBase = Conf::get("DATA_FILE_NAME_BASE");
           foreach (glob($filenameBase . "/$status/*") as $filename) {
-              $item = self::loadItemByFilename($filename);
-              if($item->hasViewsMatchingFilterViews($filterViews)) {
-                  self::$itemsCache[] = $item;
+              $note = self::loadNoteByFilename($filename);
+              if($note->hasViewsMatchingFilterViews($filterViews)) {
+                  self::$notesCache[] = $note;
               }
           }
-          self::$itemsCacheIsValid = true;
+          self::$notesCacheIsValid = true;
       }
-      return self::$itemsCache;
+      return self::$notesCache;
   }
 
   /**
    * Liefert alle Instanzen sortiert.
    * @return type
    */
-  public static function getItems(string $filterViews, string $sortProperty, bool $descending, string $status) : array {
+  public static function getNotes(string $filterViews, string $sortProperty, bool $descending, string $status) : array {
 
-      $items = self::loadItems($filterViews, $status);
+      $notes = self::loadNotes($filterViews, $status);
 
       $sortList = array();
-      $itemList = array();
+      $noteList = array();
 
-      foreach ($items as $item) {
+      foreach ($notes as $note) {
         if(is_array($sortProperty)) {
             $sortString = "";
             foreach($sortProperty as $prop) {
-                $sortString .= $item->getProperty($prop, "") . " ...";
+                $sortString .= $note->getProperty($prop, "") . " ...";
             }
         } else {
-            $sortString = $item->getProperty($sortProperty, "");
+            $sortString = $note->getProperty($sortProperty, "");
         }
-        $sortList[$item->getId()] = $sortString;
-        $itemList[$item->getId()] = $item;
+        $sortList[$note->getId()] = $sortString;
+        $noteList[$note->getId()] = $note;
       }
 
       if ($descending) {
@@ -59,7 +59,7 @@ class Persistence {
       }
       $result = array();
       foreach ($sortList as $id => $key) {
-        $result[] = $itemList[$id];
+        $result[] = $noteList[$id];
       }
       return $result;
   }
@@ -68,21 +68,21 @@ class Persistence {
    *
    *
    */
-  static private function loadItemByFilename(string $filename) : Item {
-      $item = NULL;
+  static private function loadNoteByFilename(string $filename) : Note {
+      $note = NULL;
       try {
-        $item = self::loadItem(file_get_contents($filename));
+        $note = self::loadNote(file_get_contents($filename));
       } catch (Throwable $throwable) {
         Log::error("Kann Datei $filename nicht finden.");
         throw $throwable;
       }
-      return $item;
+      return $note;
   }
 
   /**
-   * Laedt ein im aktuellen Status gespeichertes Item. Liefert NULL wenn keins gefunden.
+   * Laedt ein im aktuellen Status gespeichertes Note. Liefert NULL wenn keins gefunden.
    */
-  public static function loadItemById(string $id, string $status) : ?Item {
+  public static function loadNoteById(string $id, string $status) : ?Note {
     if ($id == "" || is_null($id)) {
       return NULL;
     }
@@ -90,17 +90,17 @@ class Persistence {
     if (!file_exists($filename)) {
       return NULL;
     }
-    return self::loadItemByFilename($filename);
+    return self::loadNoteByFilename($filename);
   }
 
   /**
    *
    */
-  private static function loadItem(String $itemString) : Item {
-    $properties = json_decode($itemString, true);
-    $item = new Item($properties["id"]);
-    $item->setProperties($properties);
-    return $item;
+  private static function loadNote(String $noteString) : Note {
+    $properties = json_decode($noteString, true);
+    $note = new Note($properties["id"]);
+    $note->setProperties($properties);
+    return $note;
   }
 
   /**
@@ -114,54 +114,54 @@ class Persistence {
   /**
    * Erstellt oder laedt einen Instanz.
    */
-  static public function loadOrCreateItem(string $id, Request $request) : Item {
-      $item = self::loadItemById($id, $request->getRequestStatus());
-      if(is_null($item)) {
-        $item = new Item($id);
+  static public function loadOrCreateNote(string $id, Request $request) : Note {
+      $note = self::loadNoteById($id, $request->getRequestStatus());
+      if(is_null($note)) {
+        $note = new Note($id);
       }
-      return $item;
+      return $note;
   }
 
   /**
    *
    */
-  public static function updateItemFromRequest(Item $item, Properties_Interface $propertiesItemPersistent) {
-      foreach ($propertiesItemPersistent->getProperties() as $name => $value) {
-          $item->setProperty($value, $name);
+  public static function updateNoteFromRequest(Note $note, Properties_Interface $propertiesNotePersistent) {
+      foreach ($propertiesNotePersistent->getProperties() as $name => $value) {
+          $note->setProperty($value, $name);
       }
-      return $item;
+      return $note;
   }
 
   /**
    * Speichert eine vollstaendige Instanz unter dem aktuellen Pfad.
    */
-  public static function itemSaveToFile(Item $item, string $filename) {
-    $props = $item->getProperties();
+  public static function noteSaveToFile(Note $note, string $filename) {
+    $props = $note->getProperties();
     file_put_contents("${filename}", json_encode($props, JSON_HEX_QUOT | JSON_HEX_TAG));
-    Log::debug("Saved Item to $filename");
+    Log::debug("Saved Note to $filename");
   }
 
      /**
      *  Speichert eine vollstaendige Instanz.
      */
-    public static function itemSave(Item $item, Request $request) {
-        $filename = self::getPathAndFilename($item->getId(), $request->getRequestStatus());
-        self::itemSaveToFile($item, $filename);
-        $filename = self::getPathAndFilename($item->getId(),"backup");
+    public static function noteSave(Note $note, Request $request) {
+        $filename = self::getPathAndFilename($note->getId(), $request->getRequestStatus());
+        self::noteSaveToFile($note, $filename);
+        $filename = self::getPathAndFilename($note->getId(),"backup");
         $filename .= $request->getProperty('backupextension', '_backup_zeit_unbekannt', true);
-        self::itemSaveToFile($item, $filename);
+        self::noteSaveToFile($note, $filename);
     }
 
   /**
    * Loescht eine vollstaendige Instanz.
    */
-  public static function itemDelete(Item $item, Request $request) {
-    // Item nach deleted kopieren
-    $filename = self::getPathAndFilename($item->getId(), "deleted");
-    self::itemSaveToFile($item, $filename);
-    // Item loeschen
+  public static function noteDelete(Note $note, Request $request) {
+    // Note nach deleted kopieren
+    $filename = self::getPathAndFilename($note->getId(), "deleted");
+    self::noteSaveToFile($note, $filename);
+    // Note loeschen
     try {
-	    $filename = self::getPathAndFilename($item->getId(), $request->getRequestStatus());
+	    $filename = self::getPathAndFilename($note->getId(), $request->getRequestStatus());
         unlink($filename);
 	} catch (Throwable $throwable) {
           Log::error("Kann Datei nicht loeschen.");
@@ -172,9 +172,9 @@ class Persistence {
     /**
      * Erstellt Backup fuer eine active oder deleted oder backup Instanz.
      */
-    public static function itemBackup(Item $item, Request $request) {
-        $filename = self::getPathAndFilename($item->getId() . $request->getBackupExtension(), "backup");
-        self::itemSaveToFile($item, $filename);
+    public static function noteBackup(Note $note, Request $request) {
+        $filename = self::getPathAndFilename($note->getId() . $request->getBackupExtension(), "backup");
+        self::noteSaveToFile($note, $filename);
     }
 
 }

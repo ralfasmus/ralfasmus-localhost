@@ -11,7 +11,7 @@ class Request implements Properties_Interface {
      * Status des Requests
      */
     private const ITEM_STATUS_DEFAULT = 'active';
-    // Request/Config Property zum Filtern der anzuzeigenden Items:
+    // Request/Config Property zum Filtern der anzuzeigenden Notes:
     private const PROPERTY_FILTER_VIEWS                 = "filter-views";
     // default action fuer Request ?index.php ohne weitere GET/POST Parameter
     const REQUEST_ACTION_DEFAULT = 'homepage';
@@ -19,8 +19,8 @@ class Request implements Properties_Interface {
     private $requestConfig = NULL;
     private $requestStatus = self::ITEM_STATUS_DEFAULT;
 
-    private $propertiesItemPersistent  = NULL;
-    private $propertiesItemBerechnet  = NULL;
+    private $propertiesNotePersistent  = NULL;
+    private $propertiesNoteBerechnet  = NULL;
     private $propertiesRequest  = NULL;
     private $propertiesAll      = NULL;
 
@@ -33,17 +33,17 @@ class Request implements Properties_Interface {
         $propertiesGet = $propertiesAll->getProperty('get', array());
         $propertiesPost = $propertiesAll->getProperty('post', array());
 
-        $this->propertiesItemPersistent = new Properties();
-        $this->propertiesItemBerechnet = new Properties();
+        $this->propertiesNotePersistent = new Properties();
+        $this->propertiesNoteBerechnet = new Properties();
         $this->propertiesRequest = new Properties();
 
         // POST ueberschreibt get. Muessen aber alles alphanumerische Schluessel sein.
 
         foreach(array_merge($propertiesGet, $propertiesPost) as $name => $value) {
-            if(stripos($name, "item-persistent-") === 0) {
-                $this->propertiesItemPersistent->setProperty($value, str_replace('item-persistent-','', $name));
-            } else if(stripos($name, "item-berechnet-") === 0) {
-               $this->propertiesItemBerechnet->setProperty($value, str_replace('item-berechnet-','', $name));
+            if(stripos($name, "note-persistent-") === 0) {
+                $this->propertiesNotePersistent->setProperty($value, str_replace('note-persistent-','', $name));
+            } else if(stripos($name, "note-berechnet-") === 0) {
+               $this->propertiesNoteBerechnet->setProperty($value, str_replace('note-berechnet-','', $name));
             } else {
                 // Request/Action Property
                 $this->propertiesRequest->setProperty($value, $name);
@@ -51,9 +51,9 @@ class Request implements Properties_Interface {
         }
 
         Log::debug('REQUEST PROPERTIES ITEM PERSISTENT:');
-        Log::debug($this->propertiesItemPersistent->getProperties());
+        Log::debug($this->propertiesNotePersistent->getProperties());
         Log::debug('REQUEST PROPERTIES ITEM BERECHNET:');
-        Log::debug($this->propertiesItemBerechnet->getProperties());
+        Log::debug($this->propertiesNoteBerechnet->getProperties());
         Log::debug('REQUEST PROPERTIES REQUEST:');
         Log::debug($this->propertiesRequest->getProperties());
     }
@@ -69,39 +69,39 @@ class Request implements Properties_Interface {
         return $this->getProperty('status', self::ITEM_STATUS_DEFAULT, true);
     }
 
-    public function getConfig() : Item {
+    public function getConfig() : Note {
         if (is_null($this->requestConfig)) {
-            $this->requestConfig = Persistence::loadOrCreateItem($this->getProperty("config-id", "defaultconfig"), $this);
-            $this->requestConfig = Persistence::updateItemFromRequest($this->requestConfig, $this->getPropertiesRequest());
+            $this->requestConfig = Persistence::loadOrCreateNote($this->getProperty("config-id", "defaultconfig"), $this);
+            $this->requestConfig = Persistence::updateNoteFromRequest($this->requestConfig, $this->getPropertiesRequest());
             // wenn in der Url explizit angegeben ist "saveconfig=yes", dann speichere die request properties aus der Url,
             // wie z.B. filter-art oder filter-text oder filter-views persistent in der config. Sonst wirken sie sich zwar aus,
             // werden aber erst mit dem naechsten Change+Save der Config gespeichert.
             if($this->getProperty("saveconfig", "") == "yes") {
-                Persistence::itemSave($this->requestConfig, $this);
+                Persistence::noteSave($this->requestConfig, $this);
             }
         }
         return $this->requestConfig;
     }
 
-  public function getPropertiesItemPersistent() : Properties_Interface {
-    return $this->propertiesItemPersistent;
+  public function getPropertiesNotePersistent() : Properties_Interface {
+    return $this->propertiesNotePersistent;
   }
 
     public function getPropertiesRequest() : Properties_Interface {
       return $this->propertiesRequest;
     }
 
-  public function getUpdatedActionItem() : Item {
-    $id = $this->getPropertiesItemPersistent()->getProperty("id");
-    $item = Persistence::loadOrCreateItem($id, $this);
-    $item = Persistence::updateItemFromRequest($item, $this->getPropertiesItemPersistent());
-    return $item;
+  public function getUpdatedActionNote() : Note {
+    $id = $this->getPropertiesNotePersistent()->getProperty("id");
+    $note = Persistence::loadOrCreateNote($id, $this);
+    $note = Persistence::updateNoteFromRequest($note, $this->getPropertiesNotePersistent());
+    return $note;
   }
 
-    public function getArtsList(array $items) : array {
+    public function getArtsList(array $notes) : array {
         $arts = array();
-        foreach($items as $item) {
-            $art = $item->getProperty("art", "");
+        foreach($notes as $note) {
+            $art = $note->getProperty("art", "");
             $artArray = explode(" ", $art);
             foreach($artArray as $art) {
                 $arts[trim($art, " ")] = "";
@@ -132,8 +132,8 @@ class Request implements Properties_Interface {
         return $this->getProperty('backupextension', time(), true);
     }
 
-    public function getItems() : array {
-        return Persistence::getItems($this->getProperty(self::PROPERTY_FILTER_VIEWS, "") , "name", false, $this->getRequestStatus());
+    public function getNotes() : array {
+        return Persistence::getNotes($this->getProperty(self::PROPERTY_FILTER_VIEWS, "") , "name", false, $this->getRequestStatus());
     }
 
    /**
@@ -157,7 +157,7 @@ class Request implements Properties_Interface {
   // ############# INTERFACE PROPERTIES #################################
 
   /**
-   * Betrachtet nur die Request/Action Properties, keine Item Properties.
+   * Betrachtet nur die Request/Action Properties, keine Note Properties.
    */
   public function getProperty(string $key, $default = "exception", bool $defaultOnEmpty = false) {
     return $this->propertiesRequest->getProperty($key, $default, $defaultOnEmpty);
@@ -174,7 +174,7 @@ class Request implements Properties_Interface {
    * Siehe interface description.
    */
   public function getProperties() : array {
-    throw new Exception('Es wurde versucht, ein komplettes Set der Request Properties abzurufen. Properties des Requests sind die unterteilt in Persistente und berechnete Item Properties und Request Properties. Diese muessen mit den entsprechenden Methoden dediziert abgefragt werden.');
+    throw new Exception('Es wurde versucht, ein komplettes Set der Request Properties abzurufen. Properties des Requests sind die unterteilt in Persistente und berechnete Note Properties und Request Properties. Diese muessen mit den entsprechenden Methoden dediziert abgefragt werden.');
   }
 
   /**
@@ -185,7 +185,7 @@ class Request implements Properties_Interface {
   }
 
   /**
-   * Betrachtet nur die Request/Action Properties, keine Item Properties.
+   * Betrachtet nur die Request/Action Properties, keine Note Properties.
    */
   public function getDecodedProperty(string $key, $default = "exception") : string {
     return $this->propertiesRequest->getDecodedProperty($key, $default);
