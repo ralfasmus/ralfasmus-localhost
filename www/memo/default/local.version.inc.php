@@ -2,16 +2,16 @@
  // default versionen
 
 if(!defined("ALLGEMEIN_VERSION_PHP")) {
-    define("ALLGEMEIN_VERSION_PHP","version-edit");
+    define("ALLGEMEIN_VERSION_PHP","version-2019-01-04");
     //define("ALLGEMEIN_VERSION_PHP","version-2018-10-24");
 }
 
  if(!defined("APPLICATION_VERSION_PHP")) {
-     define("APPLICATION_VERSION_PHP","version-edit");
+     define("APPLICATION_VERSION_PHP","version-2019-01-04");
      //define("APPLICATION_VERSION_PHP","version-2018-11-29");
  }
  if(!defined("APPLICATION_VERSION_CSSJS")) {
-     define("APPLICATION_VERSION_CSSJS","version-edit");
+     define("APPLICATION_VERSION_CSSJS","version-2019-01-04");
      //define("APPLICATION_VERSION_CSSJS","version-2018-11-29");
  }
 if(!defined("LOG_LEVEL")) {

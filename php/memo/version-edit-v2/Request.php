@@ -1,149 +1,244 @@
 <?php
-
 /**
- *
  * Aktueller Request.
- * @author asmusr
+ * Class Request
  */
-class Request implements Properties_Interface {
+class Request implements Properties_Interface
+{
 
     /**
-     * Status des Requests
+     * Request/Config Property, deren Wert den "views" Filter der anzuzeigenden Notes enthaelt
      */
-    private const ITEM_STATUS_DEFAULT = 'active';
-    // Request/Config Property zum Filtern der anzuzeigenden Notes:
-    private const PROPERTY_FILTER_VIEWS                 = "filter-views";
-    // default action fuer Request ?index.php ohne weitere GET/POST Parameter
-    const REQUEST_ACTION_DEFAULT = 'homepage';
+    private const CONFIG_PROPERTY_FILTER_VIEWS = "filter-views";
+    /**
+     * Request Property, die den zuerst zu ladenden view definiert. Das ist index-page.html fuer komplette HTML Seiten
+     * inklusive head mit styles usw. oder index-action.html fuer Requests, die nur eine (AJAX) Action ausfuehren und
+     * danach keine komplett neue Seite liefern, sondern nur evtl. ein Ergebnis der Action.
+     * @see Request::getResponse()
+     */
+    private const REQUEST_PROPERTY_BASE_VIEW = 'base-view';
+    /**
+     * Default Wert fuer @see Request::REQUEST_PROPERTY_BASE_VIEW
+     */
+    private const REQUEST_PROPERTY_BASE_VIEW_DEFAULT = 'index-page';
+    /**
+     * Request Property, die die ID zum Laden der Config-Note definiert.
+     * @see Request::getConfig()
+     */
+    private const REQUEST_PROPERTY_CONFIG_ID = 'config-id';
+    /**
+     * Default Wert fuer @see Request::REQUEST_PROPERTY_CONFIG_ID
+     */
+    private const REQUEST_PROPERTY_CONFIG_ID_DEFAULT = 'defaultconfig';
+    /**
+     * Request Property, die bestimmt, ob beim Laden einer Config diese auch direkt aus den Config GET Parametern
+     * des Requests aktualisiert UND gespeichert wird.
+     * @see Request::getConfig()
+     */
+    private const REQUEST_PROPERTY_SAVECONFIG = 'saveconfig';
+    /**
+     * Default Wert fuer @see Request::REQUEST_PROPERTY_SAVECONFIG
+     */
+    private const REQUEST_PROPERTY_SAVECONFIG_DEFAULT = 'no';
+    /**
+     * Request Property, die den Status zum Laden von Notes definiert.
+     */
+    private const REQUEST_PROPERTY_STATUS = 'status';
+    /**
+     * Default Wert fuer @see Request::REQUEST_PROPERTY_STATUS
+     */
+    private const REQUEST_PROPERTY_STATUS_DEFAULT = 'active';
+    /**
+     * Request Property, die die auszufuehrende Request Action festlegt
+     */
+    public const REQUEST_PROPERTY_ACTION = 'action';
+    /**
+     * Default action Property Wert des Requests.
+     * @see Request::REQUEST_PROPERTY_ACTION
+     */
+    public const REQUEST_PROPERTY_ACTION_DEFAULT = 'homepage';
+    /**
+     * Request Property, die die ID der zu bearbeitenden Note definiert.
+     */
+    private const REQUEST_PROPERTY_NOTE_ID = 'id';
+    /**
+     * @see Request::$propertiesNotePersistent
+     */
+    private const REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT = 'note-persistent-';
+    /**
+     * @see Request::$propertiesNoteBerechnet
+     */
+    private const REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET = 'note-berechnet-';
 
-    private $requestConfig = NULL;
-    private $requestStatus = self::ITEM_STATUS_DEFAULT;
+    /**
+     * @var Note|null Note-Instanz, deren Properties diverse Einstellungen fuer diesen Request bestimmen.
+     * @see Request::getConfig()
+     */
+    private $requestConfigCache = NULL;
 
-    private $propertiesNotePersistent  = NULL;
-    private $propertiesNoteBerechnet  = NULL;
-    private $propertiesRequest  = NULL;
-    private $propertiesAll      = NULL;
+    /**
+     * @var Properties_Interface|null GET/POST Parameter, deren Name mit note-persistent- beginnt. Sie werden der in diesem
+     * EDIT/SAVE/ zu bearbeitenden Note-Instanz zugeordnet und werden beim Speichern der Note auf dem Filesystem
+     * beruecksichtigt.
+     */
+    private $propertiesNotePersistent = NULL;
+    /**
+     * @var Properties_Interface|null GET/POST Parameter, deren Name mit note-berechnet- beginnt. Sie werden der in diesem
+     * EDIT/SAVE/ zu bearbeitenden Note-Instanz zugeordnet und werden beim Speichern der Note auf dem Filesystem
+     * IGNORIERT.
+     */
+    private $propertiesNoteBerechnet = NULL;
+    /**
+     * @var Properties_Interface|null GET/POST Parameter, die nicht mit note- beginnen, also weder in
+     * $propertiesNoteBerechnet noch in $propertiesNotePersistent enthalten sind. Das sind Parameter, die also nicht der
+     * zu bearbeitenden Note zugeordnet sind, sondern dem Request.
+     */
+    private $propertiesRequest = NULL;
+    /**
+     * @var array|null Hash Array von Properties_Interface Objekten mit den keys "get", "post", "files", "server" usw.
+     */
+    private $propertiesAll = NULL;
 
-    public function __construct(array $requestProperties = array()) {
-
-        $propertiesAll = new Properties();
-        foreach($requestProperties as $key => $propertyArray) {
-            $propertiesAll->setProperty($propertyArray, $key);
+    static private function removeParameterPrefix(array $parameters, string $prefix) : array {
+        $result = array();
+        foreach($parameters as $key => $value) {
+            $result[str_replace($prefix, '', $key)] = $value;
         }
+        return $result;
+    }
+
+    /**
+     * Request constructor.
+     * @param array $requestProperties
+     * @throws Exception
+     */
+    public function __construct(array $requestProperties = array())
+    {
+        $propertiesAll = new Properties($requestProperties);
         $propertiesGet = $propertiesAll->getProperty('get', array());
         $propertiesPost = $propertiesAll->getProperty('post', array());
 
-        $this->propertiesNotePersistent = new Properties();
-        $this->propertiesNoteBerechnet = new Properties();
-        $this->propertiesRequest = new Properties();
-
         // POST ueberschreibt get. Muessen aber alles alphanumerische Schluessel sein.
+        $parameters = array_merge($propertiesGet, $propertiesPost);
 
-        foreach(array_merge($propertiesGet, $propertiesPost) as $name => $value) {
-            if(stripos($name, "note-persistent-") === 0) {
-                $this->propertiesNotePersistent->setProperty($value, str_replace('note-persistent-','', $name));
-            } else if(stripos($name, "note-berechnet-") === 0) {
-               $this->propertiesNoteBerechnet->setProperty($value, str_replace('note-berechnet-','', $name));
-            } else {
-                // Request/Action Property
-                $this->propertiesRequest->setProperty($value, $name);
-            }
-        }
+        // Persistent Note-Instanz Parameter extrahieren
+        $this->propertiesNotePersistent = new Properties(self::removeParameterPrefix(
+                array_filter($parameters, function($key) { return stripos($key, self::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT) === 0; }, ARRAY_FILTER_USE_KEY ),
+                self::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT));
 
-        Log::debug('REQUEST PROPERTIES ITEM PERSISTENT:');
+        // Berechnete Note-Instanz Parameter extrahieren
+        $this->propertiesNoteBerechnet = new Properties(self::removeParameterPrefix(
+                array_filter($parameters, function($key) { return stripos($key, self::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET) === 0; }, ARRAY_FILTER_USE_KEY ),
+                self::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET));
+
+        // Request Parameter extrahieren
+        $this->propertiesRequest = new Properties(array_filter($parameters, function($key) {
+            return stripos($key, self::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET) === false
+                    && stripos($key, self::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT) === false;
+        }, ARRAY_FILTER_USE_KEY ));
+
+        Log::debug(self::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT . ' request properties:');
         Log::debug($this->propertiesNotePersistent->getProperties());
-        Log::debug('REQUEST PROPERTIES ITEM BERECHNET:');
+        Log::debug(self::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET . ' request properties:');
         Log::debug($this->propertiesNoteBerechnet->getProperties());
-        Log::debug('REQUEST PROPERTIES REQUEST:');
+        Log::debug('andere request properties:');
         Log::debug($this->propertiesRequest->getProperties());
     }
 
-  private $messages = array();
-  private $messageLevel = 'debug';
-
-  /**
-   * Liefert den aktuellen Status, dessen Daten angezeigt werden.
-   * deleted | backup | active
-   */
-    public function getRequestStatus() : string {
-        return $this->getProperty('status', self::ITEM_STATUS_DEFAULT, true);
+    /**
+     * @return string active|deleted|backup|archive Fuer diesen Request zu verwendender Status beim Laden von Notes.
+     */
+    public function getRequestStatus(): string
+    {
+        return $this->getProperty(self::REQUEST_PROPERTY_STATUS, self::REQUEST_PROPERTY_STATUS_DEFAULT, true);
     }
 
-    public function getConfig() : Note {
-        if (is_null($this->requestConfig)) {
-            $this->requestConfig = Persistence::loadOrCreateNote($this->getProperty("config-id", "defaultconfig"), $this);
-            $this->requestConfig = Persistence::updateNoteFromRequest($this->requestConfig, $this->getPropertiesRequest());
+    /**
+     * Liefert die Note-Instanz, deren Properties diverse Einstellungen fuer diesen Request bestimmen.
+     * Ist der Request-Parameter
+     * @return Note
+     * @see Request::$requestConfigCache
+     */
+    public function getConfig(): Note
+    {
+        if (is_null($this->requestConfigCache)) {
+            $this->requestConfigCache = $this->getUpdatedConfigNote();
+
             // wenn in der Url explizit angegeben ist "saveconfig=yes", dann speichere die request properties aus der Url,
             // wie z.B. filter-art oder filter-text oder filter-views persistent in der config. Sonst wirken sie sich zwar aus,
             // werden aber erst mit dem naechsten Change+Save der Config gespeichert.
-            if($this->getProperty("saveconfig", "") == "yes") {
-                Persistence::noteSave($this->requestConfig, $this);
+            if ($this->getProperty(self::REQUEST_PROPERTY_SAVECONFIG, self::REQUEST_PROPERTY_SAVECONFIG_DEFAULT) == "yes") {
+                Persistence::noteSave($this->requestConfigCache, $this);
             }
         }
-        return $this->requestConfig;
+        return $this->requestConfigCache;
     }
 
-  public function getPropertiesNotePersistent() : Properties_Interface {
-    return $this->propertiesNotePersistent;
-  }
-
-    public function getPropertiesRequest() : Properties_Interface {
-      return $this->propertiesRequest;
+    /**
+     * Laedt die Config Note, aktualisiert sie aus den Config- Request GET/POST Parametern,
+     * speichert sie und liefert sie als Ergebnis.
+     *
+     * @return Note
+     */
+    private function getUpdatedConfigNote(): Note
+    {
+        $id = $this->getProperty(self::REQUEST_PROPERTY_CONFIG_ID, self::REQUEST_PROPERTY_CONFIG_ID_DEFAULT);
+        $note = Persistence::loadOrCreateNoteAndUpdate($id, $this, $this->getPropertiesRequest());
+        return $note;
     }
 
-  public function getUpdatedActionNote() : Note {
-    $id = $this->getPropertiesNotePersistent()->getProperty("id");
-    $note = Persistence::loadOrCreateNote($id, $this);
-    $note = Persistence::updateNoteFromRequest($note, $this->getPropertiesNotePersistent());
-    return $note;
-  }
-
-    public function getArtsList(array $notes) : array {
-        $arts = array();
-        foreach($notes as $note) {
-            $art = $note->getProperty("art", "");
-            $artArray = explode(" ", $art);
-            foreach($artArray as $art) {
-                $arts[trim($art, " ")] = "";
-                // jetzt die Art-Teile als weitere "Haupt-" Arts erzeugen:
-                $subarts = explode('.', $art);
-                foreach($subarts as $subart) {
-                    if($subart != "") {
-                        $arts[".$subart"] = "";
-                    }
-                }
-            }
-        }
-        ksort($arts);
-        $artProperties = array();
-        foreach(array_keys($arts) as $art) {
-            if($art != "") {
-                $artProp = new Properties();
-                $artProp->setProperty($art, "name");
-                $artProp->setProperty("art", Properties_Interface::PROPERTY_VIEW);
-                $artProperties[] = $artProp;
-            }
-        }
-        return $artProperties;
+    /**
+     * Laedt die zu bearbeitende Note, aktualisiert sie aus den Note-bezogenen Request GET/POST Parametern,
+     * speichert sie und liefert sie als Ergebnis. Hierbei handelt es sich nicht um eine Config Note, sondern eine
+     * "normale" Note.
+     *
+     * @return Note
+     * @throws Exception wenn der ID Parameter nicht gesetzt ist.
+     */
+    public function getUpdatedActionNote(): Note
+    {
+        $id = $this->getPropertiesNotePersistent()->getProperty(self::REQUEST_PROPERTY_NOTE_ID);
+        $note = Persistence::loadOrCreateNoteAndUpdate($id, $this, $this->getPropertiesNotePersistent());
+        return $note;
     }
 
-
-    public function getBackupExtension() {
-        return $this->getProperty('backupextension', time(), true);
+    /**
+     * @see Request::$propertiesNotePersistent
+     * @return Properties_Interface
+     */
+    public function getPropertiesNotePersistent(): Properties_Interface
+    {
+        return $this->propertiesNotePersistent;
     }
 
-    public function getNotes() : array {
-        return Persistence::getNotes($this->getProperty(self::PROPERTY_FILTER_VIEWS, "") , "name", false, $this->getRequestStatus());
+    /**
+     * @see Request::$propertiesRequest
+     * @return Properties_Interface
+     */
+    public function getPropertiesRequest(): Properties_Interface
+    {
+        return $this->propertiesRequest;
     }
 
-   /**
-    *
-    */
-    public function getResponse() :string {
+    /**
+     * Laedt und liefert alle zu betrachtenden Notes dieses Requests.
+     * @return array
+     */
+    public function getNotesOfRequest(): array
+    {
+        return Persistence::getNotes($this->getProperty(self::CONFIG_PROPERTY_FILTER_VIEWS, ""), Note::NOTE_PROPERTY_NAME, false, $this->getRequestStatus());
+    }
+
+    /**
+     * Generiert und liefert das Response HTML. Dabei wird auch ein Action wie z.B. Speichern, Loeschen, Backup einer
+     * Note ausgefuehrt.
+     */
+    public function getResponse(): string
+    {
         $html = "";
         try {
-            $baseView = $this->getProperty('base-view', 'index-page');
-            $html = View::replacePlaceHolders($baseView, $this);
+            $baseViewName = $this->getProperty(self::REQUEST_PROPERTY_BASE_VIEW, self::REQUEST_PROPERTY_BASE_VIEW_DEFAULT);
+            $html = View::replacePlaceHolders($baseViewName, $this);
             Log::info("Done!!!");
         } catch (Throwable $throwable) {
             Log::errorThrown($throwable);
@@ -154,40 +249,45 @@ class Request implements Properties_Interface {
     }
 
 
-  // ############# INTERFACE PROPERTIES #################################
+    // ############# INTERFACE PROPERTIES #################################
 
-  /**
-   * Betrachtet nur die Request/Action Properties, keine Note Properties.
-   */
-  public function getProperty(string $key, $default = "exception", bool $defaultOnEmpty = false) {
-    return $this->propertiesRequest->getProperty($key, $default, $defaultOnEmpty);
-  }
+    /**
+     * Betrachtet nur die Request/Action Properties, keine Note Properties.
+     */
+    public function getProperty(string $key, $default = "exception", bool $defaultOnEmpty = false)
+    {
+        return $this->propertiesRequest->getProperty($key, $default, $defaultOnEmpty);
+    }
 
-  /**
-   * Siehe interface description.
-   */
-  public function setProperties(array $properties){
-    throw new Exception('Es wurde versucht, die Properties des Requests nachtraeglich zu setzen. Properties des Requests sind die POST und GET Properties. Sie werden einmalig im Konstruktor gesetzt.');
-  }
+    /**
+     * Siehe interface description.
+     */
+    public function setProperties(array $properties)
+    {
+        throw new Exception('Es wurde versucht, die Properties des Requests nachtraeglich zu setzen. Properties des Requests sind die POST und GET Properties. Sie werden einmalig im Konstruktor gesetzt.');
+    }
 
-  /**
-   * Siehe interface description.
-   */
-  public function getProperties() : array {
-    throw new Exception('Es wurde versucht, ein komplettes Set der Request Properties abzurufen. Properties des Requests sind die unterteilt in Persistente und berechnete Note Properties und Request Properties. Diese muessen mit den entsprechenden Methoden dediziert abgefragt werden.');
-  }
+    /**
+     * Siehe interface description.
+     */
+    public function getProperties(): array
+    {
+        throw new Exception('Es wurde versucht, ein komplettes Set der Request Properties abzurufen. Properties des Requests sind die unterteilt in Persistente und berechnete Note Properties und Request Properties. Diese muessen mit den entsprechenden Methoden dediziert abgefragt werden.');
+    }
 
-  /**
-   * Siehe interface description.
-   */
-  public function setProperty($value, string $key) {
-    throw new Exception('Es wurde versucht, die Properties des Requests nachtraeglich zu setzen. Properties des Requests sind die POST und GET Properties. Sie werden einmalig im Konstruktor gesetzt.');
-  }
+    /**
+     * Siehe interface description.
+     */
+    public function setProperty($value, string $key)
+    {
+        throw new Exception('Es wurde versucht, die Properties des Requests nachtraeglich zu setzen. Properties des Requests sind die POST und GET Properties. Sie werden einmalig im Konstruktor gesetzt.');
+    }
 
-  /**
-   * Betrachtet nur die Request/Action Properties, keine Note Properties.
-   */
-  public function getDecodedProperty(string $key, $default = "exception") : string {
-    return $this->propertiesRequest->getDecodedProperty($key, $default);
-  }
+    /**
+     * Betrachtet nur die Request/Action Properties, keine Note Properties.
+     */
+    public function getDecodedProperty(string $key, $default = "exception"): string
+    {
+        return $this->propertiesRequest->getDecodedProperty($key, $default);
+    }
 }

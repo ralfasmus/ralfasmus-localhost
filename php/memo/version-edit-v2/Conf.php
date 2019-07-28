@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Conf
+ */
 class Conf {
     
   static public function get($name, $default = "") {

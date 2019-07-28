@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     // Zeitfunktionen - Library:
     initMoment();
@@ -52,36 +51,40 @@ $(document).ready(function () {
         window.open(href, title);
     });
 
-    // Trigger: Klick auf Button CREATE ITEM
+    // Trigger: Klick auf Button CREATE NOTE
     $('.memo-js-create-textnote-action').on('click', function (event) {
         event.preventDefault();
         var id = newId();
-        noteCreate({'note-persistent-id' : id, 'note-persistent-view' : 'textnote', 'note-persistent-possible-views' : 'textnote'});
+        noteCreate({
+            'note-persistent-id': id,
+            'note-persistent-view': 'textnote',
+            'note-persistent-possible-views': 'textnote'
+        });
     });
 
-    // Trigger: Klick auf Button BACKUP ITEM
+    // Trigger: Klick auf Button BACKUP NOTE
     $('.memo-js-backup-action').on('click', function (event) {
         event.preventDefault();
         var id = $(event.target).attr('data-id');
-        noteBackup({'note-persistent-id' : id});
+        noteBackup({'note-persistent-id': id});
     });
 
-    // Trigger: Klick auf Button ITEM SAVE
+    // Trigger: Klick auf Button NOTE SAVE
     $('.memo-js-save-action').on('click', function (event) {
         event.preventDefault();
         $(this).change();
     });
 
-    // Trigger: Klick auf Button ITEM DELETE
+    // Trigger: Klick auf Button NOTE DELETE
     $('.memo-js-delete-action').on('click', function (event) {
         event.preventDefault();
         var id = $(event.target).attr('data-id');
-        noteDelete({'note-persistent-id' : id});
+        noteDelete({'note-persistent-id': id});
         $('.memo-js-remove-on-delete-' + id).remove();
         filterListUpdate();
     });
 
-    // Trigger: Klick auf Button ITEM HIDE
+    // Trigger: Klick auf Button NOTE HIDE
     $('.memo-js-hide-action').on('click', function (event) {
         event.preventDefault();
         var id = $(event.target).attr('data-id');
@@ -99,27 +102,27 @@ $(document).ready(function () {
  */
 function initSummerNote(element, placeHolder) {
     $(element).summernote({
- //       width: 1200,
-		  height: 200,                 // set editor height
-		  minHeight: null,             // set minimum height of editor
-		  maxHeight: null,             // set maximum height of editor
+        //       width: 1200,
+        height: 200,                 // set editor height
+        minHeight: null,             // set minimum height of editor
+        maxHeight: null,             // set maximum height of editor
         //placeholder: placeHolder,
         toolbar: [
             // [groupName, [list of button]]. @see https://summernote.org/deep-dive/#customization
-            ['do',['undo', 'redo']],
-            ['style', ['bold', 'italic', 'underline', 'strikethrough','clear']],
+            ['do', ['undo', 'redo']],
+            ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
             //['font', ['strikethrough', 'superscript', 'subscript']],
             ['font1', ['style', 'fontsize']],
             ['font3', ['color']],
             ['font4', ['fontname']],
             ['para', ['height', 'ul', 'ol', 'paragraph']],
-            ['insert', ['link','table','hr' ]],
-            ['misc',['fullscreen', 'codeview','help']]
+            ['insert', ['link', 'table', 'hr']],
+            ['misc', ['fullscreen', 'codeview', 'help']]
         ],
 
 
         callbacks: {
-            onKeyup: function(event) {
+            onKeyup: function (event) {
                 $(event.target).change();
             }
             /*

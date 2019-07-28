@@ -1,5 +1,3 @@
-
-
 /**
  * Alle Filter einer Liste und die Liste aktualisieren.
  * @param {type} filterInputElement Das Element, in dem etwas eingegeben wurde.
@@ -76,15 +74,15 @@ function filterListUpdate() {
     hideHiddenNotes(notes);
 
     // update art liste
-    var artNodes= $('.memo-js-artlist-art');
+    var artNodes = $('.memo-js-artlist-art');
     $(artNodes).addClass("memo-js-hidden");
     $(notes).filter(':not(.memo-js-hidden)').each(function () {
         var noteNotesArts = $(this).attr('data-filter-art');
-        if(isString(noteNotesArts)) {
+        if (isString(noteNotesArts)) {
             var parameters = noteNotesArts.split(' ');
             $(artNodes).each(function () {
                 var artNode = this;
-                parameters.forEach(function(noteNotesArt) {
+                parameters.forEach(function (noteNotesArt) {
                     var artNodeArt = $(artNode).attr('data-filter');
                     if (noteNotesArt.startsWith(artNodeArt)) {
                         $(artNode).removeClass('memo-js-hidden');
