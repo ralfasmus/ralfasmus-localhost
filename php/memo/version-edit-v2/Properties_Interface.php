@@ -5,56 +5,29 @@
  */
 interface Properties_Interface
 {
-
-    /**
-     * Primaerer view zum Anzeigen eines Property Objekts
-     */
-    const PROPERTY_VIEW = "view";
-    /**
-     * Default view/template zum Anzeigen eines Property Objekts, falls dieses keine oder eine leere ("") Property "view" hat:
-     */
-    const PROPERTY_VIEW_DEFAULT = "default";
-
-    /**
-     * Property dessen Wert fuer ein Properties Objekt festlegt, welche PLATZHALTER im View Template ersetzt werden.
-     * Bsp: PLACE_HOLDER_CONFIG_name_VALUE wird nur durch ein config-Note-Instanz ersetzt
-     * Bsp: PLACE_HOLDER_NOTE_name_VALUE wird nur durch die aktuelle Note-Instanz des Requests (Parameter id) ersetzt
-     */
-    const PROPERTY_PLACE_HOLDER_INDICATOR = "placeholder-indicator";
-    /**
-     * Platzhalter Indicator fuer Properties der geladenen Config Note Instanz in View Templates
-     */
-    const PROPERTY_PLACE_HOLDER_INDICATOR_CONFIG = "CONFIG";
-    /**
-     * In View Templates: Platzhalter Indicator fuer Properties, die wiederum durch Laden eines Templates oder andere
-     * Berechnung ersetzt werden. Jedenfalls keine Note oder Config Note Instanz Properties sind.
-     *
-     */
-    const PROPERTY_PLACE_HOLDER_INDICATOR_PROPERTY = "PROPERTY";
-    /**
-     * Platzhalter Indicator fuer Properties einer Instanz (z.B. Artlist Item oder geladene Note Instanzen)
-     * in View Templates
-     */
-    const PROPERTY_PLACE_HOLDER_INDICATOR_NOTE = "NOTE";
-    /**
-     * Ist die Property mit Name Properties_Interface::PLACE_HOLDER_PROPERTY_NAME fuer ein Item nicht gesetzt, so wird
-     * dieser Wert angenommen.
-     */
-    const PROPERTY_PLACE_HOLDER_INDICATOR_DEFAULT = self::PROPERTY_PLACE_HOLDER_INDICATOR_PROPERTY;
-
     /**
      * Liefert eine berechnete oder gespeicherte Property.
      * Wenn die Property nicht gesetzt ist, wird $default geliefert.
-     * Ist in dem Fall aber $default == "exception", wird eine Exception geworfen.
-     * Ist $defaultOnEmpty == true, so wird im Falle das der Property Wert gesetzt aber leer oder null ist,
-     * der $default geliefert bzw. dann auch eine Exception geworfen, wenn $defaultOnEmpty == "exception".
+     * Ist $defaultOnEmpty == true, so wird im Falle dass der Property Wert gesetzt aber leer oder null ist,
+     * der $default geliefert.
      *
      * @param string $key
      * @param mixed $default
      * @param bool $defaultOnEmpty wenn true, so wird der $default auch geliefert, wenn der Property Wert sonst "" waere.
      * @return mixed
      */
-    public function getProperty(string $key, $default = "exception", bool $defaultOnEmpty = false);
+    public function getPropertyDefault(string $key, $default = '', bool $defaultOnEmpty = false);
+
+    /**
+     * Liefert eine berechnete oder gespeicherte Property.
+     * Wenn die Property nicht gesetzt ist, wird eine Exception geworfen.
+     * @param string $key
+     * @param bool $exceptionOnEmpty wenn true (=default), wird eine Exception auch geworfen, wenn die Property zwar
+     * gesetzt, aber ein leerer String oder null ist.
+     * @param string $exceptionText
+     * @return mixed
+     */
+    public function getPropertyMandatory(string $key, bool $exceptionOnEmpty = true, string $exceptionText = '');
 
     /**
      * Setzt die uebergebenen Properties. Bereits gesetzte Properties werden ueberschrieben. Hier nicht
@@ -88,5 +61,5 @@ interface Properties_Interface
      * @param string $default
      * @return string
      */
-    public function getDecodedProperty(string $key, $default = "exception"): string;
+    public function getDecodedProperty(string $key, string $default = '', $defaultOnEmpty = false) : string;
 }

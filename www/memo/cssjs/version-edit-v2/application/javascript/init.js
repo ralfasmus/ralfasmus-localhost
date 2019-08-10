@@ -1,6 +1,7 @@
 $(document).ready(function () {
     // Zeitfunktionen - Library:
     initMoment();
+    initToc();
     // Server Log Messages nach dem Laden der Seite anzeigen im DIV
     $('.showajaxresult').html($('.ajaxresult'));
 
@@ -57,8 +58,8 @@ $(document).ready(function () {
         var id = newId();
         noteCreate({
             'note-persistent-id': id,
-            'note-persistent-view': 'textnote',
-            'note-persistent-possible-views': 'textnote'
+            'note-persistent-view': '-textnote',
+            'note-persistent-possible-views': '-textnote'
         });
     });
 
@@ -133,4 +134,11 @@ function initSummerNote(element, placeHolder) {
         }
     });
 
+}
+
+function initToc() {
+    $(function () {
+        //Calls the tocify method on your HTML div.
+        $("#toc").tocify();
+    });
 }

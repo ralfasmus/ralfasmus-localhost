@@ -4,7 +4,7 @@
  * @returns {Boolean}
  */
 function saveNotesForm(formData) {
-    formData['action'] = 'notesave';
+    formData['processor-method'] = 'noteSave';
     formData['backupextension'] = '_backup_' + jetzt('YYYY-MM-DD-HH');
     return executeAjax(formData);
 }
@@ -59,7 +59,8 @@ function noteCreate(formData) {
     var configId = $('#page').attr('data-config-id');
     var noteId = formData['note-persistent-id'];
     formData['nextpagetitle'] = 'NEW:' + noteId;
-    formData['nextpagehref'] = '?action=noteedit&config-id=' + configId + '&note-persistent-id=' + noteId;
+    //formData['nextpagehref'] = '?action=noteedit&config-id=' + configId + '&note-persistent-id=' + noteId;
+    formData['nextpagehref'] = '?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&config-id=' + configId + '&note-persistent-id=' + noteId;
 
     var success = saveNotesForm(formData);
     if (success) {
@@ -77,7 +78,7 @@ function noteCreate(formData) {
  * @returns {undefined}
  */
 function noteBackup(formData) {
-    formData['action'] = 'notebackup';
+    formData['processor-method'] = 'noteBackup';
     formData['backupextension'] = '_backup_' + jetzt('YYYY-MM-DD-HH-mm-ss');
     return executeAjax(formData);
 }
@@ -88,7 +89,7 @@ function noteBackup(formData) {
  * @returns {undefined}
  */
 function noteDelete(formData) {
-    formData['action'] = 'notedelete';
+    formData['processor-method'] = 'noteDelete';
     formData['backupextension'] = '_backup_' + jetzt('YYYY-MM-DD-HH-mm-ss');
     return executeAjax(formData);
 }
@@ -103,11 +104,12 @@ function noteDelete(formData) {
 function executeAjax(formData) {
     // config-id immer mitsenden, damit die Konfiguration, unter der die Seite angezeigt wird, auch auf dem
     // Server bekannt ist, wenn er die AJAX Action ausfuehrt.
+    // ?processor-class=ProcessorAction&processor-method=noteSave
     var configId = $('#page').attr('data-config-id');
     formData['config-id'] = configId;
     // Base View festlegen.
-    formData['base-view'] = 'index-action';
-    console.info("executeAjax: " + formData['action']);
+    formData['processor-class'] = 'ProcessorAction';
+    console.info("executeAjax: " + formData['processor-method']);
     console.info(formData);
     $.ajax(
         'index.php', // the url we want to POST

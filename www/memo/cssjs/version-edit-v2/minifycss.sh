@@ -15,7 +15,11 @@ echo "Bereite CSS Dateien fuer Einbinden in der Website auf"
 echo "Minifizierte Dateien sind mit einem Build-Hinweis inkl. Zeitstempel am Anfang der Datei gekennzeichnet: $BUILD_HINT"
 
 echo "Es entsteht css/min.css"
-sass build.scss --style compressed "css/min.css"
+# sass build.scss --style compressed "css/min.css"
+sass build.scss "css/min.css"
+echo "/* ------------------------------------------------------------------------------ */" >>  "css/min.css"
+echo "" >>  "css/min.css"
+cat lib/tocify-js/jquery.tocify.css >> "css/min.css"
 echo "" >>  "css/min.css"
 echo "$BUILD_HINT" >>  "css/min.css"
 

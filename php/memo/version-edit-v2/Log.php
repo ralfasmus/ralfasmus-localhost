@@ -22,7 +22,7 @@ class Log
         $messageBrowser = is_scalar($messageOrVariable) ? $messageOrVariable : json_encode($messageOrVariable, JSON_HEX_TAG | JSON_PRETTY_PRINT | JSON_FORCE_OBJECT | JSON_HEX_QUOT);
         $messageLogFile = is_scalar($messageOrVariable) ? $messageOrVariable : var_export($messageOrVariable, true);
         self::$logMessages[$logLevel][] = $messageBrowser;
-        if ($logLevel <= Conf::get('LOG_LEVEL', self::LOG_LEVEL_OFF)) {
+        if ($logLevel <= Request::getSingleInstance()->getPropertyDefault('log_level', self::LOG_LEVEL_OFF, true)) {
             $logFile = ROOT_DIR . "/log/memo/log.txt";
             file_put_contents($logFile, "$messageLogFile\r\n", FILE_APPEND);
         }
@@ -45,7 +45,7 @@ class Log
         $messagesConsoleHtml .= addMessages(self::$logMessages[3], 'info');
 
         // DEBUG messages auch als info messages an Browser Console senden?
-        if (4 <= Conf::get('LOG_LEVEL', self::LOG_LEVEL_OFF)) {
+        if (4 <= Request::getSingleInstance()->getPropertyDefault('log_level', self::LOG_LEVEL_OFF, true)) {
             $messagesConsoleHtml .= addMessages(self::$logMessages[4], 'info');
         }
         return "<script>$messagesConsoleHtml</script>";
@@ -77,7 +77,7 @@ class Log
         $messagesHtml .= addMessages2(self::$logMessages[3], 'info');
 
         // DEBUG messages auch als info messages an Browser Console senden?
-        if (4 <= Conf::get('LOG_LEVEL', self::LOG_LEVEL_OFF)) {
+        if (4 <= Request::getSingleInstance()->getPropertyDefault('log_level', self::LOG_LEVEL_OFF, true)) {
             $messagesHtml .= addMessages2(self::$logMessages[4], 'info');
         }
         return "<div class='ajaxresult'>$messagesHtml</div>";

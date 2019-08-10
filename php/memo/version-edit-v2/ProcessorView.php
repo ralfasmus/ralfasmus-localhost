@@ -5,7 +5,7 @@
  * REPLACED_BY_[NOTE|CONFIG|PROPERTY]_xxx_VALUE
  * Class View
  */
-class View
+class ProcessorView extends Processor
 {
 
     /**
@@ -13,57 +13,75 @@ class View
      * @var array string => string
      */
     static private $viewTemplatesCache = array();
-    /**
-     * @var Properties|null Properties dieses Views
-     */
-    private $properties = NULL;
 
-    /**
-     * Constructor. Der View wird mit RequestProperties initialisiert.
-     * @param Properties_Interface $propertiesRequest
-     */
-    public function __construct(Properties_Interface $propertiesRequest)
+
+    public function __construct(?Processor $parentProcessor, Properties_Interface $properties)
     {
-        $this->properties = $propertiesRequest;
+        parent::__construct($parentProcessor, $properties);
+    }
+
+    private function findPlaceHolders(string $viewHtml) : array
+    {
+        // #### PLACE_HOLDER_*_VALUE im Template ersetzen
+        $regexp = "/REPLACED_BY_(((?!_VALUE).)*)_VALUE/";
+        preg_match_all($regexp, $viewHtml, $matches);
+        return (count($matches) > 0) ? $matches[1] : array();
     }
     /**
+     * Rekursiv im erzeugten HTML nach REPLACED_BY suchen, das HTML dafuer generieren und diese dann ersetzen
+     * @param string $viewHtml
      * @return string
-     * @see self::PROPERTY_VIEW
      */
-    private function getViewTemplate()
-    {
-        return $this->getProperty(Request::REQUEST_PROPERTY_PROCESSOR, $this->getProperty(self::PROPERTY_VIEW, self::PROPERTY_VIEW_DEFAULT, true));
+    private function processView(string $viewHtml) : string {
+        $foundPlaceHolders = $this->findPlaceHolders($viewHtml);
+        $placeHoldersReplaced = false;
+        foreach ($foundPlaceHolders as $foundPlaceHolder) {
+            try {
+                $properties = self::propertiesFromString($foundPlaceHolder);
+                $processorPlaceHolderHtml = $this->callFromProperties($properties);
+                $viewHtml = str_replace("REPLACED_BY_${foundPlaceHolder}_VALUE", $processorPlaceHolderHtml, $viewHtml);
+            } catch (Throwable $throwable) {
+                MyThrowable::handleThrowable($throwable, "Fehler beim Bearbeiten von View :" . $this->getView() . ": Placeholder :$foundPlaceHolder: Davon Properties: "
+                        . var_export($properties, true), true);
+            }
+            $placeHoldersReplaced = true;
+        }
+        if($placeHoldersReplaced) {
+            /**
+             * alle Platzhalter sind ersetzt. Es koennte aber rein theoretisch sein, dass im eingefuegten HTML Platzhalter
+             * enthalten sind. Damit diese auch ersetzt werden, jetzt noch einmal aufrufen, aber eben nur, wenn Platzhalter
+             * gefunden und ersetzt wurden.
+             */
+            //$this->processView($viewHtml);
+        }
+        return $viewHtml;
     }
 
 
+    protected function getCssClasses() : string {
+        return parent::getCssClasses() . ' dvz-' . $this->getView();
+    }
+
+
+    protected function getView() : string {
+        $myView = $this->getPropertyMandatory('view', '', false);
+        $myParentView = (is_null($this->getParentProcessor()) || substr($myView, 0,1) != '-')
+                ? ''
+                : $this->getParentProcessor()->getView();
+        return "${myParentView}${myView}";
+    }
+
     /**
-     * Liefert fuer jedes der Properties-Objekte (z.B. Notes) in $propertiesList das generierte HTML, wobei
-     * fuer jede Instanz das passende Template geladen wird und alle REPLACED_BY_[NOTE|CONFIG|PROPERTY]_property_VALUE
-     * Platzhalter durch die entsprechenden Werte des Properties-Objekts ersetzt werden.
-     * Der Filename des fuer eine Instanz zu ladenden Templates bestimmt sich aus
-     * $viewFileNameBase und $templateNameExtension + ".html"
-     *
-     * @param string $viewFileNameBase Bsp: 'notelist', 'notelist-header', 'notelist-filter', 'notelist-notes'
-     * @param array $propertiesList
+     * Liefert das HTML fuer diesen View. Alle PLACE_HOLDER werden ersetzt.
      * @return string
      * @throws Exception
      */
-    public function createHtml(string $viewFileNameBase, array $propertiesList): string
-    {
-        $viewFileNames = array();
-        $html = '';
-        foreach ($propertiesList as $propertiesItem) {
-            // Bestimmung des zu verwendenden Item-spezifischen View Templates: Entsprechend Property 'view'
-            $viewFileNameExtension = $propertiesItem->getProperty(Note::PROPERTY_VIEW, '');
-            $viewFileNameExtension = ($viewFileNameExtension == '') ? '' : "_item-${viewFileNameExtension}";
-            $viewFileName = "${viewFileNameBase}${viewFileNameExtension}";
-
-            if (!isset($viewFileNames[$viewFileName])) {
-                $viewFileNames["$viewFileName"] = $this->getViewHtml("${viewFileName}.html");
-            }
-            $html .= $this->replacePlaceHoldersVALUE($viewFileNames[$viewFileName], $propertiesItem);
+    public function getHtml() : string {
+        $view = $this->getView();
+        if (!isset(self::$viewTemplatesCache[$view])) {
+            self::$viewTemplatesCache["$view"] = $this->getViewTemplateHtml("${view}.html");
         }
-        return $html;
+        return $this->processView(self::$viewTemplatesCache[$view]);
     }
 
     /**
@@ -72,7 +90,7 @@ class View
      * @return string
      * @throws Exception
      */
-    public function getViewHtml(string $viewFilename): string
+    public function getViewTemplateHtml(string $viewFilename): string
     {
         $filename = APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "view/$viewFilename";
         if (!file_exists($filename)) {
@@ -81,169 +99,43 @@ class View
         return file_get_contents($filename);
     }
 
+
     /**
-     * Liefert fuer $placeHolder das generierte HTML, wobei
-     * das passende View Template geladen wird und alle REPLACED_BY_[NOTE|CONFIG|PROPERTY]_property_VALUE
-     * Platzhalter durch die entsprechenden Werte des Properties-Objekts ersetzt werden.
-     * Das ganze rekursiv.
+     * Transformiert einen (query_string) String in ein Set von Properties. Ersetzt dabei vorher noch ein paar Shortcuts,
+     * die in den Views verwendet werden.
      *
-     * @param $placeHolder
-     * @return string
-     * @throws Throwable
+     * @param string $processorString Properties, wie sie in einem View Platzhalter oder als Querystring einer URL
+     * angegeben werden (aber nicht urlencoded).
+     *
+     * z.B. processor-class=ProcessorView&processor-class-properties[view]=-items_note&processor-method=getHtml
+     *
+     * @return Properties_Interface
+     * @throws Exception
      */
-    public function replacePlaceHolders(string $placeHolder) : string
-    {
-        $request = Request::getSingleInstance();
+    static protected function propertiesFromString(string $processorString) : Properties_Interface {
+        assert(is_string($processorString), 'Variable ist kein String:' . var_export($processorString, true));
+        $result = array();
 
-        $html = "";
-        switch ($placeHolder) {
+        // Shortcuts ersetzen:
+        $processorString = str_replace('CONFIG', 'processor-class=this&processor-method=getConfigValue', $processorString);
+        $processorString = str_replace('PROPERTY', 'processor-class=this&processor-method=getPropertyDefault', $processorString);
+        $processorString = str_replace('~', '&pmp[]=', $processorString);
 
-            // #########################################################################
-            // # PAGE- und AJAX Action Requests: base-view, also das aeusserste
-            // # Template, das dann diverse Platzhalter enthaelt
-            // #########################################################################
-
-            case 'index-page' : // fuehrt evtl. eine Action aus und liefert eine komplette HTML Seite
-            case 'index-action' : // fuehrt i.d.R. eine Action aus und liefert i.d.R. nur ein HTML Fragment zur Anzeige des Ergebnisses in der Seite
-            default:
-                $html = $this->getViewHtml("${placeHolder}.html");
-                break;
-
-            // #########################################################################
-            // # AJAX Action Requests: body-content (und andere PLACE_HOLDER)
-            // #########################################################################
-            case 'notesave' :
-                $request->getPersistance()->noteSave($request->getUpdatedActionNote());
-                break;
-            case 'notedelete' :
-                $request->getPersistance()->noteDelete($request->getUpdatedActionNote());
-                break;
-            case 'notebackup' :
-                $request->getPersistance()->noteBackup($request->getUpdatedActionNote());
-                break;
-            case 'noterecover' :
-                throw new Exception("Not Implemented");
-                break;
-
-            // #########################################################################
-            // # PAGE Requests: body-content (und andere PLACE_HOLDER)
-            // #########################################################################
-            case 'notelist-filter' :
-                //@TODO view und filter
-                $notes = $request->getNotesOfRequest();
-                $html = $this->createHtml($placeHolder, Note::getArtsList($notes));
-                break;
-            case 'notelist-notes' :
-                //@TODO view und filter
-                $notes = $request->getNotesOfRequest();
-                // @TODO hier noch die Config filter auswerten
-                $html = $this->createHtml($placeHolder, $notes);
-                break;
-            case 'noteedit' :
-                $note = $request->getUpdatedActionNote();
-                $html = $this->createHtml($placeHolder, array($note));
-                break;
-            case 'body-content' :
-                $action = $request->getProperty(Request::REQUEST_PROPERTY_ACTION, Request::REQUEST_PROPERTY_ACTION_DEFAULT);
-                $html = $this->replacePlaceHolders($action);
-                break;
-            case 'page-class' :
-                $html = $request->getProperty(Request::REQUEST_PROPERTY_ACTION, Request::REQUEST_PROPERTY_ACTION_DEFAULT);
-                break;
+        // als Querystring parsen und daraus ein assoziatives array erzeugen
+        parse_str($processorString, $result);
+        if(empty($result)) {
+            throw new Exception('Kann Processor-Properties from String nicht verarbeiten:'. var_export($processorString));
         }
-
-        // #### PLACE_HOLDER_CONFIG Properties im View Template ersetzen
-        $configNote = $request->getConfig();
-        $configNote->setProperty(Properties_Interface::PROPERTY_PLACE_HOLDER_INDICATOR_CONFIG, Properties_Interface::PROPERTY_PLACE_HOLDER_INDICATOR);
-        $html = $this->replacePlaceHoldersVALUE($html, $configNote);
-
-        // #### PLACE_HOLDER_PROPERTY im Template ersetzen
-        $regexp = "/REPLACED_BY_PROPERTY_([0-9a-zA-Z\-_]+)_VALUE/";
-        preg_match_all($regexp, $html, $matches);
-        $foundPlaceHolders = (count($matches) > 0) ? $matches[1] : array();
-
-        // #### Rekursiv im erzeugten HTML nach REPLACED_BY suchen, das HTML dafuer generieren und diese dann erstzen
-        $properties = new Properties();
-        foreach ($foundPlaceHolders as $foundPlaceHolder) {
-            $placeHolderHtml = $this->replacePlaceHolders($foundPlaceHolder);
-            $properties->setProperty($placeHolderHtml, $foundPlaceHolder);
-        }
-        $html = $this->replacePlaceHoldersVALUE($html, $properties);
-        return $html;
-
-        /*
-        // JSON:
-        $data = array("notes-json" => array());
-        foreach($notes as $note) {
-            $data["notes-json"][] = $note->getProperties();
-        }
-        //$data["notes-json"] = $notes;
-        header('Content-Type:json');
-        $result = json_encode($data);
-        */
+        return new Properties($result);
     }
 
     /**
-     * Ersetze REPLACED_BY_[NOTE|CONFIG|PROPERTY]_name_VALUE Zeichenfolgen in einem html string
-     * mit den Werten der entsprechenden Eigenschaften des gegebenen properties Objekts.
-     * @param string $html
-     * @param Properties_Interface $properties
+     * @param string $propertyName
+     * @param string $propertyDefault
+     * @param bool $propertyDefaultOnEmpty
      * @return string
      */
-    private function replacePlaceHoldersVALUE(string $html, Properties_Interface $properties): string
-    {
-        // NOTE|CONFIG|PROPERTY
-        $placeHolderType = $properties->getProperty(Properties_Interface::PROPERTY_PLACE_HOLDER_INDICATOR, Properties_Interface::PROPERTY_PLACE_HOLDER_INDICATOR_DEFAULT);
-        $regexp = "/REPLACED_BY_${placeHolderType}_([0-9a-zA-Z\-_]+)_VALUE/";
-        preg_match_all($regexp, $html, $matches);
-        $names = (count($matches) > 0) ? $matches[1] : array();
-        foreach ($names as $name) {
-            $html = str_replace("REPLACED_BY_${placeHolderType}_{$name}_VALUE", $properties->getProperty($name, ""), $html);
-        }
-        return $html;
-    }
-
-
-
-    // ############# INTERFACE PROPERTIES #################################
-
-    /**
-     * @see Properties_Interface::getProperty()
-     */
-    public function getProperty(string $key, $default = "exception", bool $defaultOnEmpty = false)
-    {
-        return $this->properties->getProperty($key, $default, $defaultOnEmpty);
-    }
-
-    /**
-     * @see Properties_Interface::setProperties()
-     */
-    public function setProperties(array $properties)
-    {
-        return $this->properties->setProperties($properties);
-    }
-
-    /**
-     * @see Properties_Interface::getProperties()
-     */
-    public function getProperties(): array
-    {
-        return $this->properties->getProperties();
-    }
-
-    /**
-     * @see Properties_Interface::setProperty()
-     */
-    public function setProperty($value, string $key)
-    {
-        return $this->properties->setProperty($value, $key);
-    }
-
-    /**
-     * @see Properties_Interface::getDecodedProperty()
-     */
-    public function getDecodedProperty(string $key, $default = "exception"): string
-    {
-        return $this->properties->getDecodedProperty($key, $default);
+    protected function getConfigValue(string $propertyName, string $propertyDefault = '', bool $propertyDefaultOnEmpty = true) : string {
+        return $this->getConfig()->getPropertyDefault($propertyName, $propertyDefault, $propertyDefaultOnEmpty);
     }
 }

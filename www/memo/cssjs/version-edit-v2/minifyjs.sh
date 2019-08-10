@@ -11,6 +11,10 @@ cat lib/moment-js/moment-with-locales.js >> js/min.js
 echo "" >> js/min.js
 cat lib/jquery-3.3.1/node_modules/jquery/dist/jquery.min.js >> js/min.js
 echo "" >> js/min.js
+cat lib/jquery-ui-1.12.1.custom/jquery-ui.min.js >> js/min.js
+echo "" >> js/min.js
+cat lib/tocify-js/jquery.tocify.min.js >> js/min.js
+echo "" >> js/min.js
 cat lib/popper-1.14.7/node_modules/popper.js/dist/umd/popper.min.js >> js/min.js
 echo "" >> js/min.js
 cat lib/bootstrap-4.3.1/node_modules/bootstrap/dist/js/bootstrap.min.js >> js/min.js
