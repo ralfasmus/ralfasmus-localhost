@@ -7,11 +7,34 @@
  */
 class View
 {
+
     /**
      * Cache filename => file inhalt fuer View Template Dateien unter /view/
      * @var array string => string
      */
-    private $viewTemplatesCache = array();
+    static private $viewTemplatesCache = array();
+    /**
+     * @var Properties|null Properties dieses Views
+     */
+    private $properties = NULL;
+
+    /**
+     * Constructor. Der View wird mit RequestProperties initialisiert.
+     * @param Properties_Interface $propertiesRequest
+     */
+    public function __construct(Properties_Interface $propertiesRequest)
+    {
+        $this->properties = $propertiesRequest;
+    }
+    /**
+     * @return string
+     * @see self::PROPERTY_VIEW
+     */
+    private function getViewTemplate()
+    {
+        return $this->getProperty(Request::REQUEST_PROPERTY_PROCESSOR, $this->getProperty(self::PROPERTY_VIEW, self::PROPERTY_VIEW_DEFAULT, true));
+    }
+
 
     /**
      * Liefert fuer jedes der Properties-Objekte (z.B. Notes) in $propertiesList das generierte HTML, wobei
@@ -25,20 +48,20 @@ class View
      * @return string
      * @throws Exception
      */
-    static public function createHtml(string $viewFileNameBase, array $propertiesList): string
+    public function createHtml(string $viewFileNameBase, array $propertiesList): string
     {
         $viewFileNames = array();
         $html = '';
         foreach ($propertiesList as $propertiesItem) {
             // Bestimmung des zu verwendenden Item-spezifischen View Templates: Entsprechend Property 'view'
-            $viewFileNameExtension = $propertiesItem->getProperty(Properties_Interface::PROPERTY_VIEW, '');
+            $viewFileNameExtension = $propertiesItem->getProperty(Note::PROPERTY_VIEW, '');
             $viewFileNameExtension = ($viewFileNameExtension == '') ? '' : "_item-${viewFileNameExtension}";
             $viewFileName = "${viewFileNameBase}${viewFileNameExtension}";
 
             if (!isset($viewFileNames[$viewFileName])) {
-                $viewFileNames["$viewFileName"] = self::getViewHtml("${viewFileName}.html");
+                $viewFileNames["$viewFileName"] = $this->getViewHtml("${viewFileName}.html");
             }
-            $html .= self::replacePlaceHoldersVALUE($viewFileNames[$viewFileName], $propertiesItem);
+            $html .= $this->replacePlaceHoldersVALUE($viewFileNames[$viewFileName], $propertiesItem);
         }
         return $html;
     }
@@ -49,7 +72,7 @@ class View
      * @return string
      * @throws Exception
      */
-    static public function getViewHtml(string $viewFilename): string
+    public function getViewHtml(string $viewFilename): string
     {
         $filename = APPLICATION_PHP_DIR . DIRECTORY_SEPARATOR . "view/$viewFilename";
         if (!file_exists($filename)) {
@@ -65,12 +88,12 @@ class View
      * Das ganze rekursiv.
      *
      * @param $placeHolder
-     * @param $request
      * @return string
      * @throws Throwable
      */
-    static public function replacePlaceHolders(string $placeHolder, Request $request) : string
+    public function replacePlaceHolders(string $placeHolder) : string
     {
+        $request = Request::getSingleInstance();
 
         $html = "";
         switch ($placeHolder) {
@@ -83,20 +106,20 @@ class View
             case 'index-page' : // fuehrt evtl. eine Action aus und liefert eine komplette HTML Seite
             case 'index-action' : // fuehrt i.d.R. eine Action aus und liefert i.d.R. nur ein HTML Fragment zur Anzeige des Ergebnisses in der Seite
             default:
-                $html = View::getViewHtml("${placeHolder}.html");
+                $html = $this->getViewHtml("${placeHolder}.html");
                 break;
 
             // #########################################################################
             // # AJAX Action Requests: body-content (und andere PLACE_HOLDER)
             // #########################################################################
             case 'notesave' :
-                Persistence::noteSave($request->getUpdatedActionNote(), $request);
+                $request->getPersistance()->noteSave($request->getUpdatedActionNote());
                 break;
             case 'notedelete' :
-                Persistence::noteDelete($request->getUpdatedActionNote(), $request);
+                $request->getPersistance()->noteDelete($request->getUpdatedActionNote());
                 break;
             case 'notebackup' :
-                Persistence::noteBackup($request->getUpdatedActionNote(), $request);
+                $request->getPersistance()->noteBackup($request->getUpdatedActionNote());
                 break;
             case 'noterecover' :
                 throw new Exception("Not Implemented");
@@ -108,21 +131,21 @@ class View
             case 'notelist-filter' :
                 //@TODO view und filter
                 $notes = $request->getNotesOfRequest();
-                $html = View::createHtml($placeHolder, Note::getArtsList($notes));
+                $html = $this->createHtml($placeHolder, Note::getArtsList($notes));
                 break;
             case 'notelist-notes' :
                 //@TODO view und filter
                 $notes = $request->getNotesOfRequest();
                 // @TODO hier noch die Config filter auswerten
-                $html = View::createHtml($placeHolder, $notes);
+                $html = $this->createHtml($placeHolder, $notes);
                 break;
             case 'noteedit' :
                 $note = $request->getUpdatedActionNote();
-                $html = View::createHtml($placeHolder, array($note));
+                $html = $this->createHtml($placeHolder, array($note));
                 break;
             case 'body-content' :
                 $action = $request->getProperty(Request::REQUEST_PROPERTY_ACTION, Request::REQUEST_PROPERTY_ACTION_DEFAULT);
-                $html = self::replacePlaceHolders($action, $request);
+                $html = $this->replacePlaceHolders($action);
                 break;
             case 'page-class' :
                 $html = $request->getProperty(Request::REQUEST_PROPERTY_ACTION, Request::REQUEST_PROPERTY_ACTION_DEFAULT);
@@ -132,7 +155,7 @@ class View
         // #### PLACE_HOLDER_CONFIG Properties im View Template ersetzen
         $configNote = $request->getConfig();
         $configNote->setProperty(Properties_Interface::PROPERTY_PLACE_HOLDER_INDICATOR_CONFIG, Properties_Interface::PROPERTY_PLACE_HOLDER_INDICATOR);
-        $html = self::replacePlaceHoldersVALUE($html, $configNote);
+        $html = $this->replacePlaceHoldersVALUE($html, $configNote);
 
         // #### PLACE_HOLDER_PROPERTY im Template ersetzen
         $regexp = "/REPLACED_BY_PROPERTY_([0-9a-zA-Z\-_]+)_VALUE/";
@@ -142,10 +165,10 @@ class View
         // #### Rekursiv im erzeugten HTML nach REPLACED_BY suchen, das HTML dafuer generieren und diese dann erstzen
         $properties = new Properties();
         foreach ($foundPlaceHolders as $foundPlaceHolder) {
-            $placeHolderHtml = self::replacePlaceHolders($foundPlaceHolder, $request);
+            $placeHolderHtml = $this->replacePlaceHolders($foundPlaceHolder);
             $properties->setProperty($placeHolderHtml, $foundPlaceHolder);
         }
-        $html = self::replacePlaceHoldersVALUE($html, $properties);
+        $html = $this->replacePlaceHoldersVALUE($html, $properties);
         return $html;
 
         /*
@@ -167,7 +190,7 @@ class View
      * @param Properties_Interface $properties
      * @return string
      */
-    static private function replacePlaceHoldersVALUE(string $html, Properties_Interface $properties): string
+    private function replacePlaceHoldersVALUE(string $html, Properties_Interface $properties): string
     {
         // NOTE|CONFIG|PROPERTY
         $placeHolderType = $properties->getProperty(Properties_Interface::PROPERTY_PLACE_HOLDER_INDICATOR, Properties_Interface::PROPERTY_PLACE_HOLDER_INDICATOR_DEFAULT);
@@ -178,5 +201,49 @@ class View
             $html = str_replace("REPLACED_BY_${placeHolderType}_{$name}_VALUE", $properties->getProperty($name, ""), $html);
         }
         return $html;
+    }
+
+
+
+    // ############# INTERFACE PROPERTIES #################################
+
+    /**
+     * @see Properties_Interface::getProperty()
+     */
+    public function getProperty(string $key, $default = "exception", bool $defaultOnEmpty = false)
+    {
+        return $this->properties->getProperty($key, $default, $defaultOnEmpty);
+    }
+
+    /**
+     * @see Properties_Interface::setProperties()
+     */
+    public function setProperties(array $properties)
+    {
+        return $this->properties->setProperties($properties);
+    }
+
+    /**
+     * @see Properties_Interface::getProperties()
+     */
+    public function getProperties(): array
+    {
+        return $this->properties->getProperties();
+    }
+
+    /**
+     * @see Properties_Interface::setProperty()
+     */
+    public function setProperty($value, string $key)
+    {
+        return $this->properties->setProperty($value, $key);
+    }
+
+    /**
+     * @see Properties_Interface::getDecodedProperty()
+     */
+    public function getDecodedProperty(string $key, $default = "exception"): string
+    {
+        return $this->properties->getDecodedProperty($key, $default);
     }
 }
