@@ -1,18 +1,16 @@
 <?php
 /**
  * Der vom Request erzeugte Root-Processor. Hat keinen Parent und versteht nur getHtml.
+ * Dient nur dazu, die in den GET/POST Parametern angegebenen Processor+Methode aufzurufen.
  *
  * Class ProcessorRoot
  */
 class ProcessorRoot extends Processor
 {
-    /**
-     * ProcessorRoot constructor.
-     * @param Properties_Interface $properties Die GET- und POST- Properties aus dem Request.
-     */
-    public function __construct(Properties_Interface $properties)
-    {
-        parent::__construct(null, $properties);
+    use SingleInstance_Trait;
+
+    static public function createProcessor(Properties_Interface $properties) : self {
+        return self::createSingleInstance()->initialize(null, $properties);
     }
 
     /**
@@ -20,6 +18,6 @@ class ProcessorRoot extends Processor
      * @return string
      */
     public function getHtml() : string {
-        return $this->callFromProperties($this->properties);
+        return $this->callFromProperties($this);
     }
 }

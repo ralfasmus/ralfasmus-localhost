@@ -14042,8 +14042,8 @@ $(document).ready(function () {
         var id = newId();
         noteCreate({
             'note-persistent-id': id,
-            'note-persistent-view': '-textnote',
-            'note-persistent-possible-views': '-textnote'
+            'note-persistent-view': 'NoteText',
+            'note-persistent-possible-views': 'NoteText'
         });
     });
 
@@ -14226,4 +14226,4 @@ function filterListUpdate() {
 function hideHiddenNotes(noteList) {
     $(noteList).filter('.memo-js-hidden').addClass("d-none");
     $(noteList).filter(':not(.memo-js-hidden)').removeClass("d-none");
-}/*! build-hinweis: Datei generiert am 2019-08-10_05-38-59 von minifyjs.sh */
+}/*! build-hinweis: Datei generiert am 2019-08-17_09-52-57 von minifyjs.sh */

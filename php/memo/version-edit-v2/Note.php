@@ -4,8 +4,10 @@
  * Anwendung enthaelt.
  * Class Note
  */
-class Note implements Properties_Interface
+abstract class Note implements Properties_Interface
 {
+    use Properties_Trait { getPropertyDefault as private trait_getPropertyDefault; }
+
     /**
      * Property, die die eineindeutige ID der Note-Instanz enthaelt.
      */
@@ -40,27 +42,35 @@ class Note implements Properties_Interface
     public const PROPERTY_VIEW_DEFAULT = "default";
 
     /**
-     * @var Properties|null Properties dieser Note Instanz
-     */
-    private $properties = NULL;
-
-    /**
      * Note constructor.
      * @param string $id
      */
-    public function __construct(string $id)
+    final private function __construct(string $id)
     {
         assert(!empty($id), 'Kann Note nicht erzeugen, weil $id Parameter ungueltig ist');
-        $this->properties = new Properties();
+        /**
+         * Default Initialisierung:
+         */
         $this->setProperty($id, self::NOTE_PROPERTY_ID);
-        $this->setProperty('-default', 'view');
+        $this->setProperty(static::class, 'view');
+        $this->initialize();
+        Log::logInstanceCreated($this);
     }
+
+    final static public function createForView(string $id, string $view) : Note {
+        return new $view($id);
+    }
+
+    /**
+     * Child Klassen implementieren hier die nach dem Konstruktor der Klasse Note ausgefuehrte Initialisierung.
+     */
+    abstract protected function initialize() : void ;
 
     /**
      * @see Note::NOTE_PROPERTY_ID
      * @return string
      */
-    public function getId(): string
+    final public function getId(): string
     {
         return $this->getPropertyMandatory(self::NOTE_PROPERTY_ID, true, 'Eine Note-Instanz muss eine Property :id: haben!');
     }
@@ -71,16 +81,16 @@ class Note implements Properties_Interface
      * ,,v1,v2,
      * @return string
      */
-    private function getAllViews()
+    final private function getAllViews()
     {
-        return "," . $this->getPropertyDefault(self::PROPERTY_POSSIBLE_VIEWS) . "," . $this->getPropertyDefault("view", 'default', true) . ",";
+        return "," . $this->getPropertyDefault(self::PROPERTY_POSSIBLE_VIEWS) . "," . $this->getPropertyDefault("view", 'NoteDefault', true) . ",";
     }
 
     /**
      * @param string $filterViews
      * @return bool
      */
-    public function hasViewsMatchingFilterViews(string $filterViews): bool
+    final public function hasViewsMatchingFilterViews(string $filterViews): bool
     {
         // $filterViews sind die im Listen Filter-Feld "Views" mit " " (und) getrennt angegebenen Views
         $noteViews = $this->getAllViews();
@@ -99,7 +109,7 @@ class Note implements Properties_Interface
      * @param array $notes
      * @return array Liste von Properties_Interface
      */
-    static public function getArtsList(array $notes): array
+    final static public function getArtsList(array $notes): array
     {
         $arts = array();
         foreach ($notes as $note) {
@@ -129,13 +139,15 @@ class Note implements Properties_Interface
         return $artProperties;
     }
 
-    // ############# INTERFACE PROPERTIES #################################
 
     /**
-     * @see Properties_Interface::getProperty()
+     * @see Properties_Trait::getDynamicProperty()
+     *
+     * @param string $key
+     * @return |null
      */
-    public function getPropertyDefault(string $key, $default = '', bool $defaultOnEmpty = false)
-    {
+    protected function getDynamicProperty(string $key) {
+        $result = null;
         switch ($key) {
             case "data-filter-any" :
                 $result = "";
@@ -146,57 +158,7 @@ class Note implements Properties_Interface
             case "data-filter-views" :
                 $result = $this->getAllViews();
                 break;
-
-            case "data-tooltip-html" :
-                $text = $this->getPropertyDefault("text");
-                $result = str_replace('"', "'", $text);
-                break;
-
-            default :
-                $result = $this->properties->getPropertyDefault($key, $default, $defaultOnEmpty);
-                break;
         }
-
         return $result;
     }
-    /**
-     * @see Properties_Interface::getPropertyMandatory()
-     */
-    public function getPropertyMandatory(string $key, bool $exceptionOnEmpty = true, string $exceptionText = '')
-    {
-        return $this->properties->getPropertyMandatory($key, $exceptionOnEmpty, $exceptionText);
-    }
-
-    /**
-     * @see Properties_Interface::setProperties()
-     */
-    public function setProperties(array $properties)
-    {
-        return $this->properties->setProperties($properties);
-    }
-
-    /**
-     * @see Properties_Interface::getProperties()
-     */
-    public function getProperties(): array
-    {
-        return $this->properties->getProperties();
-    }
-
-    /**
-     * @see Properties_Interface::setProperty()
-     */
-    public function setProperty($value, string $key)
-    {
-        return $this->properties->setProperty($value, $key);
-    }
-
-    /**
-     * @see Properties_Interface::getDecodedProperty()
-     */
-    public function getDecodedProperty(string $key, string $default = '', $defaultOnEmpty = false) : string
-    {
-        return $this->properties->getDecodedProperty($key, $default, $defaultOnEmpty);
-    }
-
 }

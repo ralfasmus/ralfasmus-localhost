@@ -3,11 +3,10 @@
  * Alle Funktionen zum persistenten Laden und Speichern von Notes im Status deleted.
  * Class PersistenceDeleted
  */
-class PersistenceDeleted extends PersistenceAbstract
+class PersistenceDeleted implements Persistence_Interface
 {
-    protected function getPersistanceStatus() {
-        return self::PERSISTANCE_STATUS_DELETED;
-    }
+    use SingleInstance_Trait { createSingleInstance as public; }
+    use Persistence_Trait;
 
     /**
      * Loescht eine vollstaendige Instanz.

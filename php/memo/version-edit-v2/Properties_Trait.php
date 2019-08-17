@@ -2,9 +2,9 @@
 /**
  * Implementation von @see Properties_Interface
  *
- * Trait Properties_Trait
+ * trait Properties_Trait
  */
-Trait Properties_Trait
+trait Properties_Trait
 {
     /**
      * Meine Properties in der Form name => wert.
@@ -21,19 +21,33 @@ Trait Properties_Trait
      * @return mixed|string|type
      * @throws Exception
      */
-    public function getPropertyDefault(string $key, $default = '', bool $defaultOnEmpty = false)
+    final public function getPropertyDefault(string $key, $default = '', bool $defaultOnEmpty = false)
     {
-        $properties = $this->getProperties();
-        if (isset($properties[$key])) {
-            $result = $properties[$key];
-        } else {
-            $result = $default;
-        }
-        if ($defaultOnEmpty && ((is_string($result) && $result == '') || (is_null($result)))) {
-            $result = $default;
+        $result = $this->getDynamicProperty($key);
+        if(is_null($result)) {
+            $properties = $this->getProperties();
+            if (isset($properties[$key])) {
+                $result = $properties[$key];
+            } else {
+                $result = $default;
+            }
+            if ($defaultOnEmpty && ((is_string($result) && $result == '') || (is_null($result)))) {
+                $result = $default;
+            }
         }
         return $result;
     }
+
+    /**
+     * Dynamisch erzeugte Properties werden auch von diesem Trait ueber die Standard Methoden wie
+     * @see Properties_Trait::getPropertiesDefault() oder @see Properties_Trait::getPropertyMandatory() geliefert,
+     * muessen aber in der Trait-nutzenden Klasse explizit definiert werden. Die Default-Implementation ist:
+     * return null;
+     *
+     * @return mixed null, fuer alle Properties, die nicht dynamisch definiert sind.
+     */
+    abstract protected function getDynamicProperty(string $key);
+
     /**
      * @see Properties_Interface::getPropertyMandatory()
      *
@@ -43,7 +57,7 @@ Trait Properties_Trait
      * @param string $exceptionText
      * @return mixed
      */
-    public function getPropertyMandatory(string $key, bool $exceptionOnEmpty = true, string $exceptionText = '')
+    final public function getPropertyMandatory(string $key, bool $exceptionOnEmpty = true, string $exceptionText = '')
     {
         $result = $this->getPropertyDefault($key, 'unDEfineeD', $exceptionOnEmpty);
         if($result == 'unDEfineeD') {
@@ -59,7 +73,7 @@ Trait Properties_Trait
      * @param $value
      * @return bool|float|int|mixed|string
      */
-    private function trimPropertyValue($value)
+    final private function trimPropertyValue($value)
     {
         if (is_scalar($value)) {
             $value = is_string($value) ? trim($value) : $value;
@@ -74,7 +88,7 @@ Trait Properties_Trait
      * @see Properties_Interface::setProperties()
      * @param array $properties
      */
-    public function setProperties(array $properties)
+    final public function setProperties(array $properties) : void
     {
         foreach ($properties as $name => $value) {
             $this->properties[$name] = $value;
@@ -85,7 +99,7 @@ Trait Properties_Trait
      * @see Properties_Interface::getProperties()
      * @return array
      */
-    public function getProperties(): array
+    final public function getProperties(): array
     {
         return $this->properties;
     }
@@ -95,7 +109,7 @@ Trait Properties_Trait
      * @param $value
      * @param string $key
      */
-    public function setProperty($value, string $key)
+    final public function setProperty($value, string $key)
     {
         $wert = $this->trimPropertyValue($value);
         $this->properties[$key] = $wert;
@@ -108,7 +122,7 @@ Trait Properties_Trait
      * @return string
      * @throws Exception
      */
-    public function getDecodedProperty(string $key, string $default = '', $defaultOnEmpty = false) : string
+    final public function getDecodedProperty(string $key, string $default = '', $defaultOnEmpty = false) : string
     {
         return rawurldecode($this->getPropertyDefault($key, $default, $defaultOnEmpty));
     }

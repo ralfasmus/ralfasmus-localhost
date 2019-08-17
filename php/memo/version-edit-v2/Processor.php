@@ -1,10 +1,13 @@
 <?php
 
 /**
+ * Properties eines Processors koennen im view/*.html mit processor-class=this&processor-method=getPropertyDefault
+ * eingebunden werden.
  * Class Processor
  */
-abstract class Processor
+abstract class Processor implements Properties_Interface
 {
+    use Properties_Trait;
     /**
      * Prozessor, der diesen erzeugt hat. Bei den ProcessorView-Instanzen wird ueber diese Beziehung der Dateiname des
      * zu bearbeitenden Views zusammengesetzt.
@@ -12,55 +15,26 @@ abstract class Processor
      * @var Processor|null
      */
     protected $parentProcessor = null;
-    /**
-     * Properties dieses Processors. Koennen im view/*.html mit processor-class=this&processor-method=getPropertyDefault
-     * eingebunden werden.
-     *
-     * @var Properties_Interface|null
-     */
-    protected $properties = null;
 
-    /**
-     * Request Property, die die ID zum Laden der Config-Note definiert.
-     * @see Processor::getConfig()
-     */
-    private const REQUEST_PROPERTY_CONFIG_ID = 'config-id';
-    private const REQUEST_PROPERTY_CONFIG_ID_DEFAULT = 'default';
-
-    /**
-     * Request Property, die den Status zum Laden von Notes definiert.
-     */
-    private const REQUEST_PROPERTY_STATUS = 'status';
-    /**
-     * Default Wert fuer @see Request::REQUEST_PROPERTY_STATUS
-     */
-    private const REQUEST_PROPERTY_STATUS_DEFAULT = 'active';
     /**
      * Request Property, die die ID der zu bearbeitenden Note definiert.
      */
     private const REQUEST_PROPERTY_NOTE_ID = 'id';
     /**
-     * @var string Status fuer Persistence im aktuellen Request.
-     * active|backup|deleted
-     */
-    private $status = '';
-    /**
-     * @var Note|null Note-Instanz, deren Properties diverse Einstellungen fuer diesen Request bestimmen.
-     * @see Processor::getConfig()
-     */
-    private $requestConfigCache = NULL;
-
-
-
-    /**
      * Processor constructor.
      * @param Processor|null $parentProcessor
      * @param Properties_Interface $properties
      */
-    public function __construct(?Processor $parentProcessor, Properties_Interface $properties)
+    protected function __construct(?Processor $parentProcessor, Properties_Interface $properties)
     {
+        Log::logInstanceCreated($this);
+        return $this->initialize($parentProcessor, $properties);
+    }
+
+    protected function initialize(?Processor $parentProcessor, Properties_Interface $properties) : self {
         $this->parentProcessor = $parentProcessor;
-        $this->properties = $properties;
+        $this->setProperties($properties->getProperties());
+        return $this;
     }
 
     protected function getParentProcessor() {
@@ -108,170 +82,24 @@ abstract class Processor
         return call_user_func_array( $callable, $processorMethodParameters);
     }
 
-    // ############# INTERFACE PROPERTIES #################################
-
-    /**
-     * Betrachtet nur die Request/Action Properties, keine Note Properties.
-     * @see Properties_Interface::getPropertyDefault()
-     *
-     * @param string $key
-     * @param string $default
-     * @param bool $defaultOnEmpty
-     * @return mixed
-     */
-    public function getPropertyDefault(string $key, $default = '', bool $defaultOnEmpty = false)
-    {
-        return $this->properties->getPropertyDefault($key, $default, $defaultOnEmpty);
-    }
-
-    /**
-     * @see Properties_Interface::getPropertyMandatory()
-     *
-     * @param string $key
-     * @param bool $exceptionOnEmpty
-     * @param string $exceptionText
-     * @return mixed|void
-     */
-    public function getPropertyMandatory(string $key, bool $exceptionOnEmpty = true, string $exceptionText = '') {
-        return $this->properties->getPropertyMandatory($key, $exceptionOnEmpty, $exceptionText);
-    }
-    /**
-     * @see Properties_Interface::setProperties()
-     *
-     * @param array $properties
-     * @return mixed|void
-     * @throws Exception
-     */
-    public function setProperties(array $properties)
-    {
-        throw new Exception('Not implemented.');
-    }
-
-    /**
-     * @see Properties_Interface::getProperties()
-     *
-     * @return array
-     * @throws Exception
-     */
-    public function getProperties(): array
-    {
-        return $this->properties->getProperties();
-    }
-
-    /**
-     * @see Properties_Interface::setProperty()
-     *
-     * @param $value
-     * @param string $key
-     * @return mixed|void
-     * @throws Exception
-     */
-    public function setProperty($value, string $key)
-    {
-        return $this->properties->setProperty($value, $key);
-    }
-
-    /**
-     * Betrachtet nur die Request/Action Properties, keine Note Properties.
-     * @see Properties_Interface::getDecodedProperty()
-     * @param string $key
-     * @param string $default
-     * @param bool $defaultOnEmpty
-     * @return string
-     * @throws Exception
-     */
-    public function getDecodedProperty(string $key, string $default = '', $defaultOnEmpty = false) : string
-    {
-        return $this->properties->getDecodedProperty($key, $default, $defaultOnEmpty);
-    }
-
     protected function getView() : string {
         return '';
     }
 
     /**
-     * Liefert den Persistance Handler zum aktuell im Request gueltigen Status. Der Status wird ueber die ConfigNote
-     * geliefert. Ausnahme: Fuer das Laden der Config Note selbst, ist der Status immer active. Die Config Notes fuer
-     * status=backup und status=deleted liegen also auch im Verzeichnis /active/ !
+     * Liefert den Persistence Handler zum aktuell im Request gueltigen Status. Der Status wird ueber die ConfigNote
+     * geliefert. Ausnahme: Fuer das Laden der Config Note selbst, ist der Status immer PersistenceActive. Die Config Notes fuer
+     * status=PersistenceBackup und status=PersistenceDeleted liegen also auch im Verzeichnis /PersistenceActive/ !
      *
      * @param string $status
-     * @return PersistenceAbstract
+     * @return Persistence_Interface
      * @throws Exception
      */
-    public function getPersistance(string $status = ''): PersistenceAbstract
+    public function getPersistence(string $status = ''): Persistence_Interface
     {
-        $status = ($status == '') ? $this->getStatus() : $status;
-        switch ($status) {
-            case "active" :
-                return PersistenceActive::getSingleInstance();
-                break;
-            case "backup" :
-                return PersistenceBackup::getSingleInstance();
-                break;
-            case "deleted" :
-                return PersistenceDeleted::getSingleInstance();
-                break;
-            default:
-                throw new Exception("Unbekannter Persistance Status: $status");
-        }
-    }
-
-    /**
-     * Liefert den Persistance Status fuer diesen Request.
-     *
-     * @return string active|deleted|backup|archive Fuer diesen Request zu verwendender Status beim Laden von Notes.
-     */
-    public function getStatus(): string
-    {
-        if ($this->status == '') {
-            $requestConfigId = $this->getPropertyDefault(self::REQUEST_PROPERTY_CONFIG_ID, '');
-            if (strpos($requestConfigId, 'backup') !== false) {
-                $this->status = 'backup';
-            } else {
-                if (strpos($requestConfigId, 'deleted') !== false) {
-                    $this->status = 'deleted';
-                } else {
-                    // entweder es ist eine 'status=active' config oder keine config gesetzt.
-                    if ($requestConfigId == '') {
-                        // status aus request property 'status' bestimmen oder default setzen
-                        $this->status = $this->getPropertyDefault('status', 'active', true);
-                    } else {
-                        $this->status = 'active';
-                    }
-                }
-            }
-        }
-        return $this->status;
-    }
-
-    /**
-     * Liefert die Note-Instanz, deren Properties diverse Einstellungen fuer diesen Request bestimmen.
-     * Ist der Request-Parameter
-     * @return Note
-     * @see Request::$requestConfigCache
-     */
-    public function getConfig(): Note
-    {
-        if (is_null($this->requestConfigCache)) {
-            $this->requestConfigCache = $this->getConfigNote();
-        }
-        return $this->requestConfigCache;
-    }
-
-    /**
-     * Laedt die Config Note. Immer aus 'active'!
-     *
-     * @return Note
-     */
-    private function getConfigNote(): Note
-    {
-        return $this->getPersistance('active')->loadOrCreateNote($this->getConfigId());
-    }
-
-    private function getConfigId(): string
-    {
-        return $this->getPropertyDefault(self::REQUEST_PROPERTY_CONFIG_ID, self::REQUEST_PROPERTY_CONFIG_ID_DEFAULT
-                . '-' . $this->getPropertyDefault(self::REQUEST_PROPERTY_STATUS, self::REQUEST_PROPERTY_STATUS_DEFAULT, true));
+        $status = ($status == '') ? $this->getRequest()->getStatus() : $status;
+        assert($status != '', 'Kann status nicht bestimmen und deshalb keinen Persistence Handler laden.');
+        return $status::getSingleInstance();
     }
 
     /**
@@ -285,9 +113,22 @@ abstract class Processor
     public function getUpdatedActionNote(): Note
     {
         $id = $this->getRequest()->getPropertiesNotePersistent()->getPropertyMandatory(self::REQUEST_PROPERTY_NOTE_ID, true);
-        $note = $this->getPersistance()->loadOrCreateNote($id);
-        $note = $this->getPersistance()->updateNoteFromRequest($note, $this->getRequest()->getPropertiesNotePersistent());
+        $propertiesNote = $this->getRequest()->getPropertiesNotePersistent();
+        $note = $this->getPersistence()->loadOrCreateNote($id, $propertiesNote->getPropertyDefault('view', 'NoteDefault', true));
+        $note = $this->getPersistence()->updateNoteFromRequest($note, $propertiesNote);
         return $note;
+    }
+
+
+    /**
+     * @see Properties_Trait::getDynamicProperty()
+     *
+     * @param string $key
+     * @return |null
+     */
+    protected function getDynamicProperty(string $key) {
+        // Es gibt hier keine dynamisch berechneten Properties.
+        return null;
     }
 
 }

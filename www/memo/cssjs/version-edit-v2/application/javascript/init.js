@@ -58,8 +58,8 @@ $(document).ready(function () {
         var id = newId();
         noteCreate({
             'note-persistent-id': id,
-            'note-persistent-view': '-textnote',
-            'note-persistent-possible-views': '-textnote'
+            'note-persistent-view': 'NoteText',
+            'note-persistent-possible-views': 'NoteText'
         });
     });
 

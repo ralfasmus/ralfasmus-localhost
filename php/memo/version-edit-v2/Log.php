@@ -51,6 +51,13 @@ class Log
         return "<script>$messagesConsoleHtml</script>";
     }
 
+    public static function logInstanceCreated($instance) {
+        self::debug('Created Object: ' . self::objectString($instance));
+    }
+
+    public static function objectString($instance) : string {
+        return get_class($instance) . '(' . spl_object_hash($instance) . ')';
+    }
 
     /**
      * @return string

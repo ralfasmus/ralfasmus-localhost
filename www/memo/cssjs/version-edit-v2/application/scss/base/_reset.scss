@@ -7,21 +7,3 @@ div {
 .ajaxresult {
     display:none;
 }
-
-.showajaxresult {
-    margin-top: 50px;
-    padding: 10px;
-    .ajaxresult {
-        display:block;
-        color: #ccc;
-        .mode-development & {
-            color: black;
-        }
-        .error {
-            color: red;
-        }
-        .debug {
-            color: #666;
-        }
-    }
-}

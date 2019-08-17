@@ -21,7 +21,7 @@ class ProcessorAction extends Processor
      * @throws Exception
      */
     public function noteSave() : string {
-        $this->getPersistance()->noteSave($this->getUpdatedActionNote());
+        $this->getPersistence()->noteSave($this->getUpdatedActionNote());
         return '';
     }
 
@@ -34,7 +34,7 @@ class ProcessorAction extends Processor
      * @throws Exception
      */
     public function noteDelete() : string {
-        $this->getPersistance()->noteDelete($this->getUpdatedActionNote());
+        $this->getPersistence()->noteDelete($this->getUpdatedActionNote());
         return '';
     }
 
@@ -47,7 +47,7 @@ class ProcessorAction extends Processor
      * @throws Exception
      */
     public function noteBackup() : string {
-        $this->getPersistance()->noteBackup($this->getUpdatedActionNote());
+        $this->getPersistence()->noteBackup($this->getUpdatedActionNote());
         return '';
     }
 
@@ -61,7 +61,7 @@ class ProcessorAction extends Processor
      */
     public function noteRecover() : string {
         throw new Exception('Noch nicht implementiert.');
-        $this->getPersistance()->noteRecover($this->getUpdatedActionNote());
+        $this->getPersistence()->noteRecover($this->getUpdatedActionNote());
         return '';
     }
 }

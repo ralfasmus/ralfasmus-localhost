@@ -65,10 +65,12 @@ class ProcessorView extends Processor
 
     protected function getView() : string {
         $myView = $this->getPropertyMandatory('view', '', false);
-        $myParentView = (is_null($this->getParentProcessor()) || substr($myView, 0,1) != '-')
+        $myParentView = (is_null($this->getParentProcessor()) || substr($myView, 0,1) == '^')
                 ? ''
                 : $this->getParentProcessor()->getView();
-        return "${myParentView}${myView}";
+        $myParentViewPostfix = ($myParentView != '' ? '-': '');
+        $myView = str_replace('^', '', $myView);
+        return "${myParentView}${myParentViewPostfix}${myView}";
     }
 
     /**
@@ -130,12 +132,10 @@ class ProcessorView extends Processor
     }
 
     /**
-     * @param string $propertyName
-     * @param string $propertyDefault
-     * @param bool $propertyDefaultOnEmpty
+     * @param string $key
      * @return string
      */
-    protected function getConfigValue(string $propertyName, string $propertyDefault = '', bool $propertyDefaultOnEmpty = true) : string {
-        return $this->getConfig()->getPropertyDefault($propertyName, $propertyDefault, $propertyDefaultOnEmpty);
+    protected function getConfigValue(string $key) : string {
+        return $this->getRequest()->getConfig()->getConfigValue($key);
     }
 }

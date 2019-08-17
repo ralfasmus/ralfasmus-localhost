@@ -4,9 +4,8 @@
  *
  * Class PersistenceBackup
  */
-class PersistenceBackup extends PersistenceAbstract
+class PersistenceBackup implements Persistence_Interface
 {
-    protected function getPersistanceStatus() {
-        return self::PERSISTANCE_STATUS_BACKUP;
-    }
+    use SingleInstance_Trait { createSingleInstance as public; }
+    use Persistence_Trait;
 }

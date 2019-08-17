@@ -89,7 +89,7 @@ class ProcessorItems extends Processor
      */
     public function getNotesOfRequest(): array
     {
-        return $this->getPersistance()->getNotes($this->getConfig()->getPropertyDefault(self::CONFIG_PROPERTY_FILTER_VIEWS), Note::NOTE_PROPERTY_NAME, false, $this->getStatus());
+        return $this->getPersistence()->getNotes($this->getRequest()->getConfig()->getConfigValue(self::CONFIG_PROPERTY_FILTER_VIEWS), Note::NOTE_PROPERTY_NAME, false, $this->getRequest()->getStatus());
     }
     /*
     // JSON:

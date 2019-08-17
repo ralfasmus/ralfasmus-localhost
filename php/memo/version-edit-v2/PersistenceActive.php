@@ -1,13 +1,12 @@
 <?php
 /**
- * Alle Funktionen zum persistenten Laden und Speichern von Notes im Status active.
+ * Alle Funktionen zum persistenten Laden und Speichern von Notes im Status PersistenceActive.
  * Class PersistenceActive
  */
-class PersistenceActive extends PersistenceAbstract
+class PersistenceActive implements Persistence_Interface
 {
-    protected function getPersistanceStatus() {
-        return self::PERSISTANCE_STATUS_ACTIVE;
-    }
+    use SingleInstance_Trait { createSingleInstance as public; }
+    use Persistence_Trait { noteSave as private noteSaveDefault; }
 
     /**
      * Speichert eine vollstaendige Note Instanz inkl. Backup-Sicherung der neu gespeicherten Version.
@@ -16,9 +15,8 @@ class PersistenceActive extends PersistenceAbstract
      */
     public function noteSave(Note $note)
     {
-        parent::noteSave($note);
-        $persistenceHandler = PersistenceBackup::getSingleInstance();
-        $persistenceHandler->noteSave($note);
+        $this->noteSaveDefault($note);
+        PersistenceBackup::getSingleInstance()->noteSave($note);
     }
 
     /**

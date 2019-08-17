@@ -2,53 +2,41 @@
 /**
  * Alle Funktionen zum persistenten Laden und Speichern von Notes.
  *
- * Class PersistenceAbstract
+ * Class Persistence_Trait
  */
-abstract class PersistenceAbstract
+trait Persistence_Trait
 {
-    protected const PERSISTANCE_STATUS_ACTIVE = 'active';
-    protected const PERSISTANCE_STATUS_BACKUP = 'backup';
-    protected const PERSISTANCE_STATUS_DELETED = 'deleted';
 
     /**
      * @var array Cache fuer die geladenen Note Instanzen.
      */
     private $notesCache = array();
+
     /**
      * @var bool true, wenn Persistence::notesCache valide ist.
      */
     private $notesCacheIsValid = false;
 
-    static private $singleInstances = array();
-
-    /**
-     * Fuer jede Subclasse gibt es nur eine SingleInstance, die hier im Class-Member gespeichert ist.
-     * @return mixed
-     */
-    public static function getSingleInstance() {
-        $className = static::class;
-        if(!isset(self::$singleInstances[$className])) {
-            self::$singleInstances[$className] = new $className;
-        }
-        return self::$singleInstances[$className];
-    }
-
     /**
      * Basis fuer Pfad zu Daten.
      * @return string
      */
-    private function getDataFilenameBase() : string {
+    final private function getDataFilenameBase() : string {
         assert(defined('ROOT_DIR'), 'PHP Konstante ROOT_DIR ist nicht definiert.');
         assert(defined('APPLICATION_NAME'), 'PHP Konstante APPLICATION_NAME ist nicht definiert.');
         return ROOT_DIR . "/data/memo/" . APPLICATION_NAME;
     }
 
-    /**
-     * Liefert den Status active|backup|deleted dieser Persistance Instanz.
-     * @return mixed
-     */
-    abstract protected function getPersistanceStatus();
 
+    /**
+     * Liefert das Pfadfragment (status) fuer die Klasse, die dieses Trait konkret einsetzt.
+     *
+     * @return string PersistenceActive|PersistenceBackup|PersistenceDeleted
+     */
+    final private function getPersistenceStatus() {
+        return __CLASS__;
+    }
+    
     /**
      * Laedt alle Notes in den Cache, die dem status des requests entsprechen und mit den im Filter angegebenen views matchen.
      *
@@ -56,11 +44,11 @@ abstract class PersistenceAbstract
      * @return array
      * @throws Throwable
      */
-    private function loadNotes(string $filterViews): array
+    final private function loadNotes(string $filterViews): array
     {
         if (!$this->notesCacheIsValid) {
             $filenameBase = $this->getDataFilenameBase();
-            foreach (glob($filenameBase . "/" . $this->getPersistanceStatus() . '/*') as $filename) {
+            foreach (glob($filenameBase . "/" . $this->getPersistenceStatus() . '/*') as $filename) {
                 $note = $this->loadNoteByFilename($filename);
                 assert(!is_null($note), "Note-Instanz aus Datei $filename ist nach dem Laden NULL.");
                 if ($note->hasViewsMatchingFilterViews($filterViews)) {
@@ -81,7 +69,7 @@ abstract class PersistenceAbstract
      * @return array
      * @throws Throwable
      */
-    public function getNotes(string $filterViews, string $sortProperty, bool $descending): array
+    final public function getNotes(string $filterViews, string $sortProperty, bool $descending): array
     {
 
         $notes = $this->loadNotes($filterViews);
@@ -121,14 +109,16 @@ abstract class PersistenceAbstract
      * @return Note
      * @throws Throwable
      */
-    public function loadNoteByFilename(string $filename): Note
+    final private function loadNoteByFilename(string $filename): Note
     {
         assert(!is_null($filename) && is_string($filename) && ($filename != ''), 'Kann Note Instance mit leerem/null filename nicht laden.');
         $note = NULL;
         try {
             $noteString = file_get_contents($filename);
+            Log::debug('Loading File: ' . $filename);
             assert($noteString != '', "Note-Instanz aus Datei $filename ist nach dem Laden leer.");
             $note = $this->instantiateNoteFromString($noteString);
+            Log::debug('Loaded ' . Log::objectString($note) . ' from file: ' . $filename);
         } catch (Throwable $throwable) {
             MyThrowable::handleThrowable($throwable,"Kann Note-Datei $filename nicht finden.");
         }
@@ -143,7 +133,7 @@ abstract class PersistenceAbstract
      * @return Note|null
      * @throws Throwable
      */
-    public function loadNoteById(string $id): ?Note
+    final private function loadNoteById(string $id): ?Note
     {
         if ($id == "" || is_null($id)) {
             return NULL;
@@ -159,14 +149,15 @@ abstract class PersistenceAbstract
      * @param string $noteString
      * @return Note
      */
-    private function instantiateNoteFromString(string $noteString): Note
+    final private function instantiateNoteFromString(string $noteString): Note
     {
         try {
             $properties = json_decode($noteString, true);
-            $note = new Note($properties["id"]);
+            $view = isset($properties['view']) ? $properties['view'] : 'NoteDefault';
+            $note = Note::createForView($properties["id"], $view);
             $note->setProperties($properties);
         } catch (Throwable $throwable) {
-            MyThrowable::handleThrowable($throwable, 'Kann note nicht instantiieren durch json_decode von diesem String: ' . $noteString);
+            MyThrowable::handleThrowable($throwable, 'Kann note nicht instantiieren durch json_decode von diesem String: ' . $noteString, true);
         }
         return $note;
     }
@@ -178,10 +169,10 @@ abstract class PersistenceAbstract
      * @param string $id
      * @return string
      */
-    public function getPathAndFilename(string $id): string
+    final public function getPathAndFilename(string $id): string
     {
         assert(!is_null($id) && is_string($id) && ($id != ''), 'Kann Pfad/Dateiname fuer Note zu leerer id nicht bestimmen.');
-        return $this->getDataFilenameBase() . "/" . $this->getPersistanceStatus() . "/$id";
+        return $this->getDataFilenameBase() . "/" . $this->getPersistenceStatus() . "/$id";
     }
 
     /**
@@ -189,15 +180,18 @@ abstract class PersistenceAbstract
      * Das kann auch eine Config Note sein.
      *
      * @param string $id
+     * @param string $view
      * @param Properties_Interface $notePropertiesFromRequest
      * @return Note
      * @throws Throwable
      */
-    public function loadOrCreateNote(string $id): Note
+    final public function loadOrCreateNote(string $id, string $view): Note
     {
+        assert(!is_null($view) && $view != '', '$view Parameter ist leer oder null.');
         $note = $this->loadNoteById($id);
         if (is_null($note)) {
-            $note = new Note($id);
+            $note = Note::createForView($id, $view);
+            $this->noteSave($note);
         }
         return $note;
     }
@@ -207,7 +201,7 @@ abstract class PersistenceAbstract
      * @param Properties_Interface $propertiesNotePersistent
      * @return Note
      */
-    public function updateNoteFromRequest(Note $note, Properties_Interface $propertiesNotePersistent)
+    final public function updateNoteFromRequest(Note $note, Properties_Interface $propertiesNotePersistent)
     {
         foreach ($propertiesNotePersistent->getProperties() as $name => $value) {
             $note->setProperty($value, $name);
@@ -220,19 +214,19 @@ abstract class PersistenceAbstract
      * @param Note $note
      * @param string $filename
      */
-    public function noteSaveToFile(Note $note, string $filename)
+    final public function noteSaveToFile(Note $note, string $filename)
     {
         assert(!is_null($filename) && is_string($filename) && ($filename != ''), 'Kann Note Instance mit leerem/null filename nicht speichern.');
         $props = $note->getProperties();
         file_put_contents("${filename}", json_encode($props, JSON_HEX_QUOT | JSON_HEX_TAG));
-        Log::debug("Saved Note to $filename");
+        Log::debug('Writing ' . Log::objectString($note) . ' to file: ' . $filename);
     }
 
     /**
-     * Speichert eine vollstaendige Instanz.
+     * Speichert eine vollstaendige Instanz unter meinem Status
      * @param Note $note
      */
-    public function noteSave(Note $note)
+    final public function noteSave(Note $note)
     {
         $filename = $this->getPathAndFilename($note->getId());
         $this->noteSaveToFile($note, $filename);
@@ -243,7 +237,7 @@ abstract class PersistenceAbstract
      * @param Note $note
      * @throws Throwable
      */
-    public function noteDelete(Note $note)
+    final public function noteDelete(Note $note)
     {
         // Note nach deleted kopieren
         PersistenceDeleted::getSingleInstance()->noteSave($note);
@@ -257,10 +251,10 @@ abstract class PersistenceAbstract
     }
 
     /**
-     * Erstellt Backup fuer eine active oder deleted oder backup Instanz.
+     * Erstellt Backup fuer eine PersistenceActive oder PersistenceDeleted oder PersistenceBackup Instanz.
      * @param Note $note
      */
-    public function noteBackup(Note $note)
+    final public function noteBackup(Note $note)
     {
     }
 

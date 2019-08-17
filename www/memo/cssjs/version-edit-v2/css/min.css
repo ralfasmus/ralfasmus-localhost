@@ -9685,24 +9685,6 @@ div {
   display: none;
 }
 
-.showajaxresult {
-  margin-top: 50px;
-  padding: 10px;
-}
-.showajaxresult .ajaxresult {
-  display: block;
-  color: #ccc;
-}
-.mode-development .showajaxresult .ajaxresult {
-  color: black;
-}
-.showajaxresult .ajaxresult .error {
-  color: red;
-}
-.showajaxresult .ajaxresult .debug {
-  color: #666;
-}
-
 .dvz-notelist__note .card-header .dvz-notelist-note__content {
   cursor: pointer;
 }
@@ -9735,6 +9717,21 @@ div {
 }
 .mode-development .showajaxresult {
   margin-left: 4%;
+  margin-top: 50px;
+  padding: 10px;
+}
+.mode-development .showajaxresult .ajaxresult {
+  display: block;
+  color: #ccc;
+}
+.mode-development .mode-development .showajaxresult .ajaxresult {
+  color: black;
+}
+.mode-development .showajaxresult .ajaxresult .error {
+  color: red;
+}
+.mode-development .showajaxresult .ajaxresult .debug {
+  color: #666;
 }
 
 /*
@@ -9808,4 +9805,4 @@ breakpoints
 .nav-list > li > a {
     padding: 5px;
 }
-/*! build-hinweis: Datei generiert am 2019-08-10_05-39-02 von minifycss.sh */
+/*! build-hinweis: Datei generiert am 2019-08-17_09-52-58 von minifycss.sh */
