@@ -55,11 +55,27 @@ $(document).ready(function () {
     // Trigger: Klick auf Button CREATE NOTE
     $('.memo-js-create-textnote-action').on('click', function (event) {
         event.preventDefault();
-        var id = newId();
         noteCreate({
-            'note-persistent-id': id,
+            'note-persistent-id': newId(),
             'note-persistent-view': 'NoteText',
-            'note-persistent-possible-views': 'NoteText'
+            'note-persistent-possible-views': 'NoteText',
+            'note-persistent-text' : '',
+            'note-persistent-art': '',
+            'note-persistent-name': '',
+            'note-persistent-files': ''
+        });
+    });
+    // Trigger: Klick auf Button DUPlicate Note
+    $('.memo-js-duplicate-action').on('click', function (event) {
+        event.preventDefault();
+        noteCreate({
+            'note-persistent-id': newId(),
+            'note-persistent-view': $(event.target).attr('data-view'),
+            'note-persistent-possible-views': $(event.target).attr('data-possible-views'),
+            'note-persistent-text' : 'clones:' + $(event.target).attr('data-clones-id') + '<br><br>' + $(event.target).attr('data-text'),
+            'note-persistent-art': $(event.target).attr('data-art'),
+            'note-persistent-name': $(event.target).attr('data-name'),
+            'note-persistent-files': $(event.target).attr('data-files')
         });
     });
 

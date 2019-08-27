@@ -51,14 +51,12 @@ function noteCreate(formData) {
     // Felder-Defaults setzen
     formData['note-persistent-datetimecreated'] = _jetzt;
     formData['note-persistent-datetimesaved'] = _jetzt;
-    formData['note-persistent-text'] = '';
-    formData['note-persistent-art'] = '';
 
     // Url fuer das window.open erstellen, dass nach dem Speichern des neuen Notes ausgefuehrt werden soll,
     // um das neue Notes in einem neuen EDIT Browser-Fenster zu oeffnen
     var configId = $('#page').attr('data-config-id');
     var noteId = formData['note-persistent-id'];
-    formData['nextpagetitle'] = 'NEW:' + noteId;
+    formData['nextpagetitle'] = 'NEW id:' + noteId;
     //formData['nextpagehref'] = '?action=noteedit&config-id=' + configId + '&note-persistent-id=' + noteId;
     formData['nextpagehref'] = '?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&config-id=' + configId + '&note-persistent-id=' + noteId;
 

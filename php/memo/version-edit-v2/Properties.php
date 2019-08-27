@@ -21,7 +21,7 @@ Class Properties implements Properties_Interface
      * @param string $key
      * @return |null
      */
-    protected function getDynamicProperty(string $key) {
+    public function getDynamicProperty(string $key) {
         // Es gibt hier keine dynamisch berechneten Properties.
         return null;
     }

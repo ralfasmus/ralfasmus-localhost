@@ -9685,6 +9685,10 @@ div {
   display: none;
 }
 
+.memo-hidden {
+  color: #ddd;
+}
+
 .dvz-notelist__note .card-header .dvz-notelist-note__content {
   cursor: pointer;
 }
@@ -9805,4 +9809,4 @@ breakpoints
 .nav-list > li > a {
     padding: 5px;
 }
-/*! build-hinweis: Datei generiert am 2019-08-17_09-52-58 von minifycss.sh */
+/*! build-hinweis: Datei generiert am 2019-08-20_05-14-08 von minifycss.sh */

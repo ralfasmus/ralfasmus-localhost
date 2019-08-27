@@ -62,4 +62,6 @@ interface Properties_Interface
      * @return string
      */
     public function getDecodedProperty(string $key, string $default = '', $defaultOnEmpty = false) : string;
+
+    public function getDynamicProperty(string $key);
 }

@@ -13873,14 +13873,12 @@ function noteCreate(formData) {
     // Felder-Defaults setzen
     formData['note-persistent-datetimecreated'] = _jetzt;
     formData['note-persistent-datetimesaved'] = _jetzt;
-    formData['note-persistent-text'] = '';
-    formData['note-persistent-art'] = '';
 
     // Url fuer das window.open erstellen, dass nach dem Speichern des neuen Notes ausgefuehrt werden soll,
     // um das neue Notes in einem neuen EDIT Browser-Fenster zu oeffnen
     var configId = $('#page').attr('data-config-id');
     var noteId = formData['note-persistent-id'];
-    formData['nextpagetitle'] = 'NEW:' + noteId;
+    formData['nextpagetitle'] = 'NEW id:' + noteId;
     //formData['nextpagehref'] = '?action=noteedit&config-id=' + configId + '&note-persistent-id=' + noteId;
     formData['nextpagehref'] = '?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&config-id=' + configId + '&note-persistent-id=' + noteId;
 
@@ -14039,11 +14037,27 @@ $(document).ready(function () {
     // Trigger: Klick auf Button CREATE NOTE
     $('.memo-js-create-textnote-action').on('click', function (event) {
         event.preventDefault();
-        var id = newId();
         noteCreate({
-            'note-persistent-id': id,
+            'note-persistent-id': newId(),
             'note-persistent-view': 'NoteText',
-            'note-persistent-possible-views': 'NoteText'
+            'note-persistent-possible-views': 'NoteText',
+            'note-persistent-text' : '',
+            'note-persistent-art': '',
+            'note-persistent-name': '',
+            'note-persistent-files': ''
+        });
+    });
+    // Trigger: Klick auf Button DUPlicate Note
+    $('.memo-js-duplicate-action').on('click', function (event) {
+        event.preventDefault();
+        noteCreate({
+            'note-persistent-id': newId(),
+            'note-persistent-view': $(event.target).attr('data-view'),
+            'note-persistent-possible-views': $(event.target).attr('data-possible-views'),
+            'note-persistent-text' : 'clones:' + $(event.target).attr('data-clones-id') + '<br><br>' + $(event.target).attr('data-text'),
+            'note-persistent-art': $(event.target).attr('data-art'),
+            'note-persistent-name': $(event.target).attr('data-name'),
+            'note-persistent-files': $(event.target).attr('data-files')
         });
     });
 
@@ -14224,6 +14238,6 @@ function filterListUpdate() {
 }
 
 function hideHiddenNotes(noteList) {
-    $(noteList).filter('.memo-js-hidden').addClass("d-none");
-    $(noteList).filter(':not(.memo-js-hidden)').removeClass("d-none");
-}/*! build-hinweis: Datei generiert am 2019-08-17_09-52-57 von minifyjs.sh */
+    $(noteList).filter('.memo-js-hidden').addClass("memo-hidden");
+    $(noteList).filter(':not(.memo-js-hidden)').removeClass("memo-hidden");
+}/*! build-hinweis: Datei generiert am 2019-08-27_11-51-42 von minifyjs.sh */

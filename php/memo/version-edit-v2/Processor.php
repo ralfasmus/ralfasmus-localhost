@@ -9,6 +9,10 @@ abstract class Processor implements Properties_Interface
 {
     use Properties_Trait;
     /**
+     * @var null Dynamische Properties werden ggf von dem persistenten Note Item geliefert.
+     */
+    private $dynamicPropertiesItem = null;
+    /**
      * Prozessor, der diesen erzeugt hat. Bei den ProcessorView-Instanzen wird ueber diese Beziehung der Dateiname des
      * zu bearbeitenden Views zusammengesetzt.
      *
@@ -34,6 +38,7 @@ abstract class Processor implements Properties_Interface
     protected function initialize(?Processor $parentProcessor, Properties_Interface $properties) : self {
         $this->parentProcessor = $parentProcessor;
         $this->setProperties($properties->getProperties());
+        $this->dynamicPropertiesItem = $properties;
         return $this;
     }
 
@@ -126,9 +131,9 @@ abstract class Processor implements Properties_Interface
      * @param string $key
      * @return |null
      */
-    protected function getDynamicProperty(string $key) {
+    public function getDynamicProperty(string $key) {
         // Es gibt hier keine dynamisch berechneten Properties.
-        return null;
+        return $this->dynamicPropertiesItem->getDynamicProperty($key);
     }
 
 }

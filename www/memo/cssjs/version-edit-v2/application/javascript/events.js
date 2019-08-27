@@ -96,6 +96,6 @@ function filterListUpdate() {
 }
 
 function hideHiddenNotes(noteList) {
-    $(noteList).filter('.memo-js-hidden').addClass("d-none");
-    $(noteList).filter(':not(.memo-js-hidden)').removeClass("d-none");
+    $(noteList).filter('.memo-js-hidden').addClass("memo-hidden");
+    $(noteList).filter(':not(.memo-js-hidden)').removeClass("memo-hidden");
 }

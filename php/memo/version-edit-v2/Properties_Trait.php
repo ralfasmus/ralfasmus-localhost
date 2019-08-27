@@ -46,7 +46,7 @@ trait Properties_Trait
      *
      * @return mixed null, fuer alle Properties, die nicht dynamisch definiert sind.
      */
-    abstract protected function getDynamicProperty(string $key);
+    abstract public function getDynamicProperty(string $key);
 
     /**
      * @see Properties_Interface::getPropertyMandatory()

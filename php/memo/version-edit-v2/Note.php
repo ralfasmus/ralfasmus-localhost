@@ -31,7 +31,7 @@ abstract class Note implements Properties_Interface
     /**
      * View Name fuer Instanzen der @see Note::getArtsList().
      */
-    private const ART_LIST_PROPERTY_VIEW_DEFAULT = '-art';
+    private const ART_LIST_PROPERTY_VIEW_DEFAULT = 'art';
     /**
      * Persistent gesetzter primaerer view zum Anzeigen eines Note Objekts
      */
@@ -92,11 +92,13 @@ abstract class Note implements Properties_Interface
      */
     final public function hasViewsMatchingFilterViews(string $filterViews): bool
     {
-        // $filterViews sind die im Listen Filter-Feld "Views" mit " " (und) getrennt angegebenen Views
+        // $filterViews sind die im Listen Filter-Feld "Views" mit "," (und) getrennt angegebenen Views
         $noteViews = $this->getAllViews();
         $foundAll = true;
-        foreach (explode(" ", $filterViews) as $filterView) {
-            $foundAll = $foundAll && stripos($noteViews, ",$filterView,") !== false;
+        if($filterViews != '') {
+            foreach (explode(" ", $filterViews) as $filterView) {
+                $foundAll = $foundAll && stripos($noteViews, ",$filterView,") !== false;
+            }
         }
         return $foundAll;
     }
@@ -146,17 +148,17 @@ abstract class Note implements Properties_Interface
      * @param string $key
      * @return |null
      */
-    protected function getDynamicProperty(string $key) {
+    public function getDynamicProperty(string $key) {
         $result = null;
         switch ($key) {
             case "data-filter-any" :
                 $result = "";
                 foreach ($this->getProperties() as $name => $value) {
-                    $result .= "$value ";
+                    $result .= strtolower("$value ");
                 }
                 break;
             case "data-filter-views" :
-                $result = $this->getAllViews();
+                $result = strtolower($this->getAllViews());
                 break;
         }
         return $result;

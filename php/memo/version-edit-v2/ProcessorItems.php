@@ -25,7 +25,7 @@ class ProcessorItems extends Processor
      * @param array $items Liste von items, die das Properties_Interface implementieren.
      * @return string
      */
-    private function getHtmlItems(array $items) {
+    private function getHtmlItems(array $items) : string {
         $html = '';
         foreach($items as $item) {
             assert(in_array(Properties_Interface::class, class_implements($item)),
@@ -49,7 +49,7 @@ class ProcessorItems extends Processor
      *
      * @return string
      */
-    protected function getHtmlNotes()
+    protected function getHtmlNotes() : string
     {
         return $this->getHtmlItems($this->getNotesOfRequest());
     }
@@ -62,7 +62,7 @@ class ProcessorItems extends Processor
      *
      * @return string
      */
-    protected function getHtmlArts()
+    protected function getHtmlArts() : string
     {
         $notes = $this->getNotesOfRequest();
         return $this->getHtmlItems(Note::getArtsList($notes));
@@ -77,7 +77,7 @@ class ProcessorItems extends Processor
      * @return string
      * @throws Exception
      */
-    public function getHtmlEditUpdatedActionNote()
+    public function getHtmlEditUpdatedActionNote() : string
     {
         $notes = array($this->getUpdatedActionNote());
         return $this->getHtmlItems($notes);
