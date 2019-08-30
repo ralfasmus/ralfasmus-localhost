@@ -17,7 +17,12 @@ final class Config implements Config_Interface
 
     private function initialize(string $configId) : self {
         assert(!is_null($configId) && '' != $configId, 'config-id darf nicht leer oder null sein.');
-        $this->note = PersistenceActive::getSingleInstance()->loadOrCreateNote($configId, NoteDefault::class);
+        $persistenceForConfigs = PersistenceActive::getSingleInstance();
+        $configNote = $persistenceForConfigs->loadNoteById($configId);
+        if(is_null($configNote)) {
+            MyThrowable::throw("Kann keine Config fuer diesen Request laden mit config-id=$configId");
+        }
+        $this->note = $configNote;
         return $this;
     }
 

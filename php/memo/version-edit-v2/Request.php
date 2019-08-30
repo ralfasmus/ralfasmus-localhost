@@ -50,7 +50,7 @@ class Request implements Properties_Interface
     /**
      * Request Property, die den Status zum Laden von Notes definiert.
      */
-    private const REQUEST_PROPERTY_STATUS = 'status';
+    public const REQUEST_PROPERTY_STATUS = 'status';
 
     static private function removeParameterPrefix(array $parameters, string $prefix) : array {
         $result = array();
@@ -101,8 +101,7 @@ class Request implements Properties_Interface
         PersistenceDeleted::createSingleInstance();
 
         // Load and/or create Configuration Object for this request
-        $configId = $this->getPropertyDefault(self::REQUEST_PROPERTY_CONFIG_ID, self::REQUEST_PROPERTY_CONFIG_ID_DEFAULT
-                . '-' . $this->getStatus());
+        $configId = $this->getPropertyDefault(self::REQUEST_PROPERTY_CONFIG_ID, 'default-' . PersistenceActive::class, true);
         Config::createConfig($configId);
 
         return $this;
@@ -143,13 +142,16 @@ class Request implements Properties_Interface
     }
 
     /**
-     * Liefert den Persistence Status fuer diesen Request.
+     * Liefert den Persistence Status fuer diesen Request. Der Status ergibt sich aus der Property 'status' der verwendeten
+     * Konfiguration. Nur wenn keine Konfiguration angegeben ist, wird eine GET Variable 'status' ausgewertet,
+     * die bei der Erzeugung der Konfiguration dann als status gesetzt wird. Ist keine GET Variable 'status' angegeben,
+     * wird ein Default Wert 'PersistenceActive' angenommen.
      *
      * @return string PersistenceActive|PersistenceDeleted|PersistenceBackup Fuer diesen Request zu verwendender Status beim Laden von Notes.
      */
     public function getStatus(): string
     {
-        return $this->status = $this->getPropertyDefault(self::REQUEST_PROPERTY_STATUS, PersistenceActive::class, true);
+        return $this->getConfig()->getConfigValue(static::REQUEST_PROPERTY_STATUS);
     }
 
 

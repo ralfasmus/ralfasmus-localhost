@@ -18,6 +18,7 @@ final class NoteText extends Note
             case "data-tooltip-html" :
                 $text = $this->getPropertyDefault("text");
                 $result = str_replace('"', "'", $text);
+                return $result;
                 break;
         }
         return parent::getDynamicProperty($key);

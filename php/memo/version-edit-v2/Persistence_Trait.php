@@ -133,7 +133,7 @@ trait Persistence_Trait
      * @return Note|null
      * @throws Throwable
      */
-    final private function loadNoteById(string $id): ?Note
+    public function loadNoteById(string $id): ?Note
     {
         if ($id == "" || is_null($id)) {
             return NULL;
