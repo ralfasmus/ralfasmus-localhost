@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="de"
+      lang="de"><head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Notes v2</title>
+    <link href="/memo/cssjs/version-edit-v2/css/min.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="/memo/cssjs/version-edit-v2/lib/summernote-0.8.12-dist/dist/summernote-bs4.css" rel="stylesheet" type="text/css" media="screen" />
+    <script src="/memo/cssjs/version-edit-v2/js/min.js" type="text/javascript"></script>
+    
+    <link rel="icon" type="image/png" href="/memo/cssjs/version-edit-v2/images/icon16x16notes.png" />
+  
+</head>
+<body class="">
+    <div id="page" class="  dvz-notelist dvz-page-begin status-mode-development " data-config-id="CONFIG-PersistenceActive-DEFAULT">
+        <a id="pagetop"></a>
+        <div class="project-page container-fluid">
+        <form class="project-header-form" data-id="CONFIG-PersistenceActive-DEFAULT" id="js-config">
+    <div class="row">
+        <input name="note-persistent-filter-art" class="col-2  memo-js-liste-filter-text memo-js-liste-filter-art" data-dvz-selector-attribute="data-filter-art" placeholder="...Filter Art..." value="">
+        <input name="note-persistent-filter-text" class="col-2 memo-js-liste-filter-text memo-js-liste-filter-any" data-dvz-selector-attribute="data-filter-any" placeholder="...Filter any field..."  value="">
+        <input name="note-persistent-filter-views" class="col-2 memo-js-liste-filter-text" data-dvz-selector-attribute="data-filter-views" placeholder="...View: NoteDefault|NoteText|..."  value="">
+        <div class="col form-inline">
+            <button class="memo-js-create-textnote-action form-control">Neue TextNote</button>
+            <button class="form-control" disabled="disabled">(Reset)</button>
+            <button class="form-control" disabled="disabled">(Reload)</button>
+            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=CONFIG-PersistenceActive-DEFAULT" class="form-control" role="button">Liste active</a>
+            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=CONFIG-PersistenceBackup-DEFAULT" class="form-control" role="button">Liste backup</a>
+            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=CONFIG-PersistenceDeleted-DEFAULT" class="form-control" role="button">Liste deleted</a>
+            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=CONFIG-PersistenceActive-configs" class="form-control" role="button">Liste configs active</a>
+            <button class="form-control" type="button" data-toggle="collapse" data-target="#memo-js-config-collapse">CONFIG</button>
+        </div>
+    </div>
+    <div class="row collapse" id="memo-js-config-collapse">
+        <div class="col">
+            <div class="form-group row">
+                <label for="label-CONFIG-PersistenceActive-DEFAULT-name" class="col-form-label col-sm-1">Name</label>
+                <div class="col-sm-4">
+                    <input name="note-persistent-name" class="form-control" id="label-CONFIG-PersistenceActive-DEFAULT-name" value="CONFIG-PersistenceActive-DEFAULT">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="label-CONFIG-PersistenceActive-DEFAULT-datetimesaved" class="col-form-label col-sm-1">datetimesaved</label>
+                <div class="col-sm-4">
+                    <input name="note-persistent-datetimesaved" class="form-control" id="label-CONFIG-PersistenceActive-DEFAULT-datetimesaved" value="2019-09-01-06-42-28">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="label-CONFIG-PersistenceActive-DEFAULT-datetimecreated" class="col-form-label col-sm-1">datetimecreated</label>
+                <div class="col-sm-4">
+                    <input name="note-persistent-datetimecreated" disabled="disabled" class="form-control" id="label-CONFIG-PersistenceActive-DEFAULT-datetimecreated" value="">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="label-CONFIG-PersistenceActive-DEFAULT-id" class="col-form-label col-sm-1">id</label>
+                <div class="col-sm-4">
+                    <input name="note-persistent-id" disabled="disabled" class="form-control" id="label-CONFIG-PersistenceActive-DEFAULT-id" value="CONFIG-PersistenceActive-DEFAULT">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+        <div class="row">
+                <div class="col col-2">
+                        <em>Alle ARTs + berechnete Haupt-ARTs der sichtbaren Notes:</em><br>
+                        <div class="artlist-entries">
+                                
+                        </div>
+                </div>
+                <div class="col accordion" id="memo-jsbs-notelist-accordion-data-parent">
+                        <div class="row dvz-notelist__note memo-js-notelist__note note-_id2019-07-23-06-17-18 memo-js-remove-on-delete-id2019-07-23-06-17-18 memo-js-remove-on-hide-id2019-07-23-06-17-18"
+     data-filter-art="" data-filter-any="id2019-07-23-06-17-18 notedefault "
+     data-filter-views=",,notedefault,">
+    <div class="col card">
+        <div class="container-fluid">
+            <div class="row card-header">
+                <div class="col dvz-notelist-note__content" data-toggle="collapse"
+                     data-target="#memo-jsbs-collapse_note_accordion_id2019-07-23-06-17-18">
+                    <div class="" data-toggle="tooltip" data-placement="top" data-html="true"
+                         title="">
+                        
+                    </div>
+                </div>
+                <div class="col">
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-07-23-06-17-18"
+                       target="_blank">EDIT</a>
+                    <a href="#" class="memo-js-hide-action" data-id="id2019-07-23-06-17-18">HIDE</a>
+                    <a href="#" class="memo-js-duplicate-action"
+                       data-clones-id="id2019-07-23-06-17-18"
+                       data-name=""
+                       data-art=""
+                       data-text=""
+                       data-files=""
+                       data-view="NoteDefault"
+                       data-possible-views=""
+                    >DUP</a>
+                    <a href="#" class="memo-js-backup-action" data-id="id2019-07-23-06-17-18">BACKUP</a>
+                    <a href="#" class="memo-js-delete-action" data-id="id2019-07-23-06-17-18">DELETE</a>
+                </div>
+            </div>
+        </div>
+        <div id="memo-jsbs-collapse_note_accordion_id2019-07-23-06-17-18" class="collapse"
+             data-parent="#memo-jsbs-notelist-accordion-data-parent">
+            <div class="card-body">
+                <div class="">
+                    
+                </div>
+                <div class="">
+                    id2019-07-23-06-17-18
+                </div>
+                <div class="">
+                    
+                </div>
+                <div class="">
+                    
+                </div>
+                <div class="">
+                    NoteDefault
+                </div>
+                <div class="">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row dvz-notelist__note memo-js-notelist__note note-_id2019-08-31-06-23-06 memo-js-remove-on-delete-id2019-08-31-06-23-06 memo-js-remove-on-hide-id2019-08-31-06-23-06"
+     data-filter-art="" data-filter-any="id2019-08-31-06-23-06 notetext notetext <p>die filter input felder werden ja in der config gespeichert. das muss auch in die include/exclude regex uebergehen. am besten direkt auch dort regexes mit feldname eingeben und nur noch ein eingabe-feld.</p><p>aber achtung: das in der config gesetzte filter regex zum ausblenden der config muss zusätzlich angewendet werden und darf nur über die config änderbar sein!</p><p>summernote plugins:&nbsp;<a href=&quot;https://github.com/summernote/awesome-summernote&quot; style=&quot;font-size: 1rem;&quot;>https://github.com/summernote/awesome-summernote</a></p>  <strong>to do</strong>  2019-08-31-06-23-06 2019-09-26-05-59-51 "
+     data-filter-views=",notetext,notetext,">
+    <div class="col card">
+        <div class="container-fluid">
+            <div class="row card-header">
+                <div class="col dvz-notelist-note__content" data-toggle="collapse"
+                     data-target="#memo-jsbs-collapse_note_accordion_id2019-08-31-06-23-06">
+                    <div class="" data-toggle="tooltip" data-placement="top" data-html="true"
+                         title="<p>Die Filter Input Felder werden ja in der config gespeichert. das muss auch in die include/exclude regex uebergehen. am besten direkt auch dort regexes mit feldname eingeben und nur noch ein eingabe-feld.</p><p>Aber Achtung: das in der config gesetzte filter regex zum Ausblenden der config muss zusätzlich angewendet werden und darf nur über die config änderbar sein!</p><p>Summernote Plugins:&nbsp;<a href=&quot;https://github.com/summernote/awesome-summernote&quot; style=&quot;font-size: 1rem;&quot;>https://github.com/summernote/awesome-summernote</a></p>">
+                        <strong>To Do</strong>
+                    </div>
+                </div>
+                <div class="col">
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-08-31-06-23-06&config-id=CONFIG-PersistenceActive-DEFAULT&css-page=full-screen-editor-on-load"
+                       target="_blank">[EDIT Full Screen]</a>
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-08-31-06-23-06&config-id=CONFIG-PersistenceActive-DEFAULT"
+                       target="_blank">EDIT</a>
+                    <a href="#" class="memo-js-hide-action" data-id="id2019-08-31-06-23-06">HIDE</a>
+                    <a href="#" class="memo-js-duplicate-action"
+                       data-clones-id="id2019-08-31-06-23-06"
+                       data-name="<strong>To Do</strong>"
+                       data-art=""
+                       data-text="<p>Die Filter Input Felder werden ja in der config gespeichert. das muss auch in die include/exclude regex uebergehen. am besten direkt auch dort regexes mit feldname eingeben und nur noch ein eingabe-feld.</p><p>Aber Achtung: das in der config gesetzte filter regex zum Ausblenden der config muss zusätzlich angewendet werden und darf nur über die config änderbar sein!</p><p>Summernote Plugins:&nbsp;<a href=&quot;https://github.com/summernote/awesome-summernote&quot; style=&quot;font-size: 1rem;&quot;>https://github.com/summernote/awesome-summernote</a></p>"
+                       data-files=""
+                       data-view="NoteText"
+                       data-possible-views="NoteText"
+                    >DUP</a>
+                    <a href="#" class="memo-js-backup-action" data-id="id2019-08-31-06-23-06">BACKUP</a>
+                    <a href="#" class="memo-js-delete-action" data-id="id2019-08-31-06-23-06">DELETE</a>
+                </div>
+            </div>
+        </div>
+        <div id="memo-jsbs-collapse_note_accordion_id2019-08-31-06-23-06" class="collapse"
+             data-parent="#memo-jsbs-notelist-accordion-data-parent">
+            <div class="card-body">
+                <div class="">
+                    <p>art: </p>
+                </div>
+                <div class="">
+                    <p>Die Filter Input Felder werden ja in der config gespeichert. das muss auch in die include/exclude regex uebergehen. am besten direkt auch dort regexes mit feldname eingeben und nur noch ein eingabe-feld.</p><p>Aber Achtung: das in der config gesetzte filter regex zum Ausblenden der config muss zusätzlich angewendet werden und darf nur über die config änderbar sein!</p><p>Summernote Plugins:&nbsp;<a href=&quot;https://github.com/summernote/awesome-summernote&quot; style=&quot;font-size: 1rem;&quot;>https://github.com/summernote/awesome-summernote</a></p>
+                </div>
+                <div class="">
+                    
+                </div>
+                <div class="">
+                    <p>view: NoteText</p>
+                </div>
+                <div class="">
+                    <p>possible-views: NoteText</p>
+                </div>
+                <div class="">
+                    <p>id: id2019-08-31-06-23-06</p>
+                </div>
+                <div class="">
+                    <p>datetimesaved: 2019-09-26-05-59-51</p>
+                </div>
+                <div class="">
+                    <p>datetimecreated: 2019-08-31-06-23-06</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row dvz-notelist__note memo-js-notelist__note note-_id2019-08-31-06-27-51 memo-js-remove-on-delete-id2019-08-31-06-27-51 memo-js-remove-on-hide-id2019-08-31-06-27-51"
+     data-filter-art="" data-filter-any="id2019-08-31-06-27-51 notetext notetext <p>notes:&nbsp;<a href=&quot;http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=notetext&amp;processor-class=processorview&amp;processor-method=gethtml&amp;processor-class-properties[view]=notelist&quot; style=&quot;font-size: 1rem;&quot;>notes v2</a></p><p>configs (active):&nbsp;<a href=&quot;http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=notetext&amp;processor-class=processorview&amp;processor-method=gethtml&amp;processor-class-properties[view]=notelist&amp;config-id=config-persistenceactive-configs&quot; target=&quot;_blank&quot;>http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=notetext&amp;processor-class=processorview&amp;processor-method=gethtml&amp;processor-class-properties[view]=notelist&amp;config-id=config-persistenceactive-configs</a></p><p><br></p>  linksuooikkkutttjkkhjkhlö c:\fakepath\270x120.png 2019-09-15-08-26-46_570x256.png 2019-08-31-06-27-51 2019-09-15-10-36-09 "
+     data-filter-views=",notetext,notetext,">
+    <div class="col card">
+        <div class="container-fluid">
+            <div class="row card-header">
+                <div class="col dvz-notelist-note__content" data-toggle="collapse"
+                     data-target="#memo-jsbs-collapse_note_accordion_id2019-08-31-06-27-51">
+                    <div class="" data-toggle="tooltip" data-placement="top" data-html="true"
+                         title="<p>Notes:&nbsp;<a href=&quot;http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=NoteText&amp;processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=notelist&quot; style=&quot;font-size: 1rem;&quot;>Notes v2</a></p><p>Configs (active):&nbsp;<a href=&quot;http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=NoteText&amp;processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=notelist&amp;config-id=CONFIG-PersistenceActive-configs&quot; target=&quot;_blank&quot;>http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=NoteText&amp;processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=notelist&amp;config-id=CONFIG-PersistenceActive-configs</a></p><p><br></p>">
+                        Linksuooikkkutttjkkhjkhlö
+                    </div>
+                </div>
+                <div class="col">
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-08-31-06-27-51&config-id=CONFIG-PersistenceActive-DEFAULT&css-page=full-screen-editor-on-load"
+                       target="_blank">[EDIT Full Screen]</a>
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-08-31-06-27-51&config-id=CONFIG-PersistenceActive-DEFAULT"
+                       target="_blank">EDIT</a>
+                    <a href="#" class="memo-js-hide-action" data-id="id2019-08-31-06-27-51">HIDE</a>
+                    <a href="#" class="memo-js-duplicate-action"
+                       data-clones-id="id2019-08-31-06-27-51"
+                       data-name="Linksuooikkkutttjkkhjkhlö"
+                       data-art=""
+                       data-text="<p>Notes:&nbsp;<a href=&quot;http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=NoteText&amp;processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=notelist&quot; style=&quot;font-size: 1rem;&quot;>Notes v2</a></p><p>Configs (active):&nbsp;<a href=&quot;http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=NoteText&amp;processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=notelist&amp;config-id=CONFIG-PersistenceActive-configs&quot; target=&quot;_blank&quot;>http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=NoteText&amp;processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=notelist&amp;config-id=CONFIG-PersistenceActive-configs</a></p><p><br></p>"
+                       data-files="C:\fakepath\270x120.png 2019-09-15-08-26-46_570x256.png"
+                       data-view="NoteText"
+                       data-possible-views="NoteText"
+                    >DUP</a>
+                    <a href="#" class="memo-js-backup-action" data-id="id2019-08-31-06-27-51">BACKUP</a>
+                    <a href="#" class="memo-js-delete-action" data-id="id2019-08-31-06-27-51">DELETE</a>
+                </div>
+            </div>
+        </div>
+        <div id="memo-jsbs-collapse_note_accordion_id2019-08-31-06-27-51" class="collapse"
+             data-parent="#memo-jsbs-notelist-accordion-data-parent">
+            <div class="card-body">
+                <div class="">
+                    <p>art: </p>
+                </div>
+                <div class="">
+                    <p>Notes:&nbsp;<a href=&quot;http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=NoteText&amp;processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=notelist&quot; style=&quot;font-size: 1rem;&quot;>Notes v2</a></p><p>Configs (active):&nbsp;<a href=&quot;http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=NoteText&amp;processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=notelist&amp;config-id=CONFIG-PersistenceActive-configs&quot; target=&quot;_blank&quot;>http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php?filter-views=NoteText&amp;processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=notelist&amp;config-id=CONFIG-PersistenceActive-configs</a></p><p><br></p>
+                </div>
+                <div class="">
+                    C:\fakepath\270x120.png 2019-09-15-08-26-46_570x256.png
+                </div>
+                <div class="">
+                    <p>view: NoteText</p>
+                </div>
+                <div class="">
+                    <p>possible-views: NoteText</p>
+                </div>
+                <div class="">
+                    <p>id: id2019-08-31-06-27-51</p>
+                </div>
+                <div class="">
+                    <p>datetimesaved: 2019-09-15-10-36-09</p>
+                </div>
+                <div class="">
+                    <p>datetimecreated: 2019-08-31-06-27-51</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row dvz-notelist__note memo-js-notelist__note note-_id2019-09-15-10-36-55 memo-js-remove-on-delete-id2019-09-15-10-36-55 memo-js-remove-on-hide-id2019-09-15-10-36-55"
+     data-filter-art="" data-filter-any="id2019-09-15-10-36-55 notetext notetext <p><br></p>  abc download 2019-09-15-10-36-55 2019-09-15-10-41-30 2019-09-15-08-37-56_100x60.png 2019-09-15-08-41-17_100x60.png 2019-09-15-08-41-18_100x60.png 2019-09-15-08-41-19_100x60.png 2019-09-15-08-41-31_200x115.png "
+     data-filter-views=",notetext,notetext,">
+    <div class="col card">
+        <div class="container-fluid">
+            <div class="row card-header">
+                <div class="col dvz-notelist-note__content" data-toggle="collapse"
+                     data-target="#memo-jsbs-collapse_note_accordion_id2019-09-15-10-36-55">
+                    <div class="" data-toggle="tooltip" data-placement="top" data-html="true"
+                         title="<p><br></p>">
+                        abc download
+                    </div>
+                </div>
+                <div class="col">
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-09-15-10-36-55&config-id=CONFIG-PersistenceActive-DEFAULT&css-page=full-screen-editor-on-load"
+                       target="_blank">[EDIT Full Screen]</a>
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-09-15-10-36-55&config-id=CONFIG-PersistenceActive-DEFAULT"
+                       target="_blank">EDIT</a>
+                    <a href="#" class="memo-js-hide-action" data-id="id2019-09-15-10-36-55">HIDE</a>
+                    <a href="#" class="memo-js-duplicate-action"
+                       data-clones-id="id2019-09-15-10-36-55"
+                       data-name="abc download"
+                       data-art=""
+                       data-text="<p><br></p>"
+                       data-files="2019-09-15-08-37-56_100x60.png 2019-09-15-08-41-17_100x60.png 2019-09-15-08-41-18_100x60.png 2019-09-15-08-41-19_100x60.png 2019-09-15-08-41-31_200x115.png"
+                       data-view="NoteText"
+                       data-possible-views="NoteText"
+                    >DUP</a>
+                    <a href="#" class="memo-js-backup-action" data-id="id2019-09-15-10-36-55">BACKUP</a>
+                    <a href="#" class="memo-js-delete-action" data-id="id2019-09-15-10-36-55">DELETE</a>
+                </div>
+            </div>
+        </div>
+        <div id="memo-jsbs-collapse_note_accordion_id2019-09-15-10-36-55" class="collapse"
+             data-parent="#memo-jsbs-notelist-accordion-data-parent">
+            <div class="card-body">
+                <div class="">
+                    <p>art: </p>
+                </div>
+                <div class="">
+                    <p><br></p>
+                </div>
+                <div class="">
+                    2019-09-15-08-37-56_100x60.png 2019-09-15-08-41-17_100x60.png 2019-09-15-08-41-18_100x60.png 2019-09-15-08-41-19_100x60.png 2019-09-15-08-41-31_200x115.png
+                </div>
+                <div class="">
+                    <p>view: NoteText</p>
+                </div>
+                <div class="">
+                    <p>possible-views: NoteText</p>
+                </div>
+                <div class="">
+                    <p>id: id2019-09-15-10-36-55</p>
+                </div>
+                <div class="">
+                    <p>datetimesaved: 2019-09-15-10-41-30</p>
+                </div>
+                <div class="">
+                    <p>datetimecreated: 2019-09-15-10-36-55</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row dvz-notelist__note memo-js-notelist__note note-_id2019-09-15-10-41-34 memo-js-remove-on-delete-id2019-09-15-10-41-34 memo-js-remove-on-hide-id2019-09-15-10-41-34"
+     data-filter-art="" data-filter-any="id2019-09-15-10-41-34 notetext 2019-09-15-08-41-45_270x120.png 2019-09-15-08-42-21_950x600.png 2019-09-15-08-42-25_950x600.png 2019-09-15-08-43-03_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-09_87x117.png notetext <p><br></p>  jhvjhvkjvk zuiuzfifiztfifri rir6izzzz 2019-09-15-10-41-34 2019-09-15-10-43-09 "
+     data-filter-views=",notetext,notetext,">
+    <div class="col card">
+        <div class="container-fluid">
+            <div class="row card-header">
+                <div class="col dvz-notelist-note__content" data-toggle="collapse"
+                     data-target="#memo-jsbs-collapse_note_accordion_id2019-09-15-10-41-34">
+                    <div class="" data-toggle="tooltip" data-placement="top" data-html="true"
+                         title="<p><br></p>">
+                        jhvjhvkjvk zuiuzfifiztfifri rir6izzzz
+                    </div>
+                </div>
+                <div class="col">
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-09-15-10-41-34&config-id=CONFIG-PersistenceActive-DEFAULT&css-page=full-screen-editor-on-load"
+                       target="_blank">[EDIT Full Screen]</a>
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-09-15-10-41-34&config-id=CONFIG-PersistenceActive-DEFAULT"
+                       target="_blank">EDIT</a>
+                    <a href="#" class="memo-js-hide-action" data-id="id2019-09-15-10-41-34">HIDE</a>
+                    <a href="#" class="memo-js-duplicate-action"
+                       data-clones-id="id2019-09-15-10-41-34"
+                       data-name="jhvjhvkjvk zuiuzfifiztfifri rir6izzzz"
+                       data-art=""
+                       data-text="<p><br></p>"
+                       data-files="2019-09-15-08-41-45_270x120.png 2019-09-15-08-42-21_950x600.png 2019-09-15-08-42-25_950x600.png 2019-09-15-08-43-03_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-09_87x117.png"
+                       data-view="NoteText"
+                       data-possible-views="NoteText"
+                    >DUP</a>
+                    <a href="#" class="memo-js-backup-action" data-id="id2019-09-15-10-41-34">BACKUP</a>
+                    <a href="#" class="memo-js-delete-action" data-id="id2019-09-15-10-41-34">DELETE</a>
+                </div>
+            </div>
+        </div>
+        <div id="memo-jsbs-collapse_note_accordion_id2019-09-15-10-41-34" class="collapse"
+             data-parent="#memo-jsbs-notelist-accordion-data-parent">
+            <div class="card-body">
+                <div class="">
+                    <p>art: </p>
+                </div>
+                <div class="">
+                    <p><br></p>
+                </div>
+                <div class="">
+                    2019-09-15-08-41-45_270x120.png 2019-09-15-08-42-21_950x600.png 2019-09-15-08-42-25_950x600.png 2019-09-15-08-43-03_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-08_87x117.png 2019-09-15-08-43-09_87x117.png
+                </div>
+                <div class="">
+                    <p>view: NoteText</p>
+                </div>
+                <div class="">
+                    <p>possible-views: NoteText</p>
+                </div>
+                <div class="">
+                    <p>id: id2019-09-15-10-41-34</p>
+                </div>
+                <div class="">
+                    <p>datetimesaved: 2019-09-15-10-43-09</p>
+                </div>
+                <div class="">
+                    <p>datetimecreated: 2019-09-15-10-41-34</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row dvz-notelist__note memo-js-notelist__note note-_id2019-09-15-10-06-15 memo-js-remove-on-delete-id2019-09-15-10-06-15 memo-js-remove-on-hide-id2019-09-15-10-06-15"
+     data-filter-art="" data-filter-any="id2019-09-15-10-06-15 notetext 2019-09-15-08-26-12_240x195.png 2019-09-15-08-26-18_330x195.png 2019-09-15-08-26-23_330x195.png 2019-09-15-08-26-26_330x195.png 2019-09-15-08-27-20_270x120.png 2019-09-15-08-29-26_270x120.png 2019-09-15-08-30-21_55x73.png notetext <p><br></p>  test 21 2019-09-15-10-06-15 2019-09-15-10-36-05 "
+     data-filter-views=",notetext,notetext,">
+    <div class="col card">
+        <div class="container-fluid">
+            <div class="row card-header">
+                <div class="col dvz-notelist-note__content" data-toggle="collapse"
+                     data-target="#memo-jsbs-collapse_note_accordion_id2019-09-15-10-06-15">
+                    <div class="" data-toggle="tooltip" data-placement="top" data-html="true"
+                         title="<p><br></p>">
+                        test 21
+                    </div>
+                </div>
+                <div class="col">
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-09-15-10-06-15&config-id=CONFIG-PersistenceActive-DEFAULT&css-page=full-screen-editor-on-load"
+                       target="_blank">[EDIT Full Screen]</a>
+                    <a href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=noteedit&note-persistent-id=id2019-09-15-10-06-15&config-id=CONFIG-PersistenceActive-DEFAULT"
+                       target="_blank">EDIT</a>
+                    <a href="#" class="memo-js-hide-action" data-id="id2019-09-15-10-06-15">HIDE</a>
+                    <a href="#" class="memo-js-duplicate-action"
+                       data-clones-id="id2019-09-15-10-06-15"
+                       data-name="test 21"
+                       data-art=""
+                       data-text="<p><br></p>"
+                       data-files="2019-09-15-08-26-12_240x195.png 2019-09-15-08-26-18_330x195.png 2019-09-15-08-26-23_330x195.png 2019-09-15-08-26-26_330x195.png 2019-09-15-08-27-20_270x120.png 2019-09-15-08-29-26_270x120.png 2019-09-15-08-30-21_55x73.png"
+                       data-view="NoteText"
+                       data-possible-views="NoteText"
+                    >DUP</a>
+                    <a href="#" class="memo-js-backup-action" data-id="id2019-09-15-10-06-15">BACKUP</a>
+                    <a href="#" class="memo-js-delete-action" data-id="id2019-09-15-10-06-15">DELETE</a>
+                </div>
+            </div>
+        </div>
+        <div id="memo-jsbs-collapse_note_accordion_id2019-09-15-10-06-15" class="collapse"
+             data-parent="#memo-jsbs-notelist-accordion-data-parent">
+            <div class="card-body">
+                <div class="">
+                    <p>art: </p>
+                </div>
+                <div class="">
+                    <p><br></p>
+                </div>
+                <div class="">
+                    2019-09-15-08-26-12_240x195.png 2019-09-15-08-26-18_330x195.png 2019-09-15-08-26-23_330x195.png 2019-09-15-08-26-26_330x195.png 2019-09-15-08-27-20_270x120.png 2019-09-15-08-29-26_270x120.png 2019-09-15-08-30-21_55x73.png
+                </div>
+                <div class="">
+                    <p>view: NoteText</p>
+                </div>
+                <div class="">
+                    <p>possible-views: NoteText</p>
+                </div>
+                <div class="">
+                    <p>id: id2019-09-15-10-06-15</p>
+                </div>
+                <div class="">
+                    <p>datetimesaved: 2019-09-15-10-36-05</p>
+                </div>
+                <div class="">
+                    <p>datetimecreated: 2019-09-15-10-06-15</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ###asm start -->
+<style>
+.okok a {  }
+</style>
+<div class="row dvz-notelist__note memo-js-notelist__note note-_id2019-08-30-11-27-59 memo-js-remove-on-delete-id2019-08-30-11-27-59 memo-js-remove-on-hide-id2019-08-30-11-27-59" data-filter-art="" data-filter-any="id2019-08-30-11-27-59 notetext notetext <p>&quot; okok ' hjj</p>  test 21 n &quot; uuu 'klk c:\fakepath\230x135.png 2019-08-30-11-27-59 2019-09-15-08-16-54 " data-filter-views=",notetext,notetext,">
+    <div class="col card">
+            <div class="d-flex card-header">
+                <div style="background-color: red;" class="flex-grow-1 dvz-notelist-note__content collapsed" data-toggle="collapse" data-target="#memo-jsbs-collapse_note_accordion_id2019-08-30-11-27-59" aria-expanded="false">
+                    <div class="" data-toggle="tooltip" data-placement="top" data-html="true" title="" data-original-title="<p>&quot; okok ' hjj</p>">
+                        test 21 n " uuu 'klk
+                    </div>
+                </div>
+                       <a class="dvz-notelist-note__content collapse"  href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=noteedit&amp;note-persistent-id=id2019-08-30-11-27-59&amp;config-id=CONFIG-PersistenceActive-DEFAULT&amp;css-page=full-screen-editor-on-load" target="_blank">[EDIT Full Screen]</a>
+                    <a class="dvz-notelist-note__content collapse" href="/memo/priv/privnotes-dev/index.php?processor-class=ProcessorView&amp;processor-method=getHtml&amp;processor-class-properties[view]=noteedit&amp;note-persistent-id=id2019-08-30-11-27-59&amp;config-id=CONFIG-PersistenceActive-DEFAULT" target="_blank">EDIT</a>
+                    <a href="#" class="dvz-notelist-note__content memo-js-hide-action collapse" data-id="id2019-08-30-11-27-59" style="">HIDE</a>
+                    <a href="#" class="dvz-notelist-note__content memo-js-duplicate-action collapse" data-clones-id="id2019-08-30-11-27-59" data-name="test 21 n &quot; uuu 'klk" data-art="" data-text="<p>&quot; okok ' hjj</p>" data-files="C:\fakepath\230x135.png" data-view="NoteText" data-possible-views="NoteText" style="">DUP</a>
+                    <a href="#" class="dvz-notelist-note__content memo-js-backup-action collapse" data-id="id2019-08-30-11-27-59" style="">BACKUP</a>
+                    <a href="#" class="dvz-notelist-note__content memo-js-delete-action collapse" data-id="id2019-08-30-11-27-59" style="">DELETE</a>
+        
+  <a class="keepme dvz-notelist-note__content collapsed" data-toggle="collapse" href=".note-_id2019-08-30-11-27-59 a:not(.keepme)" aria-expanded="false">
+    [...]
+  </a>
+<!-- ###asm ende -->
+
+            </div>
+        <div id="memo-jsbs-collapse_note_accordion_id2019-08-30-11-27-59" class="collapse" data-parent="#memo-jsbs-notelist-accordion-data-parent" style="">
+            <div class="card-body">
+                <div class="">
+                    <p>art: </p>
+                </div>
+                <div class="">
+                    <p>" okok ' hjj</p>
+                </div>
+                <div class="">
+                    C:\fakepath\230x135.png
+                </div>
+                <div class="">
+                    <p>view: NoteText</p>
+                </div>
+                <div class="">
+                    <p>possible-views: NoteText</p>
+                </div>
+                <div class="">
+                    <p>id: id2019-08-30-11-27-59</p>
+                </div>
+                <div class="">
+                    <p>datetimesaved: 2019-09-15-08-16-54</p>
+                </div>
+                <div class="">
+                    <p>datetimecreated: 2019-08-30-11-27-59</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+        </div>
+        </div>
+        <div class="showajaxresult container-fluid">AJAX-RESULTs HIER</div>
+        </div>
+        <input name="nextpage" id='nextpage' value="" class="d-none" data-nextpagetitle="Unbekannt: Next-Page-Title" data-onchange="href=this.dataset.href; alert(href);window.open(href, '_blank');">
+    </body>
+</html>
+<div class='ajaxresult'><div class='error'></div><div class='info'>SERVER-LOG: Done!!!<br>SERVER-LOG: Request: /memo/priv/privnotes-dev/index.php?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist<br>SERVER-LOG: <h4>Request Properties -post-:</h4><br>SERVER-LOG: <h4>Request Properties -cookie-:</h4><br>SERVER-LOG: <h4>Request Properties -get-:</h4><br>SERVER-LOG: <strong>filter-views</strong>=\'NoteText\'<br>SERVER-LOG: <strong>processor-class</strong>=\'ProcessorView\'<br>SERVER-LOG: <strong>processor-method</strong>=\'getHtml\'<br>SERVER-LOG: <strong>processor-class-properties</strong>=array (
+  \'view\' => \'notelist\',
+)<br>SERVER-LOG: <h4>Request Properties -files-:</h4><br>SERVER-LOG: <h4>Request Properties -server-:</h4><br>SERVER-LOG: <strong>SCRIPT_URL</strong>=\'/memo/priv/privnotes-dev/index.php\'<br>SERVER-LOG: <strong>SCRIPT_URI</strong>=\'http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php\'<br>SERVER-LOG: <strong>HTTP_HOST</strong>=\'ralfwork.localhost:90\'<br>SERVER-LOG: <strong>HTTP_CONNECTION</strong>=\'keep-alive\'<br>SERVER-LOG: <strong>HTTP_UPGRADE_INSECURE_REQUESTS</strong>=\'1\'<br>SERVER-LOG: <strong>HTTP_USER_AGENT</strong>=\'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36\'<br>SERVER-LOG: <strong>HTTP_SEC_FETCH_MODE</strong>=\'navigate\'<br>SERVER-LOG: <strong>HTTP_SEC_FETCH_USER</strong>=\'?1\'<br>SERVER-LOG: <strong>HTTP_ACCEPT</strong>=\'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3\'<br>SERVER-LOG: <strong>HTTP_SEC_FETCH_SITE</strong>=\'none\'<br>SERVER-LOG: <strong>HTTP_ACCEPT_ENCODING</strong>=\'gzip, deflate, br\'<br>SERVER-LOG: <strong>HTTP_ACCEPT_LANGUAGE</strong>=\'en-US,en;q=0.9,de;q=0.8,de-DE;q=0.7\'<br>SERVER-LOG: <strong>PATH</strong>=\'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\asmus\\projekte\\bash\\bin;C:\\asmus\\projekte\\bash\\bin\\environment;C:\\asmus\\projekte\\bash\\bin\\groups\\DVZSN-BN0333;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\WinSCP\\;C:\\asmus\\Programme\\Maven321\\bin;C:\\Program Files (x86)\\Java\\jre1.8.0_181\\jre\\bin;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\PDFtk\\bin\\;C:\\Program Files\\TortoiseGit\\bin;C:\\HashiCorp\\Vagrant\\bin;C:\\asmus\\programme\\wamp64\\bin\\php\\php7.2.0;C:\\asmus\\programme\\pandoc-2.1.1;C:\\Program Files (x86)\\Sennheiser\\SoftphoneSDK\\;C:\\Users\\asmusr\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\ProgramData\\ComposerSetup\\bin;C:\\asmus\\programme\<br>odejs\<br>pm;C:\\asmus\\programme\\hadoop-2.7.1\\winutils\\bin;C:\\Program Files (x86)\\PuTTY\\;C:\\asmus\\programme\<br>odejs\\;C:\\Windows\\system32\\config\\systemprofile\\AppData\\Roaming\<br>pm\'<br>SERVER-LOG: <strong>SystemRoot</strong>=\'C:\\Windows\'<br>SERVER-LOG: <strong>COMSPEC</strong>=\'C:\\Windows\\system32\\cmd.exe\'<br>SERVER-LOG: <strong>PATHEXT</strong>=\'.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC\'<br>SERVER-LOG: <strong>WINDIR</strong>=\'C:\\Windows\'<br>SERVER-LOG: <strong>SERVER_SIGNATURE</strong>=\'<address>Apache/2.4.23 (Win64) PHP/7.2.0 Server at ralfwork.localhost Port 90</address>
+\'<br>SERVER-LOG: <strong>SERVER_SOFTWARE</strong>=\'Apache/2.4.23 (Win64) PHP/7.2.0\'<br>SERVER-LOG: <strong>SERVER_NAME</strong>=\'ralfwork.localhost\'<br>SERVER-LOG: <strong>SERVER_ADDR</strong>=\'::1\'<br>SERVER-LOG: <strong>SERVER_PORT</strong>=\'90\'<br>SERVER-LOG: <strong>REMOTE_ADDR</strong>=\'::1\'<br>SERVER-LOG: <strong>DOCUMENT_ROOT</strong>=\'C:/asmus/vhosts/ralfwork.localhost/www\'<br>SERVER-LOG: <strong>REQUEST_SCHEME</strong>=\'http\'<br>SERVER-LOG: <strong>CONTEXT_PREFIX</strong>=\'\'<br>SERVER-LOG: <strong>CONTEXT_DOCUMENT_ROOT</strong>=\'C:/asmus/vhosts/ralfwork.localhost/www\'<br>SERVER-LOG: <strong>SERVER_ADMIN</strong>=\'wampserver@wampserver.invalid\'<br>SERVER-LOG: <strong>SCRIPT_FILENAME</strong>=\'C:/asmus/vhosts/ralfwork.localhost/www/memo/priv/privnotes-dev/index.php\'<br>SERVER-LOG: <strong>REMOTE_PORT</strong>=\'61955\'<br>SERVER-LOG: <strong>GATEWAY_INTERFACE</strong>=\'CGI/1.1\'<br>SERVER-LOG: <strong>SERVER_PROTOCOL</strong>=\'HTTP/1.1\'<br>SERVER-LOG: <strong>REQUEST_METHOD</strong>=\'GET\'<br>SERVER-LOG: <strong>QUERY_STRING</strong>=\'filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist\'<br>SERVER-LOG: <strong>REQUEST_URI</strong>=\'/memo/priv/privnotes-dev/index.php?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist\'<br>SERVER-LOG: <strong>SCRIPT_NAME</strong>=\'/memo/priv/privnotes-dev/index.php\'<br>SERVER-LOG: <strong>PHP_SELF</strong>=\'/memo/priv/privnotes-dev/index.php\'<br>SERVER-LOG: <strong>REQUEST_TIME_FLOAT</strong>=1569474372.333<br>SERVER-LOG: <strong>REQUEST_TIME</strong>=1569474372<br>SERVER-LOG: <h4>Request Properties -request-:</h4><br>SERVER-LOG: <strong>filter-views</strong>=\'NoteText\'<br>SERVER-LOG: <strong>processor-class</strong>=\'ProcessorView\'<br>SERVER-LOG: <strong>processor-method</strong>=\'getHtml\'<br>SERVER-LOG: <strong>processor-class-properties</strong>=array (
+  \'view\' => \'notelist\',
+)<br></div></div><script>console.info('SERVER-LOG: Done!!!');console.info('SERVER-LOG: Request: /memo/priv/privnotes-dev/index.php?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist');console.info('SERVER-LOG: <h4>Request Properties -post-:</h4>');console.info('SERVER-LOG: <h4>Request Properties -cookie-:</h4>');console.info('SERVER-LOG: <h4>Request Properties -get-:</h4>');console.info('SERVER-LOG: <strong>filter-views</strong>=\'NoteText\'');console.info('SERVER-LOG: <strong>processor-class</strong>=\'ProcessorView\'');console.info('SERVER-LOG: <strong>processor-method</strong>=\'getHtml\'');console.info('SERVER-LOG: <strong>processor-class-properties</strong>=array (   \'view\' => \'notelist\', )');console.info('SERVER-LOG: <h4>Request Properties -files-:</h4>');console.info('SERVER-LOG: <h4>Request Properties -server-:</h4>');console.info('SERVER-LOG: <strong>SCRIPT_URL</strong>=\'/memo/priv/privnotes-dev/index.php\'');console.info('SERVER-LOG: <strong>SCRIPT_URI</strong>=\'http://ralfwork.localhost:90/memo/priv/privnotes-dev/index.php\'');console.info('SERVER-LOG: <strong>HTTP_HOST</strong>=\'ralfwork.localhost:90\'');console.info('SERVER-LOG: <strong>HTTP_CONNECTION</strong>=\'keep-alive\'');console.info('SERVER-LOG: <strong>HTTP_UPGRADE_INSECURE_REQUESTS</strong>=\'1\'');console.info('SERVER-LOG: <strong>HTTP_USER_AGENT</strong>=\'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36\'');console.info('SERVER-LOG: <strong>HTTP_SEC_FETCH_MODE</strong>=\'navigate\'');console.info('SERVER-LOG: <strong>HTTP_SEC_FETCH_USER</strong>=\'?1\'');console.info('SERVER-LOG: <strong>HTTP_ACCEPT</strong>=\'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3\'');console.info('SERVER-LOG: <strong>HTTP_SEC_FETCH_SITE</strong>=\'none\'');console.info('SERVER-LOG: <strong>HTTP_ACCEPT_ENCODING</strong>=\'gzip, deflate, br\'');console.info('SERVER-LOG: <strong>HTTP_ACCEPT_LANGUAGE</strong>=\'en-US,en;q=0.9,de;q=0.8,de-DE;q=0.7\'');console.info('SERVER-LOG: <strong>PATH</strong>=\'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\asmus\\projekte\\bash\\bin;C:\\asmus\\projekte\\bash\\bin\\environment;C:\\asmus\\projekte\\bash\\bin\\groups\\DVZSN-BN0333;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\WinSCP\\;C:\\asmus\\Programme\\Maven321\\bin;C:\\Program Files (x86)\\Java\\jre1.8.0_181\\jre\\bin;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\PDFtk\\bin\\;C:\\Program Files\\TortoiseGit\\bin;C:\\HashiCorp\\Vagrant\\bin;C:\\asmus\\programme\\wamp64\\bin\\php\\php7.2.0;C:\\asmus\\programme\\pandoc-2.1.1;C:\\Program Files (x86)\\Sennheiser\\SoftphoneSDK\\;C:\\Users\\asmusr\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\ProgramData\\ComposerSetup\\bin;C:\\asmus\\programme\\nodejs\\npm;C:\\asmus\\programme\\hadoop-2.7.1\\winutils\\bin;C:\\Program Files (x86)\\PuTTY\\;C:\\asmus\\programme\\nodejs\\;C:\\Windows\\system32\\config\\systemprofile\\AppData\\Roaming\\npm\'');console.info('SERVER-LOG: <strong>SystemRoot</strong>=\'C:\\Windows\'');console.info('SERVER-LOG: <strong>COMSPEC</strong>=\'C:\\Windows\\system32\\cmd.exe\'');console.info('SERVER-LOG: <strong>PATHEXT</strong>=\'.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC\'');console.info('SERVER-LOG: <strong>WINDIR</strong>=\'C:\\Windows\'');console.info('SERVER-LOG: <strong>SERVER_SIGNATURE</strong>=\'<address>Apache/2.4.23 (Win64) PHP/7.2.0 Server at ralfwork.localhost Port 90</address> \'');console.info('SERVER-LOG: <strong>SERVER_SOFTWARE</strong>=\'Apache/2.4.23 (Win64) PHP/7.2.0\'');console.info('SERVER-LOG: <strong>SERVER_NAME</strong>=\'ralfwork.localhost\'');console.info('SERVER-LOG: <strong>SERVER_ADDR</strong>=\'::1\'');console.info('SERVER-LOG: <strong>SERVER_PORT</strong>=\'90\'');console.info('SERVER-LOG: <strong>REMOTE_ADDR</strong>=\'::1\'');console.info('SERVER-LOG: <strong>DOCUMENT_ROOT</strong>=\'C:/asmus/vhosts/ralfwork.localhost/www\'');console.info('SERVER-LOG: <strong>REQUEST_SCHEME</strong>=\'http\'');console.info('SERVER-LOG: <strong>CONTEXT_PREFIX</strong>=\'\'');console.info('SERVER-LOG: <strong>CONTEXT_DOCUMENT_ROOT</strong>=\'C:/asmus/vhosts/ralfwork.localhost/www\'');console.info('SERVER-LOG: <strong>SERVER_ADMIN</strong>=\'wampserver@wampserver.invalid\'');console.info('SERVER-LOG: <strong>SCRIPT_FILENAME</strong>=\'C:/asmus/vhosts/ralfwork.localhost/www/memo/priv/privnotes-dev/index.php\'');console.info('SERVER-LOG: <strong>REMOTE_PORT</strong>=\'61955\'');console.info('SERVER-LOG: <strong>GATEWAY_INTERFACE</strong>=\'CGI/1.1\'');console.info('SERVER-LOG: <strong>SERVER_PROTOCOL</strong>=\'HTTP/1.1\'');console.info('SERVER-LOG: <strong>REQUEST_METHOD</strong>=\'GET\'');console.info('SERVER-LOG: <strong>QUERY_STRING</strong>=\'filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist\'');console.info('SERVER-LOG: <strong>REQUEST_URI</strong>=\'/memo/priv/privnotes-dev/index.php?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist\'');console.info('SERVER-LOG: <strong>SCRIPT_NAME</strong>=\'/memo/priv/privnotes-dev/index.php\'');console.info('SERVER-LOG: <strong>PHP_SELF</strong>=\'/memo/priv/privnotes-dev/index.php\'');console.info('SERVER-LOG: <strong>REQUEST_TIME_FLOAT</strong>=1569474372.333');console.info('SERVER-LOG: <strong>REQUEST_TIME</strong>=1569474372');console.info('SERVER-LOG: <h4>Request Properties -request-:</h4>');console.info('SERVER-LOG: <strong>filter-views</strong>=\'NoteText\'');console.info('SERVER-LOG: <strong>processor-class</strong>=\'ProcessorView\'');console.info('SERVER-LOG: <strong>processor-method</strong>=\'getHtml\'');console.info('SERVER-LOG: <strong>processor-class-properties</strong>=array (   \'view\' => \'notelist\', )');</script>

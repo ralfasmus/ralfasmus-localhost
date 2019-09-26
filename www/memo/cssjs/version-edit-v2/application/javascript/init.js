@@ -16,7 +16,14 @@ $(document).ready(function () {
         if (isString($(this).val()) && '' !== $(this).val()) {
             $(this).summernote('code', $(this).val());
         }
-        $('.btn-fullscreen').click();
+        /*
+         Ist ueber den GET Parameter css-page=full-screen-editor-on-load die css-class #page.full-screen-editor-on-load
+         gesetzt, wird gleich beim Laden/Init der Seite der Texteditor Summernote auf dem einzigen Richtext feld der Note
+         im Fullscreen Modus geoeffnet.
+         */
+        if($('#page').hasClass('full-screen-editor-on-load')) {
+            $('.note-editor .btn-fullscreen').click();
+        }
     });
 
     // Bootstrap tooltip:

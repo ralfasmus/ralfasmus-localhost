@@ -594,7 +594,7 @@ pre code {
 .col-lg-auto, .col-lg-12, .col-lg-11, .col-lg-10, .col-lg-9, .col-lg-8, .col-lg-7, .col-lg-6, .col-lg-5, .col-lg-4, .col-lg-3, .col-lg-2, .col-lg-1, .col-md,
 .col-md-auto, .col-md-12, .col-md-11, .col-md-10, .col-md-9, .col-md-8, .col-md-7, .col-md-6, .col-md-5, .col-md-4, .col-md-3, .col-md-2, .col-md-1, .col-sm,
 .col-sm-auto, .col-sm-12, .col-sm-11, .col-sm-10, .col-sm-9, .col-sm-8, .col-sm-7, .col-sm-6, .col-sm-5, .col-sm-4, .col-sm-3, .col-sm-2, .col-sm-1, .col,
-.col-auto, .col-12, .col-11, .col-10, .col-9, .col-8, .dvz-notelist__note .card-header .dvz-notelist-note__content, .col-7, .col-6, .col-5, .col-4, .col-3, .col-2, .col-1 {
+.col-auto, .col-12, .col-11, .col-10, .col-9, .col-8, .col-7, .col-6, .col-5, .col-4, .col-3, .col-2, .col-1 {
   position: relative;
   width: 100%;
   padding-right: 15px;
@@ -648,7 +648,7 @@ pre code {
   max-width: 58.3333333333%;
 }
 
-.col-8, .dvz-notelist__note .card-header .dvz-notelist-note__content {
+.col-8 {
   flex: 0 0 66.6666666667%;
   max-width: 66.6666666667%;
 }
@@ -7240,7 +7240,8 @@ button.bg-dark:focus {
 }
 
 .mr-2,
-.mx-2 {
+.mx-2,
+.dvz-notelist__note .card-header .dvz-notelist-note__content {
   margin-right: 0.5rem !important;
 }
 
@@ -7250,7 +7251,8 @@ button.bg-dark:focus {
 }
 
 .ml-2,
-.mx-2 {
+.mx-2,
+.dvz-notelist__note .card-header .dvz-notelist-note__content {
   margin-left: 0.5rem !important;
 }
 
@@ -7360,7 +7362,8 @@ button.bg-dark:focus {
 }
 
 .pr-1,
-.px-1 {
+.px-1,
+.dvz-notelist__note .card-header .dvz-notelist-note__content {
   padding-right: 0.25rem !important;
 }
 
@@ -7370,7 +7373,8 @@ button.bg-dark:focus {
 }
 
 .pl-1,
-.px-1 {
+.px-1,
+.dvz-notelist__note .card-header .dvz-notelist-note__content {
   padding-left: 0.25rem !important;
 }
 
@@ -9713,6 +9717,10 @@ div {
   overflow: hidden;
 }
 
+.dvz-notelist__note .card-header .dvz-notelist-note__content {
+  background-color: lightgrey;
+}
+
 .mode-development .project-page,
 .mode-development .showajaxresult {
   width: 47%;
@@ -9809,4 +9817,4 @@ breakpoints
 .nav-list > li > a {
     padding: 5px;
 }
-/*! build-hinweis: Datei generiert am 2019-08-31_06-10-42 von minifycss.sh */
+/*! build-hinweis: Datei generiert am 2019-09-26_10-19-54 von minifycss.sh */

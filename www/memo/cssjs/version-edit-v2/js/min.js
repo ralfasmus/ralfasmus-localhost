@@ -14027,6 +14027,9 @@ $(document).ready(function () {
         if (isString($(this).val()) && '' !== $(this).val()) {
             $(this).summernote('code', $(this).val());
         }
+        if($('#page').hasClass('full-screen-editor-on-load')) {
+            $('.note-editor .btn-fullscreen').click();
+        }
     });
 
     // Bootstrap tooltip:
@@ -14275,4 +14278,4 @@ function filterListUpdate() {
 function hideHiddenNotes(noteList) {
     $(noteList).filter('.memo-js-hidden').addClass("memo-hidden");
     $(noteList).filter(':not(.memo-js-hidden)').removeClass("memo-hidden");
-}/*! build-hinweis: Datei generiert am 2019-09-15_08-30-00 von minifyjs.sh */
+}/*! build-hinweis: Datei generiert am 2019-09-26_06-31-32 von minifyjs.sh */

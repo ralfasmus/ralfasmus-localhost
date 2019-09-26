@@ -20,4 +20,23 @@ class ProcessorRoot extends Processor
     public function getHtml() : string {
         return $this->callFromProperties($this);
     }
+
+    /**
+     * Liefert die CSS Klassen dieses Processors. Da dies der Root Processor ist, sind dies Klassen auf dem #page Element.
+     *
+     * @return string
+     */
+    protected function getCssClasses() : string {
+        return $this->getCssClassesFromParameters() . (is_null($this->getParentProcessor()) ? '' : $this->getParentProcessor()->getCssClasses());
+    }
+
+    /**
+     * Es koennen per GET/POST Parameter 'css-page' css Klassen auf dem #page Element gesetzt werden.
+     * Bsp: ?css-page=full-screen-editor-on-load -> #page.full-screen-editor-on-load - Auswirkung siehe init.js
+     *
+     * @return string
+     */
+    private function getCssClassesFromParameters() : string {
+        return $this->getRequest()->getPropertiesRequest()->getPropertyDefault('css-page', ''). ' ';
+    }
 }
