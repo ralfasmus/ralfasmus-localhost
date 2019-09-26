@@ -7,9 +7,10 @@
             <button class="memo-js-create-textnote-action form-control">Neue TextNote</button>
             <button class="form-control" disabled="disabled">(Reset)</button>
             <button class="form-control" disabled="disabled">(Reload)</button>
-            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=default-PersistenceActive" class="form-control" role="button">Liste active</a>
-            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=default-PersistenceBackup" class="form-control" role="button">Liste backup</a>
-            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=default-PersistenceDeleted" class="form-control" role="button">Liste deleted</a>
+            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=CONFIG-PersistenceActive-DEFAULT" class="form-control" role="button">Liste active</a>
+            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=CONFIG-PersistenceBackup-DEFAULT" class="form-control" role="button">Liste backup</a>
+            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=CONFIG-PersistenceDeleted-DEFAULT" class="form-control" role="button">Liste deleted</a>
+            <a target="_blank" href="?filter-views=NoteText&processor-class=ProcessorView&processor-method=getHtml&processor-class-properties[view]=notelist&config-id=CONFIG-PersistenceActive-configs" class="form-control" role="button">Liste configs active</a>
             <button class="form-control" type="button" data-toggle="collapse" data-target="#memo-js-config-collapse">CONFIG</button>
         </div>
     </div>
@@ -18,25 +19,25 @@
             <div class="form-group row">
                 <label for="label-REPLACED_BY_CONFIG~id_VALUE-name" class="col-form-label col-sm-1">Name</label>
                 <div class="col-sm-4">
-                    <input name="note-persistent-name" class="form-control" id="label-REPLACED_BY_CONFIG~id_VALUE-name" value='REPLACED_BY_CONFIG~name_VALUE'>
+                    <input name="note-persistent-name" class="form-control" id="label-REPLACED_BY_CONFIG~id_VALUE-name" value="REPLACED_BY_CONFIG~name_VALUE">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="label-REPLACED_BY_CONFIG~id_VALUE-datetimesaved" class="col-form-label col-sm-1">datetimesaved</label>
                 <div class="col-sm-4">
-                    <input name="note-persistent-datetimesaved" class="form-control" id="label-REPLACED_BY_CONFIG~id_VALUE-datetimesaved" value='REPLACED_BY_CONFIG~datetimesaved_VALUE'>
+                    <input name="note-persistent-datetimesaved" class="form-control" id="label-REPLACED_BY_CONFIG~id_VALUE-datetimesaved" value="REPLACED_BY_CONFIG~datetimesaved_VALUE">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="label-REPLACED_BY_CONFIG~id_VALUE-datetimecreated" class="col-form-label col-sm-1">datetimecreated</label>
                 <div class="col-sm-4">
-                    <input name="note-persistent-datetimecreated" disabled="disabled" class="form-control" id="label-REPLACED_BY_CONFIG~id_VALUE-datetimecreated" value='REPLACED_BY_CONFIG~datetimecreated~~1_VALUE'>
+                    <input name="note-persistent-datetimecreated" disabled="disabled" class="form-control" id="label-REPLACED_BY_CONFIG~id_VALUE-datetimecreated" value="REPLACED_BY_CONFIG~datetimecreated~~1_VALUE">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="label-REPLACED_BY_CONFIG~id_VALUE-id" class="col-form-label col-sm-1">id</label>
                 <div class="col-sm-4">
-                    <input name="note-persistent-id" disabled="disabled" class="form-control" id="label-REPLACED_BY_CONFIG~id_VALUE-id" value='REPLACED_BY_CONFIG~id_VALUE'>
+                    <input name="note-persistent-id" disabled="disabled" class="form-control" id="label-REPLACED_BY_CONFIG~id_VALUE-id" value="REPLACED_BY_CONFIG~id_VALUE">
                 </div>
             </div>
         </div>

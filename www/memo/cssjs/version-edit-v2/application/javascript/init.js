@@ -1,7 +1,8 @@
 $(document).ready(function () {
     // Zeitfunktionen - Library:
     initMoment();
-    initToc();
+    //initToc();
+    initFileInput();
     // Server Log Messages nach dem Laden der Seite anzeigen im DIV
     $('.showajaxresult').html($('.ajaxresult'));
 
@@ -15,6 +16,7 @@ $(document).ready(function () {
         if (isString($(this).val()) && '' !== $(this).val()) {
             $(this).summernote('code', $(this).val());
         }
+        $('.btn-fullscreen').click();
     });
 
     // Bootstrap tooltip:
@@ -55,28 +57,26 @@ $(document).ready(function () {
     // Trigger: Klick auf Button CREATE NOTE
     $('.memo-js-create-textnote-action').on('click', function (event) {
         event.preventDefault();
-        noteCreate({
-            'note-persistent-id': newId(),
-            'note-persistent-view': 'NoteText',
-            'note-persistent-possible-views': 'NoteText',
-            'note-persistent-text' : '',
-            'note-persistent-art': '',
-            'note-persistent-name': '',
-            'note-persistent-files': ''
-        });
+        var formData = new FormData();
+        formData.append('note-persistent-id', newId());
+        formData.append('note-persistent-view', 'NoteText');
+        formData.append('note-persistent-possible-views', 'NoteText');
+        formData.append('note-persistent-text', '');
+        formData.append('note-persistent-art', '');
+        formData.append('note-persistent-name', '');
+        noteCreate(formData);
     });
     // Trigger: Klick auf Button DUPlicate Note
     $('.memo-js-duplicate-action').on('click', function (event) {
         event.preventDefault();
-        noteCreate({
-            'note-persistent-id': newId(),
-            'note-persistent-view': $(event.target).attr('data-view'),
-            'note-persistent-possible-views': $(event.target).attr('data-possible-views'),
-            'note-persistent-text' : 'clones:' + $(event.target).attr('data-clones-id') + '<br><br>' + $(event.target).attr('data-text'),
-            'note-persistent-art': $(event.target).attr('data-art'),
-            'note-persistent-name': $(event.target).attr('data-name'),
-            'note-persistent-files': $(event.target).attr('data-files')
-        });
+        var formData = new FormData();
+        formData.append('note-persistent-id', newId());
+        formData.append('note-persistent-view', $(event.target).attr('data-view'));
+        formData.append('note-persistent-possible-views', $(event.target).attr('data-possible-views'));
+        formData.append('note-persistent-text', 'clones:' + $(event.target).attr('data-clones-id') + '<br><br>' + $(event.target).attr('data-text'));
+        formData.append('note-persistent-art',  $(event.target).attr('data-art'));
+        formData.append('note-persistent-name', $(event.target).attr('data-name') + '- KOPIE');
+        noteCreate(formData);
     });
 
     // Trigger: Klick auf Button BACKUP NOTE
@@ -156,5 +156,12 @@ function initToc() {
     $(function () {
         //Calls the tocify method on your HTML div.
         $("#toc").tocify();
+    });
+}
+
+function initFileInput() {
+    $(function () {
+        //Calls the tocify method on your HTML div.
+        bsCustomFileInput.init();
     });
 }

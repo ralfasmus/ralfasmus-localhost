@@ -19,6 +19,10 @@ cat lib/popper-1.14.7/node_modules/popper.js/dist/umd/popper.min.js >> js/min.js
 echo "" >> js/min.js
 cat lib/bootstrap-4.3.1/node_modules/bootstrap/dist/js/bootstrap.min.js >> js/min.js
 echo "" >> js/min.js
+cat lib/summernote-0.8.12-dist/dist/summernote-bs4.min.js >> js/min.js
+echo "" >> js/min.js
+cat lib/bs4-custom-file-input/dist/bs-custom-file-input.min.js >> js/min.js
+echo "" >> js/min.js
 
 # mein neues JS:
 cat application/javascript/helpers.js >> js/min.js
@@ -30,20 +34,6 @@ echo "" >> js/min.js
 cat application/javascript/init.js >> js/min.js
 echo "" >> js/min.js
 cat application/javascript/events.js >> js/min.js
-
-# mein altes JS:
-#cat site/js/globals.js >> js/min.js
-#cat site/js/logging-and-errorhandling.js >> js/min.js
-#cat site/js/helpers.js >> js/min.js
-#cat site/js/datetime.js >> js/min.js
-#cat site/js/instances.js >> js/min.js
-#cat site/js/filter.js >> js/min.js
-#cat site/js/sortieren.js >> js/min.js
-#cat site/js/summen.js >> js/min.js
-#cat site/js/load-page.js >> js/min.js
-#cat site/js/instance-events.js >> js/min.js
-#cat site/js/list-events.js >> js/min.js
-#cat site/js/global-events.js >> js/min.js
 
 echo "$BUILD_HINT" >>  "js/min.js"
 echo "Done...................";

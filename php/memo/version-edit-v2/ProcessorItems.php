@@ -9,9 +9,10 @@
 class ProcessorItems extends Processor
 {
     /**
-     * Request/Config Property, deren Wert den "views" Filter der anzuzeigenden Notes enthaelt
+     * Request/Config Properties, deren Werte die Filter Properties und Regexes fuer das Laden der anzuzeigenden Notes enthalten
      */
-    private const CONFIG_PROPERTY_FILTER_VIEWS = "filter-views";
+    private const CONFIG_PROPERTY_FILTER_PROPERTIES_INCLUDE = "filter-properties-include";
+    private const CONFIG_PROPERTY_FILTER_PROPERTIES_EXCLUDE = "filter-properties-exclude";
 
     public function __construct(?Processor $parentProcessor, Properties_Interface $properties)
     {
@@ -89,7 +90,10 @@ class ProcessorItems extends Processor
      */
     public function getNotesOfRequest(): array
     {
-        return $this->getPersistence()->getNotes($this->getRequest()->getConfig()->getConfigValue(self::CONFIG_PROPERTY_FILTER_VIEWS), Note::NOTE_PROPERTY_NAME, false, $this->getRequest()->getStatus());
+        $config = $this->getRequest()->getConfig();
+        $includeRegex = json_decode('{' . $config->getConfigValue(static::CONFIG_PROPERTY_FILTER_PROPERTIES_INCLUDE) . '}', true);
+        $excludeRegex = json_decode('{' . $config->getConfigValue(static::CONFIG_PROPERTY_FILTER_PROPERTIES_EXCLUDE) . '}', true);
+        return $this->getPersistence()->getNotes($includeRegex, $excludeRegex,Note::NOTE_PROPERTY_NAME, false, $this->getRequest()->getStatus());
     }
     /*
     // JSON:

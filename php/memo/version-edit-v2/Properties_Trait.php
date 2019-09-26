@@ -126,5 +126,9 @@ trait Properties_Trait
     {
         return rawurldecode($this->getPropertyDefault($key, $default, $defaultOnEmpty));
     }
+    final public function getValueDoubleQuote2singleQuote(string $value) : string
+    {
+        return str_replace('"',"'", $value);
+    }
 
 }

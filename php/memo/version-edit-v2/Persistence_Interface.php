@@ -7,15 +7,16 @@
 interface Persistence_Interface
 {
     /**
-     * Liefert alle Instanzen sortiert.
+     * Liefert alle Instanzen die dem Request Persistence Status entsprechen, gefiltert und sortiert entsprechend Parametern.
      *
-     * @param string $filterViews
+     * @param array $filterLoadingPropertiesInclude  name => regex array von properties, die bei match im Ergebnis enthalten sind
+     * @param array $filterLoadingPropertiesExclude  name => regex array von properties, die bei match NICHT im Ergebnis enthalten sind
      * @param string $sortProperty
      * @param bool $descending
      * @return array
      * @throws Throwable
      */
-    public function getNotes(string $filterViews, string $sortProperty, bool $descending): array;
+    public function getNotes(array $filterLoadingPropertiesInclude, array $filterLoadingPropertiesExclude, string $sortProperty, bool $descending): array;
 
     /**
      * Liefert Pfad und Dateiname zur Instanz, so dass sie daraus geladen

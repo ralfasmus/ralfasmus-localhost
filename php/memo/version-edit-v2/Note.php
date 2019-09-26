@@ -86,22 +86,6 @@ abstract class Note implements Properties_Interface
         return "," . $this->getPropertyDefault(self::PROPERTY_POSSIBLE_VIEWS) . "," . $this->getPropertyDefault("view", 'NoteDefault', true) . ",";
     }
 
-    /**
-     * @param string $filterViews
-     * @return bool
-     */
-    final public function hasViewsMatchingFilterViews(string $filterViews): bool
-    {
-        // $filterViews sind die im Listen Filter-Feld "Views" mit "," (und) getrennt angegebenen Views
-        $noteViews = $this->getAllViews();
-        $foundAll = true;
-        if($filterViews != '') {
-            foreach (explode(" ", $filterViews) as $filterView) {
-                $foundAll = $foundAll && stripos($noteViews, ",$filterView,") !== false;
-            }
-        }
-        return $foundAll;
-    }
 
     /**
      * Liefert die alphabetisch sortierte Liste der "art" Werte aus den uebergebenen Note-Instanzen. Jede art ist nur
@@ -151,14 +135,39 @@ abstract class Note implements Properties_Interface
     public function getDynamicProperty(string $key) {
         $result = null;
         switch ($key) {
+            // zur Verwendung im data-text Attribute der DUPlicate Url
+            case "data-text" :
+                $result .= $this->getValueDoubleQuote2singleQuote($this->getPropertyDefault('text', ''));
+                break;
+            // zur Verwendung in einem Filter-Input Feld im Formular
             case "data-filter-any" :
                 $result = "";
                 foreach ($this->getProperties() as $name => $value) {
-                    $result .= strtolower("$value ");
+                    if(!is_array($value)) {
+                        $result .= strtolower($this->getValueDoubleQuote2singleQuote($value, '')) . ' ';//htmlspecialchars("$value "));
+                    }
                 }
                 break;
+            // zur Verwendung in einem Filter-Input Feld im Formular
             case "data-filter-views" :
-                $result = strtolower($this->getAllViews());
+                $result = strtolower($this->getDynamicProperty('all-views'));
+                break;
+            // zur Verwendung u.a. beim Laden von Notes.
+            case "all-views" :
+                $result = $this->getAllViews();
+                break;
+            // Downloadlinks auf die Attachment Documents der Note
+            case "fileslinked" :
+                $filenames = explode(' ', $this->getPropertyDefault('files', ''));
+                $linkTags = array();
+                foreach($filenames as $filename) {
+                    if($filename != '') {
+                        list($timestamp, $name) = explode('_', $filename);
+                        $downloadHrefBase = "/memo/priv/" . APPLICATION_NAME . '/download';
+                        $linkTags[] = '<a class="dvz-note-download" href="' . "$downloadHrefBase/$filename" . '" target="_blank">' . "$name ($timestamp)</a>";
+                    }
+                }
+                $result .= implode('<br/>', $linkTags);
                 break;
         }
         return $result;

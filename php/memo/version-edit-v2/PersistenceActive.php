@@ -15,7 +15,7 @@ class PersistenceActive implements Persistence_Interface
      */
     public function noteSave(Note $note)
     {
-        $this->noteSaveDefault($note);
+        $this->noteSaveDefault($note, true);
         PersistenceBackup::getSingleInstance()->noteSave($note);
     }
 

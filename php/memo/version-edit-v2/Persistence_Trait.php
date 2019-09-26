@@ -27,6 +27,16 @@ trait Persistence_Trait
         return ROOT_DIR . "/data/memo/" . APPLICATION_NAME;
     }
 
+    /**
+     * Basis fuer Pfad zu Downloads.
+     * @return string
+     */
+    final private function getDownloadFilenameBase() : string {
+        assert(defined('ROOT_DIR'), 'PHP Konstante ROOT_DIR ist nicht definiert.');
+        assert(defined('APPLICATION_NAME'), 'PHP Konstante APPLICATION_NAME ist nicht definiert.');
+        return ROOT_DIR . "/www/memo/priv/" . APPLICATION_NAME . '/download';
+    }
+
 
     /**
      * Liefert das Pfadfragment (status) fuer die Klasse, die dieses Trait konkret einsetzt.
@@ -38,20 +48,28 @@ trait Persistence_Trait
     }
     
     /**
-     * Laedt alle Notes in den Cache, die dem status des requests entsprechen und mit den im Filter angegebenen views matchen.
+     * Laedt alle Notes in den Cache, die dem Request Persistence Status entsprechen, gefiltert entsprechend Parametern.
      *
-     * @param string $filterViews Wert aus dem Eingabefeld auf der Noteliste-Seite.
+     * @param array $filterLoadingPropertiesInclude  name => regex array von properties, die bei match im Ergebnis enthalten sind
+     * @param array $filterLoadingPropertiesExclude  name => regex array von properties, die bei match NICHT im Ergebnis enthalten sind
      * @return array
      * @throws Throwable
      */
-    final private function loadNotes(string $filterViews): array
+    final private function loadNotes(array $filterLoadingPropertiesInclude, array $filterLoadingPropertiesExclude): array
     {
         if (!$this->notesCacheIsValid) {
             $filenameBase = $this->getDataFilenameBase();
             foreach (glob($filenameBase . "/" . $this->getPersistenceStatus() . '/*') as $filename) {
                 $note = $this->loadNoteByFilename($filename);
                 assert(!is_null($note), "Note-Instanz aus Datei $filename ist nach dem Laden NULL.");
-                if ($note->hasViewsMatchingFilterViews($filterViews)) {
+                $match = true;
+                foreach($filterLoadingPropertiesInclude as $name => $regex) {
+                    $match = $match && (1 === preg_match($regex, $note->getPropertyDefault($name,'')));
+                }
+                foreach($filterLoadingPropertiesExclude as $name => $regex) {
+                    $match = $match && !(1 === preg_match($regex, $note->getPropertyDefault($name,'')));
+                }
+                if ($match) {
                     $this->notesCache[] = $note;
                 }
             }
@@ -61,18 +79,19 @@ trait Persistence_Trait
     }
 
     /**
-     * Liefert alle Instanzen sortiert.
+     * @see Persistence_Interface::getNotes
      *
-     * @param string $filterViews
+     * @param array $filterLoadingPropertiesInclude  name => regex array von properties, die bei match im Ergebnis enthalten sind
+     * @param array $filterLoadingPropertiesExclude  name => regex array von properties, die bei match NICHT im Ergebnis enthalten sind
      * @param string $sortProperty
      * @param bool $descending
      * @return array
      * @throws Throwable
      */
-    final public function getNotes(string $filterViews, string $sortProperty, bool $descending): array
+    final public function getNotes(array $filterLoadingPropertiesInclude, array $filterLoadingPropertiesExclude, string $sortProperty, bool $descending): array
     {
 
-        $notes = $this->loadNotes($filterViews);
+        $notes = $this->loadNotes($filterLoadingPropertiesInclude, $filterLoadingPropertiesExclude);
 
         $sortList = array();
         $noteList = array();
@@ -155,6 +174,11 @@ trait Persistence_Trait
             $properties = json_decode($noteString, true);
             $view = isset($properties['view']) ? $properties['view'] : 'NoteDefault';
             $note = Note::createForView($properties["id"], $view);
+            foreach($properties as $name => $value) {
+                if(stripos($name,'filter') === false) {
+                    $properties["$name"] = str_replace('"', '&quot;', $value);
+                }
+            }
             $note->setProperties($properties);
         } catch (Throwable $throwable) {
             MyThrowable::handleThrowable($throwable, 'Kann note nicht instantiieren durch json_decode von diesem String: ' . $noteString, true);
@@ -211,33 +235,61 @@ trait Persistence_Trait
 
     /**
      * Speichert eine vollstaendige Instanz unter dem aktuellen Pfad.
+     * Uploads aus $_FILES werden nur hochgeladen, wenn $includeUploads == true
+     *
      * @param Note $note
      * @param string $filename
+     * @param bool $includeUploads
      */
-    final public function noteSaveToFile(Note $note, string $filename)
+    final public function noteSaveToFile(Note $note, string $filename, bool $includeUploads = false) : void
     {
         assert(!is_null($filename) && is_string($filename) && ($filename != ''), 'Kann Note Instance mit leerem/null filename nicht speichern.');
+        if ($includeUploads) {
+            $uploads_dir = $this->getDownloadFilenameBase();
+            $noteFiles = trim($note->getPropertyDefault('files', ''));
+            $noteFiles = $noteFiles == '' ? array() : explode(' ', $noteFiles);
+            foreach ($_FILES["note-persistent-files"]["error"] as $key => $error) {
+                if ($error == UPLOAD_ERR_OK) {
+                    $tmp_name = $_FILES["note-persistent-files"]["tmp_name"][$key];
+                    // basename() may prevent filesystem traversal attacks;
+                    // further validation/sanitation of the filename may be appropriate
+                    $name = basename($_FILES["note-persistent-files"]["name"][$key]);
+                    $timestamp = new DateTime();
+                    $timestamp = $timestamp->format('Y-m-d-H-i-s');
+                    $downloadName = "${timestamp}_${name}";
+                    if (move_uploaded_file($tmp_name, "${uploads_dir}/${downloadName}")) {
+                        $noteFiles[] = "${downloadName}";
+                    } else {
+                        MyThrowable::throw("Dateiupload ist fehlgeschlagen! Ziel:" . "${uploads_dir}/${$downloadName}");
+                    }
+                }
+            }
+            $note->setProperty(implode(' ', $noteFiles), 'files');
+        }
         $props = $note->getProperties();
         file_put_contents("${filename}", json_encode($props, JSON_HEX_QUOT | JSON_HEX_TAG));
         Log::debug('Writing ' . Log::objectString($note) . ' to file: ' . $filename);
     }
 
     /**
-     * Speichert eine vollstaendige Instanz unter meinem Status
+     * Speichert eine vollstaendige Instanz unter meinem Status.
+     * Uploads aus $_FILES werden nur hochgeladen, wenn $includeUploads == true
      * @param Note $note
+     * @param bool $includeUploads
      */
-    final public function noteSave(Note $note)
+    final public function noteSave(Note $note, bool $includeUploads = false) : void
     {
         $filename = $this->getPathAndFilename($note->getId());
-        $this->noteSaveToFile($note, $filename);
+        $this->noteSaveToFile($note, $filename, $includeUploads);
     }
 
     /**
      * Loescht eine vollstaendige Instanz.
      * @param Note $note
+     * @param bool $includeUploads
      * @throws Throwable
      */
-    final public function noteDelete(Note $note)
+    final public function noteDelete(Note $note) : void
     {
         // Note nach deleted kopieren
         PersistenceDeleted::getSingleInstance()->noteSave($note);
@@ -254,7 +306,7 @@ trait Persistence_Trait
      * Erstellt Backup fuer eine PersistenceActive oder PersistenceDeleted oder PersistenceBackup Instanz.
      * @param Note $note
      */
-    final public function noteBackup(Note $note)
+    final public function noteBackup(Note $note) : void
     {
     }
 

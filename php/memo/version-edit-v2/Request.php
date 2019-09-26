@@ -45,7 +45,7 @@ class Request implements Properties_Interface
      * @see self::getConfig()
      */
     private const REQUEST_PROPERTY_CONFIG_ID = 'config-id';
-    private const REQUEST_PROPERTY_CONFIG_ID_DEFAULT = 'default';
+    private const REQUEST_PROPERTY_CONFIG_ID_DEFAULT = 'CONFIG-PersistenceActive-DEFAULT';
 
     /**
      * Request Property, die den Status zum Laden von Notes definiert.
@@ -101,7 +101,7 @@ class Request implements Properties_Interface
         PersistenceDeleted::createSingleInstance();
 
         // Load and/or create Configuration Object for this request
-        $configId = $this->getPropertyDefault(self::REQUEST_PROPERTY_CONFIG_ID, 'default-' . PersistenceActive::class, true);
+        $configId = $this->getPropertyDefault(self::REQUEST_PROPERTY_CONFIG_ID, static::REQUEST_PROPERTY_CONFIG_ID_DEFAULT, true);
         Config::createConfig($configId);
 
         return $this;

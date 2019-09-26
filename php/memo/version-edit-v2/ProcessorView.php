@@ -39,6 +39,9 @@ class ProcessorView extends Processor
             try {
                 $properties = self::propertiesFromString($foundPlaceHolder);
                 $processorPlaceHolderHtml = $this->callFromProperties($properties);
+                if(is_array($processorPlaceHolderHtml)) {
+                    $processorPlaceHolderHtml = "";
+                }
                 $viewHtml = str_replace("REPLACED_BY_${foundPlaceHolder}_VALUE", $processorPlaceHolderHtml, $viewHtml);
             } catch (Throwable $throwable) {
                 MyThrowable::handleThrowable($throwable, "Fehler beim Bearbeiten von View :" . $this->getView() . ": Placeholder :$foundPlaceHolder: Davon Properties: "
