@@ -5,6 +5,7 @@
  */
 class Request implements Properties_Interface
 {
+
     /**
      * @var Properties_Interface|null GET/POST Parameter, die nicht mit note- beginnen, also weder in
      * $propertiesNoteBerechnet noch in $propertiesNotePersistent enthalten sind. Das sind Parameter, die also nicht der

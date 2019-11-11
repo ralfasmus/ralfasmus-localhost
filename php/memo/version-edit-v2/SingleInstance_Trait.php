@@ -10,7 +10,7 @@ trait SingleInstance_Trait
      * Objekte koennen nicht mehr durch new erzeugt werden.
      * SingleInstance_Trait constructor.
      */
-    private function __construct() {
+    protected function __construct() {
     }
 
     /**

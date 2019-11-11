@@ -20,7 +20,8 @@ final class Config implements Config_Interface
         $persistenceForConfigs = PersistenceActive::getSingleInstance();
         $configNote = $persistenceForConfigs->loadNoteById($configId);
         if(is_null($configNote)) {
-            MyThrowable::throw("Kann keine Config fuer diesen Request laden mit config-id=$configId");
+            $persistenceForConfigs->loadOrCreateNote($configId, 'NoteDefault');
+            //#asm MyThrowable::throw("Kann keine Config fuer diesen Request laden mit config-id=$configId");
         }
         $this->note = $configNote;
         return $this;

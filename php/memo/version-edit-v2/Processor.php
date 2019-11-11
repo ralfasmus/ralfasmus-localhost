@@ -24,6 +24,7 @@ abstract class Processor implements Properties_Interface
      * Request Property, die die ID der zu bearbeitenden Note definiert.
      */
     private const REQUEST_PROPERTY_NOTE_ID = 'id';
+
     /**
      * Processor constructor.
      * @param Processor|null $parentProcessor
@@ -100,7 +101,7 @@ abstract class Processor implements Properties_Interface
      * @return Persistence_Interface
      * @throws Exception
      */
-    public function getPersistence(string $status = ''): Persistence_Interface
+    public function getPersistence(string $status = 'PersistenceActive'): Persistence_Interface
     {
         $status = ($status == '') ? $this->getRequest()->getStatus() : $status;
         assert($status != '', 'Kann status nicht bestimmen und deshalb keinen Persistence Handler laden.');

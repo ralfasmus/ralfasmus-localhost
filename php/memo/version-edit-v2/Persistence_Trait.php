@@ -248,19 +248,21 @@ trait Persistence_Trait
             $uploads_dir = $this->getDownloadFilenameBase();
             $noteFiles = trim($note->getPropertyDefault('files', ''));
             $noteFiles = $noteFiles == '' ? array() : explode(' ', $noteFiles);
-            foreach ($_FILES["note-persistent-files"]["error"] as $key => $error) {
-                if ($error == UPLOAD_ERR_OK) {
-                    $tmp_name = $_FILES["note-persistent-files"]["tmp_name"][$key];
-                    // basename() may prevent filesystem traversal attacks;
-                    // further validation/sanitation of the filename may be appropriate
-                    $name = basename($_FILES["note-persistent-files"]["name"][$key]);
-                    $timestamp = new DateTime();
-                    $timestamp = $timestamp->format('Y-m-d-H-i-s');
-                    $downloadName = "${timestamp}_${name}";
-                    if (move_uploaded_file($tmp_name, "${uploads_dir}/${downloadName}")) {
-                        $noteFiles[] = "${downloadName}";
-                    } else {
-                        MyThrowable::throw("Dateiupload ist fehlgeschlagen! Ziel:" . "${uploads_dir}/${$downloadName}");
+            if(isset($_FILES["note-persistent-files"]) && isset($_FILES["note-persistent-files"]["error"])) {
+                foreach ($_FILES["note-persistent-files"]["error"] as $key => $error) {
+                    if ($error == UPLOAD_ERR_OK) {
+                        $tmp_name = $_FILES["note-persistent-files"]["tmp_name"][$key];
+                        // basename() may prevent filesystem traversal attacks;
+                        // further validation/sanitation of the filename may be appropriate
+                        $name = basename($_FILES["note-persistent-files"]["name"][$key]);
+                        $timestamp = new DateTime();
+                        $timestamp = $timestamp->format('Y-m-d-H-i-s');
+                        $downloadName = "${timestamp}_${name}";
+                        if (move_uploaded_file($tmp_name, "${uploads_dir}/${downloadName}")) {
+                            $noteFiles[] = "${downloadName}";
+                        } else {
+                            MyThrowable::throw("Dateiupload ist fehlgeschlagen! Ziel:" . "${uploads_dir}/${$downloadName}");
+                        }
                     }
                 }
             }
