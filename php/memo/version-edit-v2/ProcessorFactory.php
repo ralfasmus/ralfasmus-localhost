@@ -29,14 +29,14 @@ class ProcessorFactory
             //    $processorInstance = new $processorClassProperty($processorInitProperties);
             $processorInstance = $processorClassProperty::createInstance($processorInitProperties);
         }
-        return $this->initExecution($processorInstance, $processorCreateProperties);
+        $this->setProcessorMethodAndParameter($processorInstance, $processorCreateProperties);
+        return $processorInstance;
     }
 
-    private function initExecution(Processor_Interface $processorInstance, Properties_Interface $processorCreateProperties) : Processor_Interface {
+    private function setProcessorMethodAndParameter(Processor_Interface $processorInstance, Properties_Interface $processorCreateProperties) : void {
         $processorMethod = $processorCreateProperties->getPropertyDefault('processor-method', 'getHtml', true);
         $processorMethodParameters = $processorCreateProperties->getPropertyDefault('pexec', array(), true);
         $processorInstance->setProcessorMethod($processorMethod);
         $processorInstance->setProcessorMethodParameters($processorMethodParameters);
-        return $processorInstance;
     }
 }

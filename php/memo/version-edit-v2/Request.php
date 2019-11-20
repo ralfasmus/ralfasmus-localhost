@@ -80,6 +80,7 @@ final class Request implements Properties_Interface, Request_Interface
      */
     private function initialize(array $requestProperties) : Request_Interface
     {
+        $this->initializePropertiesTrait();
         $this->propertiesAll = new Properties($requestProperties);
         $propertiesGet = $this->getPropertiesAll()->getPropertyDefault('get', array(), true);
         $propertiesPost = $this->getPropertiesAll()->getPropertyDefault('post', array(), true);
@@ -88,19 +89,19 @@ final class Request implements Properties_Interface, Request_Interface
         $parameters = array_merge($propertiesGet, $propertiesPost);
 
         // Persistent Note-Instanz Parameter extrahieren
-        $this->propertiesNotePersistent = new Properties(self::removeParameterPrefix(
-                array_filter($parameters, function($key) { return stripos($key, self::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT) === 0; }, ARRAY_FILTER_USE_KEY ),
-                self::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT));
+        $this->propertiesNotePersistent = new Properties(static::removeParameterPrefix(
+                array_filter($parameters, function($key) { return stripos($key, static::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT) === 0; }, ARRAY_FILTER_USE_KEY ),
+                static::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT));
 
         // Berechnete Note-Instanz Parameter extrahieren
-        $this->propertiesNoteBerechnet = new Properties(self::removeParameterPrefix(
-                array_filter($parameters, function($key) { return stripos($key, self::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET) === 0; }, ARRAY_FILTER_USE_KEY ),
-                self::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET));
+        $this->propertiesNoteBerechnet = new Properties(static::removeParameterPrefix(
+                array_filter($parameters, function($key) { return stripos($key, static::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET) === 0; }, ARRAY_FILTER_USE_KEY ),
+                static::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET));
 
         // Request Parameter extrahieren
         $this->setProperties(array_filter($parameters, function($key) {
-            return stripos($key, self::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET) === false
-                    && stripos($key, self::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT) === false;
+            return stripos($key, static::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET) === false
+                    && stripos($key, static::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT) === false;
         }, ARRAY_FILTER_USE_KEY ));
 
         // Initialisierung der Persistence Schicht, bevor sie mittels ::getSingleInstance() genutzt werden kann

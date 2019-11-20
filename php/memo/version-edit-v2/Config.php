@@ -20,20 +20,26 @@ final class Config implements Properties_Interface
     private $note = null;
 
 
+    /**
+     * Create a SingleInstance using the standard Trait Method.
+     * Initialize the instance using the Config class - specific method.
+     *
+     * @return static
+     * @throws Exception
+     */
     static public function createSingleInstance() : self {
         return static::trait_createSingleInstance()->initialize();
     }
 
     /**
      * Initialization.
-     * @param array $configProperties
      * @throws Exception
      */
     private function initialize() : self
     {
+        $this->initializePropertiesTrait();
         $configId = Request::getSingleInstance()->getPropertyDefault(static::REQUEST_PROPERTY_CONFIG_ID, static::REQUEST_PROPERTY_CONFIG_ID_DEFAULT, true);
         $this->setProperties(array('config-id' => $configId));
-        $this->setDynamicPropertiesItem($this);
         $persistenceForConfigs = PersistenceActive::getSingleInstance();
         $configNote = $persistenceForConfigs->loadNoteById($configId);
         if(is_null($configNote)) {

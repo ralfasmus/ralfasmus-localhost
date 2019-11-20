@@ -1,10 +1,11 @@
 <?php
 /**
- * Bis jetzt noch niht zur Instanziierung genutzt.
+ * Bis jetzt noch nicht zur Instanziierung genutzt.
  * Class MyThrowable
  */
 class MyThrowable // extends Throwable
 {
+    const STOP_EXECUTION_ON_ERROR = true;
     /**
      * Aufruf macht nur Sinn, wenn $message nicht leer ist.
      *
@@ -15,7 +16,8 @@ class MyThrowable // extends Throwable
      */
     static public function handleThrowable(Throwable $throwable, string $message, bool $throw = false) {
         assert(!is_null($message) && $message != '');
-        if($throw) {
+        if($throw || self::STOP_EXECUTION_ON_ERROR) {
+            echo "<pre>".  "$message\n" . $throwable->getMessage() . "\n" . $throwable->getTraceAsString() . "</pre>";
             throw new Exception($message, $throwable->getCode(), $throwable);
         } else {
             if($throwable->getPrevious()) {

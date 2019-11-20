@@ -17,7 +17,14 @@ trait Properties_Trait
      */
     private $dynamicPropertiesItem = null;
 
+    private $propertiesInitialized = false;
 
+    private function initializePropertiesTrait() : self {
+        assert(!$this->propertiesInitialized, __CLASS__ . '->propertiesInitialized ist schon TRUE. Nochmal initialisieren nicht erlaubt.');
+        $this->dynamicPropertiesItem = $this;
+        $this->propertiesInitialized = true;
+        return $this;
+    }
     /**
      * @see Properties_Interface::getPropertyDefault()
      *
@@ -29,6 +36,7 @@ trait Properties_Trait
      */
     final public function getPropertyDefault(string $key, $default = '', bool $defaultOnEmpty = false, $checkDynamicProperties = true)
     {
+        assert($this->propertiesInitialized, __CLASS__ . '->propertiesInitialized ist FALSE.');
             $properties = $this->getProperties();
             if (isset($properties[$key])) {
                 $result = $properties[$key];

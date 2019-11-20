@@ -51,6 +51,7 @@ abstract class Note implements Properties_Interface
         /**
          * Default Initialisierung:
          */
+        $this->initializePropertiesTrait();
         $this->setProperty($id, self::NOTE_PROPERTY_ID);
         $this->setProperty(static::class, 'view');
         $this->initialize();

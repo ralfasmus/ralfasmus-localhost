@@ -65,7 +65,7 @@ final class ProcessorAction extends Processor
      *
      * @return string
      */
-    public function getCssClasses() : string {
+    public function pmGetCssClasses() : string {
         return $this->getPropertyDefault('ParentCssClasses', '');
     }
 

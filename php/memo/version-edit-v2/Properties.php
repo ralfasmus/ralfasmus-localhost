@@ -12,6 +12,6 @@ Class Properties implements Properties_Interface
      */
     public function __construct(array $properties = array())
     {
-        $this->setProperties($properties);
+        $this->initializePropertiesTrait()->setProperties($properties);
     }
 }

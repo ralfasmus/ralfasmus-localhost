@@ -7,39 +7,53 @@
  */
 Trait Processor_Trait
 {
+    use Properties_Trait;
     private $processorMethod = '';
     private $processorMethodParameters = array();
 
-    static public function createInstance(Properties_Interface $properties) : Processor_Interface {
-        return new static($properties);
+    abstract function getDefaultProcessorMethod() : string;
+
+    private function getProcessorMethod() {
+        return $this->processorMethod == '' ? $this->getDefaultProcessorMethod() : $this->processorMethod;
     }
 
     /**
-     * Processor constructor.
+     * Erzeugt eine Instance eines Processors.
+     * Wird aufgerufen in @see ProcessorFactory::createProcessor().
+     *
      * @param Properties_Interface $properties
+     * @return Processor_Interface
      */
-    private function __construct(Properties_Interface $properties)
-    {
-        Log::logInstanceCreated($this);
-        return $this->initialize($properties);
+    static public function createInstance(Properties_Interface $properties) : Processor_Interface {
+        $instance = new static;
+        $instance->initializeProcessorTrait($properties);
+        Log::logInstanceCreated($instance);
+        return $instance;
     }
 
-    private function initialize(Properties_Interface $properties) : self {
-        $this->setDynamicPropertiesItem($properties);
-        return $this;
+    /**
+     * Initialisiert die Eigenschaften dieses Trait.
+     *
+     * @param Properties_Interface $properties
+     * @return $this
+     */
+    private function initializeProcessorTrait(Properties_Interface $properties) : void {
+        $this->initializePropertiesTrait()->setDynamicPropertiesItem($properties);
     }
 
+    /**
+     * Fuehrt die @see Processor_Trait::$processorMethod des Processors mit seinen
+     * @see Processor_Trait::$processorMethodParameters aus und liefert das Ergebnis.
+     *
+     * @return mixed
+     */
     public function execute() {
         $method = $this->processorMethod;
         $parameters = $this->processorMethodParameters;
         $callable = array($this, $method);
         assert(is_callable($callable));
         if(!is_callable($callable)) {
-            /*
-            MyThrowable::throw('<pre>'. "Kann den im Template definierten Platzhalter nicht aufloesen. Das ist kein valider Callable Instance/Class: $processorClassProperty="
-                . get_class($processorInstance) . ":" . var_export($processorInstance) . " Properties:". var_export($processorInitProperties, true)
-                . " Method:$processorMethod Parameters:" . var_export($processorMethodParameters, true) . "") . '</pre>';
-            */
+            MyThrowable::throw("Kann callable nicht ausfuehren.");
         }
         return call_user_func_array($callable, $parameters);
     }

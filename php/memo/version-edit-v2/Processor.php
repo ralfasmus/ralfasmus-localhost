@@ -7,5 +7,11 @@
 abstract class Processor implements Processor_Interface, Properties_Interface
 {
     use Processor_Trait;
-    use Properties_Trait;
+
+    protected static $PROCESSOR_METHOD_DEFAULT = '';
+
+    private function getDefaultProcessorMethod() : string {
+        return static::$PROCESSOR_METHOD_DEFAULT;
+    }
+
 }
