@@ -132,8 +132,8 @@ abstract class Note implements Properties_Interface
      * @param string $key
      * @return |null
      */
-    public function getDynamicProperty(string $key) {
-        $result = null;
+    protected function getDynamicProperty(string $key) {
+        $result = 'unDEfineeD';
         switch ($key) {
             // zur Verwendung im data-text Attribute der DUPlicate Url
             case "data-text" :

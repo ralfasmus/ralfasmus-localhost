@@ -23,7 +23,7 @@ final class NoteDefault extends Note
      * @param string $key
      * @return |null
      */
-    public function getDynamicProperty(string $key) {
+    protected function getDynamicProperty(string $key) {
         switch ($key) {
             case "other-properties-edit-html" :
                 return $this->getPropertiesHtmlEdit();

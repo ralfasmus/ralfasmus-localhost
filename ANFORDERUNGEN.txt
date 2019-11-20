@@ -13,3 +13,18 @@ die GET/POST/config property itemtype (default: default) bestimmt, wie ein item 
 Beim Speichern werden keine Properties gelöscht. Es wird immer die Datei eingelesen, die submitted properties gesetzt und dann alles geschrieben.
 Standard Maske bietet alle properties einer Datei zum Editieren an und die Möglichkeit, eine neue Property zu erzeugen
 Properties, die "text" im Namen haben, werden mit HTML Editor angeboten
+
+Browser mit neuer Text-Notiz mit vorbelegten Feldern öffnen ohne schon zu speichern:
+http://ralfasmus.localhost/memo/priv/privnotes-dev/index.php?action=itemedit&config-id=defaultconfig&item-persistent-name=Test%20Notiz&item-persistent-art=.test-art&item-persistent-view=textnote&item-persistent-possible-views=textnote&item-persistent-text=<strong>Test</strong>HTML&item-persistent-id=id2019-07-19-04-54-34
+
+Neue Text-Notiz mit belegten Feldern erstellen und speichern (aber nicht im Browser öffnen):
+http://ralfasmus.localhost/memo/priv/privnotes-dev/index.php?action=itemsave&config-id=defaultconfig&item-persistent-name=Test%20Notiz&item-persistent-art=.test-art&item-persistent-view=textnote&item-persistent-possible-views=textnote&item-persistent-text=<strong>Test</strong>HTML&item-persistent-id=id2019-07-19-04-54-34
+
+Lädt eine Item Liste mit vorbelegten Filtern "art" und "view". Letzterer wird schon beim Laden der Items berücksichtigt.
+http://ralfasmus.localhost/memo/priv/privnotes-dev/index.php?filter-art=kkk&filter-views=textnote
+Die Filter sind dabei zwar vorbelegt und wirken sich auch aus, aber die config wurde nicht entsprechend gespeichert. Ein anschließender Aufruf von dieser Url: liefert also wieder eine "art"-ungefilterte Liste:
+http://ralfasmus.localhost/memo/priv/privnotes-dev/index.php?filter-views=textnote
+
+Anders hier:
+http://ralfasmus.localhost/memo/priv/privnotes-dev/index.php?filter-art=kkk&filter-views=textnote&saveconfig=yes
+

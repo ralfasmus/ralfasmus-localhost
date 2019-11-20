@@ -13,6 +13,12 @@ trait Properties_Trait
     private $properties = array();
 
     /**
+     * @var Properties_Interface|null Dynamische Properties werden ggf von einem Item (dem persistenten Note Item) geliefert.
+     */
+    private $dynamicPropertiesItem = null;
+
+
+    /**
      * @see Properties_Interface::getPropertyDefault()
      *
      * @param string $key
@@ -21,32 +27,40 @@ trait Properties_Trait
      * @return mixed|string|type
      * @throws Exception
      */
-    final public function getPropertyDefault(string $key, $default = '', bool $defaultOnEmpty = false)
+    final public function getPropertyDefault(string $key, $default = '', bool $defaultOnEmpty = false, $checkDynamicProperties = true)
     {
-        $result = $this->getDynamicProperty($key);
-        if(is_null($result)) {
             $properties = $this->getProperties();
             if (isset($properties[$key])) {
                 $result = $properties[$key];
             } else {
-                $result = $default;
+                $result = 'unDEfineeD';
+                if($checkDynamicProperties) {
+                    $result = $this->getDynamicProperty($key);
+                }
+                if($result == 'unDEfineeD') {
+                    $result = $default;
+                }
             }
             if ($defaultOnEmpty && ((is_string($result) && $result == '') || (is_null($result)))) {
                 $result = $default;
             }
-        }
+
         return $result;
     }
 
     /**
-     * Dynamisch erzeugte Properties werden auch von diesem Trait ueber die Standard Methoden wie
+     * Dynamisch erzeugte Properties werden von diesem Trait ueber die Standard Methoden wie
      * @see Properties_Trait::getPropertiesDefault() oder @see Properties_Trait::getPropertyMandatory() geliefert,
      * muessen aber in der Trait-nutzenden Klasse explizit definiert werden. Die Default-Implementation ist:
-     * return null;
+     * return unDEfineeD;
      *
-     * @return mixed null, fuer alle Properties, die nicht dynamisch definiert sind.
+     * @return mixed, unDEfineeD fuer alle Properties, die nicht dynamisch definiert sind.
      */
-    abstract public function getDynamicProperty(string $key);
+    protected function getDynamicProperty(string $key) {
+        return (is_null($this->dynamicPropertiesItem))
+            ? 'unDEfineeD'
+            : $this->dynamicPropertiesItem->getPropertyDefault($key, 'unDEfineeD', false, $this !== $this->dynamicPropertiesItem);
+    }
 
     /**
      * @see Properties_Interface::getPropertyMandatory()
@@ -113,6 +127,14 @@ trait Properties_Trait
     {
         $wert = $this->trimPropertyValue($value);
         $this->properties[$key] = $wert;
+    }
+
+    /**
+     * @see Properties_Interface::setDynamicPropertyItem().
+     * @param Properties_Interface|null $dynamicPropertyItem
+     */
+    public function setDynamicPropertiesItem(?Properties_Interface $dynamicPropertiesItem) : void {
+        $this->dynamicPropertiesItem = $dynamicPropertiesItem;
     }
 
     /**

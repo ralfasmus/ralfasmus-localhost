@@ -14,15 +14,4 @@ Class Properties implements Properties_Interface
     {
         $this->setProperties($properties);
     }
-
-    /**
-     * @see Properties_Trait::getDynamicProperty()
-     *
-     * @param string $key
-     * @return |null
-     */
-    public function getDynamicProperty(string $key) {
-        // Es gibt hier keine dynamisch berechneten Properties.
-        return null;
-    }
 }

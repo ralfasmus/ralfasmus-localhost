@@ -5,34 +5,43 @@
  *
  * Class Config
  */
-final class Config implements Config_Interface
+final class Config implements Properties_Interface
 {
-    use SingleInstance_Trait;
+    use SingleInstance_Trait { createSingleInstance as private trait_createSingleInstance; }
+    use Properties_Trait;
+
+    /**
+     * Request Property, die die ID zum Laden der Config-Note definiert.
+     * @see self::getConfig()
+     */
+    private const REQUEST_PROPERTY_CONFIG_ID = 'config-id';
+    private const REQUEST_PROPERTY_CONFIG_ID_DEFAULT = 'CONFIG-PersistenceActive-DEFAULT';
 
     private $note = null;
 
-    static public function createConfig(string $configId) : self {
-        return self::createSingleInstance()->initialize($configId);
+
+    static public function createSingleInstance() : self {
+        return static::trait_createSingleInstance()->initialize();
     }
 
-    private function initialize(string $configId) : self {
-        assert(!is_null($configId) && '' != $configId, 'config-id darf nicht leer oder null sein.');
+    /**
+     * Initialization.
+     * @param array $configProperties
+     * @throws Exception
+     */
+    private function initialize() : self
+    {
+        $configId = Request::getSingleInstance()->getPropertyDefault(static::REQUEST_PROPERTY_CONFIG_ID, static::REQUEST_PROPERTY_CONFIG_ID_DEFAULT, true);
+        $this->setProperties(array('config-id' => $configId));
+        $this->setDynamicPropertiesItem($this);
         $persistenceForConfigs = PersistenceActive::getSingleInstance();
         $configNote = $persistenceForConfigs->loadNoteById($configId);
         if(is_null($configNote)) {
-            $persistenceForConfigs->loadOrCreateNote($configId, 'NoteDefault');
+            //$persistenceForConfigs->loadOrCreateNote($configId, 'NoteDefault');
             //#asm MyThrowable::throw("Kann keine Config fuer diesen Request laden mit config-id=$configId");
+        } else {
+            $this->setProperties($configNote->getProperties());
         }
-        $this->note = $configNote;
         return $this;
     }
-
-    public function getConfigValue($key) {
-        return $this->getNote()->getPropertyDefault($key, '', true);
-    }
-
-    private function getNote() : Note {
-        return $this->note;
-    }
-
 }

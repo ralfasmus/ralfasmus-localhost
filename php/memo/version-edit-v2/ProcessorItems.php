@@ -6,18 +6,13 @@
  *
  * Class ProcessorItems
  */
-class ProcessorItems extends Processor
+final class ProcessorItems extends Processor
 {
     /**
      * Request/Config Properties, deren Werte die Filter Properties und Regexes fuer das Laden der anzuzeigenden Notes enthalten
      */
     private const CONFIG_PROPERTY_FILTER_PROPERTIES_INCLUDE = "filter-properties-include";
     private const CONFIG_PROPERTY_FILTER_PROPERTIES_EXCLUDE = "filter-properties-exclude";
-
-    public function __construct(?Processor $parentProcessor, Properties_Interface $properties)
-    {
-        parent::__construct($parentProcessor, $properties);
-    }
 
     /**
      * Hilfsmethode: Fuer eine Liste von Note Instanzen das HTML jeweils aus dem gleichen View erzeugen und als
@@ -32,13 +27,22 @@ class ProcessorItems extends Processor
             assert(in_array(Properties_Interface::class, class_implements($item)),
                     'Ein item implementiert nicht das Interface ' . Properties_Interface::class
                     . ' und kann deshalb nicht die Properties zur Initialisierung eines Processors liefern.');
+            $processorCreateProperties = new Properties(array(
+                //'ProcessorThis' => $this->getPropertyMandatory( 'ProcessorThis'),
+                'processor-class' => 'ProcessorView',
+                'processor-method' => 'getHtml',
+                'pexec' => array()
+            ));
 
-            $html .= $this->getParentProcessor()->callFromProperties(new Properties(array(
-                    'processor-class' => 'ProcessorView',
-                    'processor-class-properties' => $item,
-                    'processor-method' => 'getHtml',
-                    'processor-method-parameters' => array()
-            )));
+            $processorInitProperties = new Properties(array(
+                    'ParentView' => $this->getPropertyDefault('ParentView', ''),
+                    'view' => $item->getPropertyDefault('view', ''),
+                    'ParentCssClasses' => $this->getPropertyDefault('ParentCssClasses', ''),
+                )
+            );
+            $processorInitProperties->setDynamicPropertiesItem($item);
+
+            $html .= ProcessorFactory::getSingleInstance()->createProcessor($processorCreateProperties, $processorInitProperties)->execute();
         }
         return $html;
     }
@@ -46,11 +50,11 @@ class ProcessorItems extends Processor
     /**
      * Liefert das HTML fuer die Liste der sichtbaren Notes des Requests.
      *
-     * processor-class=ProcessorItems&processor-method=getHtmlNotes
+     * pcreate[processor-class]=ProcessorItems&pcreate[processor-method]=getHtmlNotes
      *
      * @return string
      */
-    protected function getHtmlNotes() : string
+    public function getHtmlNotes() : string
     {
         return $this->getHtmlItems($this->getNotesOfRequest());
     }
@@ -59,11 +63,11 @@ class ProcessorItems extends Processor
     /**
      * Liefert das HTML fuer die Liste der 'art' Werte der sichtbaren Notes des Requests.
      *
-     * processor-class=ProcessorItems&processor-method=getHtmlArts
+     * pcreate[processor-class]=ProcessorItems&pcreate[processor-method]=getHtmlArts
      *
      * @return string
      */
-    protected function getHtmlArts() : string
+    public function getHtmlArts() : string
     {
         $notes = $this->getNotesOfRequest();
         return $this->getHtmlItems(Note::getArtsList($notes));
@@ -73,7 +77,7 @@ class ProcessorItems extends Processor
     /**
      * Liefert das HTML fuer die EDIT Seite der Note Instance, die in den Request Daten spezifiziert ist.
      *
-     * processor-class=ProcessorItems&processor-method=getHtmlEditUpdatedActionNote
+     * pcreate[processor-class]=ProcessorItems&pcreate[processor-method]=getHtmlEditUpdatedActionNote
      *
      * @return string
      * @throws Exception
@@ -90,11 +94,11 @@ class ProcessorItems extends Processor
      */
     public function getNotesOfRequest(): array
     {
-        $config = $this->getRequest()->getConfig();
-        $includeRegex = json_decode('{' . $config->getConfigValue(static::CONFIG_PROPERTY_FILTER_PROPERTIES_INCLUDE) . '}', true);
-        $excludeRegex = json_decode('{' . $config->getConfigValue(static::CONFIG_PROPERTY_FILTER_PROPERTIES_EXCLUDE) . '}', true);
-        return $this->getPersistence()->getNotes($includeRegex, $excludeRegex,Note::NOTE_PROPERTY_NAME, false, $this->getRequest()->getStatus());
+        $includeRegex = json_decode('{' . Request::getSingleInstance()->getConfigValue(static::CONFIG_PROPERTY_FILTER_PROPERTIES_INCLUDE) . '}', true);
+        $excludeRegex = json_decode('{' . Request::getSingleInstance()->getConfigValue(static::CONFIG_PROPERTY_FILTER_PROPERTIES_EXCLUDE) . '}', true);
+        return $this->getPersistence()->getNotes($includeRegex, $excludeRegex,Note::NOTE_PROPERTY_NAME, false, Request::getSingleInstance()->getStatus());
     }
+
     /*
     // JSON:
     $data = array("notes-json" => array());

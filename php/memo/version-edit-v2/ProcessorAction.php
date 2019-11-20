@@ -5,17 +5,12 @@
  *
  * Class ProcessorAction
  */
-class ProcessorAction extends Processor
+final class ProcessorAction extends Processor
 {
-    public function __construct(?Processor $parentProcessor, Properties_Interface $properties)
-    {
-        parent::__construct($parentProcessor, $properties);
-    }
-
     /**
      * Speichere die Note Instance, mit den Daten, die in den Request GET/POST-Daten spezifiziert sind.
      *
-     * ?processor-class=ProcessorAction&processor-method=noteSave
+     * ?pcreate[processor-class]=ProcessorAction&pcreate[processor-method]=noteSave
      *
      * @return string
      * @throws Exception
@@ -28,7 +23,7 @@ class ProcessorAction extends Processor
     /**
      * Loesche die Note Instance, die in den Request GET/POST-Daten spezifiziert ist.
      *
-     * ?processor-class=ProcessorAction&processor-method=noteDelete
+     * ?pcreate[processor-class]=ProcessorAction&pcreate[processor-method]=noteDelete
      *
      * @return string
      * @throws Exception
@@ -41,7 +36,7 @@ class ProcessorAction extends Processor
     /**
      * Sichere die Note Instance, die in den Request GET/POST-Daten spezifiziert ist.
      *
-     * ?processor-class=ProcessorAction&processor-method=noteBackup
+     * ?pcreate[processor-class]=ProcessorAction&pcreate[processor-method]=noteBackup
      *
      * @return string
      * @throws Exception
@@ -54,7 +49,7 @@ class ProcessorAction extends Processor
     /**
      * Stelle die Note Instance aus dem Delete/Backup wieder her, die in den Request GET/POST-Daten spezifiziert ist.
      *
-     * ?processor-class=ProcessorAction&processor-method=noteRecover
+     * ?pcreate[processor-class]=ProcessorAction&pcreate[processor-method]=noteRecover
      *
      * @return string
      * @throws Exception
@@ -64,4 +59,18 @@ class ProcessorAction extends Processor
         $this->getPersistence()->noteRecover($this->getUpdatedActionNote());
         return '';
     }
+
+    /**
+     * Liefert alle CSS Klassen dieses Processors.
+     *
+     * @return string
+     */
+    public function getCssClasses() : string {
+        return $this->getPropertyDefault('ParentCssClasses', '');
+    }
+
+    protected function getView() : string {
+        return '';
+    }
+
 }

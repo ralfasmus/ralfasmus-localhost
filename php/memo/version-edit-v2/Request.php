@@ -3,7 +3,7 @@
  * Aktueller Request.
  * Class Request
  */
-class Request implements Properties_Interface
+final class Request implements Properties_Interface, Request_Interface
 {
 
     /**
@@ -11,7 +11,11 @@ class Request implements Properties_Interface
      * $propertiesNoteBerechnet noch in $propertiesNotePersistent enthalten sind. Das sind Parameter, die also nicht der
      * zu bearbeitenden Note zugeordnet sind, sondern dem Request.
      */
-    use Properties_Trait, SingleInstance_Trait;
+    use Properties_Trait,
+        SingleInstance_Trait {
+            createSingleInstance as private trait_createSingleInstance;
+            getSingleInstance as trait_getSingleInstance;
+    }
 
     /**
      * @see Request::$propertiesNotePersistent
@@ -42,11 +46,15 @@ class Request implements Properties_Interface
     private $propertiesAll = NULL;
 
     /**
-     * Request Property, die die ID zum Laden der Config-Note definiert.
-     * @see self::getConfig()
+     * Abruf der SingleInstance. Diese muss vorher explizit mittels @see SingleInstance_Trait::createSingleInstance()
+     * erzeugt worden sein.
+     *
+     * @return Request_Interface
      */
-    private const REQUEST_PROPERTY_CONFIG_ID = 'config-id';
-    private const REQUEST_PROPERTY_CONFIG_ID_DEFAULT = 'CONFIG-PersistenceActive-DEFAULT';
+    static public function getSingleInstance() : Request_Interface {
+       return static::trait_getSingleInstance();
+    }
+
 
     /**
      * Request Property, die den Status zum Laden von Notes definiert.
@@ -61,18 +69,17 @@ class Request implements Properties_Interface
         return $result;
     }
 
-    static public function createRequest(array $requestProperties) : self {
-        return self::createSingleInstance()->initialize($requestProperties);
+    static public function createSingleInstance(array $requestProperties) : Request_Interface {
+        return static::trait_createSingleInstance()->initialize($requestProperties);
     }
 
     /**
-     * Request constructor.
+     * Request initialization.
      * @param array $requestProperties
      * @throws Exception
      */
-    private function initialize(array $requestProperties) : self
+    private function initialize(array $requestProperties) : Request_Interface
     {
-        //assert(is_null(self::$singleInstance), 'Klasse Request darf nur einmal instantiiert werden!');
         $this->propertiesAll = new Properties($requestProperties);
         $propertiesGet = $this->getPropertiesAll()->getPropertyDefault('get', array(), true);
         $propertiesPost = $this->getPropertiesAll()->getPropertyDefault('post', array(), true);
@@ -102,8 +109,7 @@ class Request implements Properties_Interface
         PersistenceDeleted::createSingleInstance();
 
         // Load and/or create Configuration Object for this request
-        $configId = $this->getPropertyDefault(self::REQUEST_PROPERTY_CONFIG_ID, static::REQUEST_PROPERTY_CONFIG_ID_DEFAULT, true);
-        Config::createConfig($configId);
+        Config::createSingleInstance();
 
         return $this;
     }
@@ -138,8 +144,8 @@ class Request implements Properties_Interface
         return $this;
     }
 
-    public function getConfig() : Config_Interface {
-        return Config::getSingleInstance();
+    public function getConfigValue(string $key) : string {
+        return Config::getSingleInstance()->getPropertyDefault($key, '');
     }
 
     /**
@@ -152,7 +158,10 @@ class Request implements Properties_Interface
      */
     public function getStatus(): string
     {
-        return $this->getConfig()->getConfigValue(static::REQUEST_PROPERTY_STATUS);
+        $status = $this->getConfigValue(static::REQUEST_PROPERTY_STATUS);
+        if($status == '') {
+            return 'PersistenceActive';
+        }
     }
 
 
@@ -165,11 +174,11 @@ class Request implements Properties_Interface
         $html = "";
         try {
             //echo '<br>GET properties: ' . var_export($this->propertiesRequest->getProperties(), true);
-            // Browser: index.php?processor.class=ProcessorView&processor.method=getHtml&processor.method=getHtml&processor.class.properties=notelist|noteedit
+            // Browser: index.php?filter-views=NoteText&pcreate[processor_class]=ProcessorView&pcreate[processor_method]=getHtml&pinit[view]=notelist&config-id=default-PersistenceActive
             // AJAX: index.php?processor.class=ProcessorView&processor.method=saveItem&status=PersistenceActive
-            $rootProcessor = ProcessorRoot::createProcessor($this->getPropertiesRequest());
-            $html .= $rootProcessor->getHtml();
-
+            $processorCreateProperties = new Properties($this->getPropertiesRequest()->getPropertyDefault('pcreate', array()));
+            $processorInitProperties = new Properties($this->getPropertiesRequest()->getPropertyDefault('pinit', array()));
+            $html .= ProcessorFactory::createSingleInstance()->createProcessor($processorCreateProperties, $processorInitProperties)->execute();
             Log::info("Done!!!");
         } catch (Throwable $throwable) {
             MyThrowable::handleThrowable($throwable, 'Fehler beim Erzeugen der Response.', false);
@@ -188,14 +197,4 @@ class Request implements Properties_Interface
         return $html;
     }
 
-    /**
-     * @see Properties_Trait::getDynamicProperty()
-     *
-     * @param string $key
-     * @return |null
-     */
-    public function getDynamicProperty(string $key) {
-        // Es gibt hier keine dynamisch berechneten Properties.
-        return null;
-    }
 }

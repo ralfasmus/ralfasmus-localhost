@@ -5,6 +5,7 @@
  */
 interface Properties_Interface
 {
+
     /**
      * Liefert eine berechnete oder gespeicherte Property.
      * Wenn die Property nicht gesetzt ist, wird $default geliefert.
@@ -54,6 +55,12 @@ interface Properties_Interface
     public function setProperty($value, string $key);
 
     /**
+     * Setzt das Item, das ggf. dynamisch berechnete Properties liefert.
+     * @param Properties_Interface|null $dynamicPropertiesItem
+     */
+    public function setDynamicPropertiesItem(?Properties_Interface $dynamicPropertiesItem) : void;
+
+    /**
      * Liefert die Property rawurldecoded. @see Properties_Interface::getProperty(). Es gibt hier keinen $defaultOnEmpty
      * Parameter, weil nicht benoetigt und nnicht sinnvoll.
      *
@@ -62,6 +69,4 @@ interface Properties_Interface
      * @return string
      */
     public function getDecodedProperty(string $key, string $default = '', $defaultOnEmpty = false) : string;
-
-    public function getDynamicProperty(string $key);
 }
