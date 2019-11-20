@@ -30,7 +30,6 @@ final class ProcessorItems extends Processor
             $processorCreateProperties = new Properties(array(
                 //'ProcessorThis' => $this->getPropertyMandatory( 'ProcessorThis'),
                 'processor-class' => 'ProcessorView',
-                'processor-method' => 'getHtml',
                 'pexec' => array()
             ));
 

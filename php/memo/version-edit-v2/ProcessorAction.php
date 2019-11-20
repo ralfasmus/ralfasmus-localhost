@@ -59,18 +59,4 @@ final class ProcessorAction extends Processor
         $this->getPersistence()->noteRecover($this->getUpdatedActionNote());
         return '';
     }
-
-    /**
-     * Liefert alle CSS Klassen dieses Processors.
-     *
-     * @return string
-     */
-    public function pmGetCssClasses() : string {
-        return $this->getPropertyDefault('ParentCssClasses', '');
-    }
-
-    protected function getView() : string {
-        return '';
-    }
-
 }

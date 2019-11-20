@@ -7,7 +7,7 @@
  */
 final class ProcessorView extends Processor
 {
-    protected static $PROCESSOR_METHOD_DEFAULT = 'getHtml';
+    protected static $PROCESSOR_METHOD_DEFAULT = 'pmGetHtml';
     /**
      * Cache filename => file inhalt fuer View Template Dateien unter /view/
      * @var array string => string
@@ -88,7 +88,7 @@ final class ProcessorView extends Processor
      * @return string
      * @throws Exception
      */
-    public function getHtml() : string {
+    public function pmGetHtml() : string {
         $view = $this->getView();
         if (!isset(static::$viewTemplatesCache[$view])) {
             static::$viewTemplatesCache["$view"] = $this->getViewTemplateHtml("${view}.html");
