@@ -34,9 +34,13 @@ class ProcessorFactory
     }
 
     private function setProcessorMethodAndParameter(Processor_Interface $processorInstance, Properties_Interface $processorCreateProperties) : void {
-        $processorMethod = $processorCreateProperties->getPropertyDefault('processor-method', 'getHtml', true);
-        $processorMethodParameters = $processorCreateProperties->getPropertyDefault('pexec', array(), true);
-        $processorInstance->setProcessorMethod($processorMethod);
-        $processorInstance->setProcessorMethodParameters($processorMethodParameters);
+        $processorMethod = $processorCreateProperties->getPropertyDefault('processor-method', 'unDEfineeD', true);
+        if($processorMethod != 'unDEfineeD') {
+            $processorInstance->setProcessorMethod($processorMethod);
+        }
+        $processorMethodParameters = $processorCreateProperties->getPropertyDefault('pexec', null, true);
+        if(!is_null($processorMethodParameters)) {
+            $processorInstance->setProcessorMethodParameters($processorMethodParameters);
+        }
     }
 }

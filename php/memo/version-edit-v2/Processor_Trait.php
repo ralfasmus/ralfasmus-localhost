@@ -8,11 +8,33 @@
 Trait Processor_Trait
 {
     use Properties_Trait;
+
+    /**
+     * @var string Processor Method to execute via
+     * @see Processor_Trait::execute().
+     */
     private $processorMethod = '';
+
+    /**
+     * @var array Parameters to use when executing Processor Method via
+     * @see Processor_Trait::execute().
+     */
     private $processorMethodParameters = array();
 
+    /**
+     * Returns the Default Processor Method to use if
+     * @see Processor_Trait::$processorMethod == ''.
+     * Is implemented in the abstract Processor class to use late static binding.
+     *
+     * @return string
+     */
     abstract function getDefaultProcessorMethod() : string;
 
+    /**
+     * @see Processor_Trait::$processorMethod.
+     *
+     * @return string
+     */
     private function getProcessorMethod() {
         return $this->processorMethod == '' ? $this->getDefaultProcessorMethod() : $this->processorMethod;
     }
@@ -48,7 +70,7 @@ Trait Processor_Trait
      * @return mixed
      */
     public function execute() {
-        $method = $this->processorMethod;
+        $method = $this->getProcessorMethod();
         $parameters = $this->processorMethodParameters;
         $callable = array($this, $method);
         assert(is_callable($callable));

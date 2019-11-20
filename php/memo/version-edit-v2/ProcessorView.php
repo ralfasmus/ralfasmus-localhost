@@ -84,6 +84,19 @@ final class ProcessorView extends Processor
     }
 
     /**
+     * Liefert das HTML fuer diesen View. Alle PLACE_HOLDER werden ersetzt.
+     * @return string
+     * @throws Exception
+     */
+    public function getHtml() : string {
+        $view = $this->getView();
+        if (!isset(static::$viewTemplatesCache[$view])) {
+            static::$viewTemplatesCache["$view"] = $this->getViewTemplateHtml("${view}.html");
+        }
+        return $this->processView(static::$viewTemplatesCache[$view]);
+    }
+
+    /**
      * Returns the complete name of the view file name in /view/* but without the trailing ".html".
      *
      * @return string
@@ -97,19 +110,6 @@ final class ProcessorView extends Processor
         $myParentViewPostfix = ($myParentView != '' ? '-': '');
         $myView = str_replace('^', '', $myView);
         return "${myParentView}${myParentViewPostfix}${myView}";
-    }
-
-    /**
-     * Liefert das HTML fuer diesen View. Alle PLACE_HOLDER werden ersetzt.
-     * @return string
-     * @throws Exception
-     */
-    public function getHtml() : string {
-        $view = $this->getView();
-        if (!isset(static::$viewTemplatesCache[$view])) {
-            static::$viewTemplatesCache["$view"] = $this->getViewTemplateHtml("${view}.html");
-        }
-        return $this->processView(static::$viewTemplatesCache[$view]);
     }
 
     /**
