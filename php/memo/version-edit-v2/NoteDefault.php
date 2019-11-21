@@ -12,24 +12,21 @@ final class NoteDefault extends Note
      * Fuer alle anderen Properties wird das EDIT SHOW usw. html immer hier dynamisch erzeugt.
      */
     const DEFAULT_PROPERTIES = array('id', 'name', 'art', 'view', 'possible-views', 'datetimesaved', 'datetimecreated', 'files');
-    /**
-     * @see Note::initialize()
-     */
-    protected function initialize() : void {
-    }
+
     /**
      * @see Properties_Trait::getDynamicProperty()
      *
      * @param string $key
      * @return |null
      */
-    protected function getDynamicProperty(string $key) {
+    protected function getDynamicPropertySpecial(string $key) {
+        $result = 'unDEfineeD';
         switch ($key) {
             case "other-properties-edit-html" :
-                return $this->getPropertiesHtmlEdit();
+                $result = $this->getPropertiesHtmlEdit();
                 break;
         }
-        return parent::getDynamicProperty($key);
+        return $result;
     }
 
     /**

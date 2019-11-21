@@ -10,7 +10,7 @@ final class ProcessorAction extends Processor
     /**
      * Speichere die Note Instance, mit den Daten, die in den Request GET/POST-Daten spezifiziert sind.
      *
-     * ?pcreate[processor-class]=ProcessorAction&pcreate[processor-method]=noteSave
+     * ?pcreate[instance-class]=ProcessorAction&pcreate[processor-method]=noteSave
      *
      * @return string
      * @throws Exception
@@ -23,7 +23,7 @@ final class ProcessorAction extends Processor
     /**
      * Loesche die Note Instance, die in den Request GET/POST-Daten spezifiziert ist.
      *
-     * ?pcreate[processor-class]=ProcessorAction&pcreate[processor-method]=noteDelete
+     * ?pcreate[instance-class]=ProcessorAction&pcreate[processor-method]=noteDelete
      *
      * @return string
      * @throws Exception
@@ -36,7 +36,7 @@ final class ProcessorAction extends Processor
     /**
      * Sichere die Note Instance, die in den Request GET/POST-Daten spezifiziert ist.
      *
-     * ?pcreate[processor-class]=ProcessorAction&pcreate[processor-method]=noteBackup
+     * ?pcreate[instance-class]=ProcessorAction&pcreate[processor-method]=noteBackup
      *
      * @return string
      * @throws Exception
@@ -49,7 +49,7 @@ final class ProcessorAction extends Processor
     /**
      * Stelle die Note Instance aus dem Delete/Backup wieder her, die in den Request GET/POST-Daten spezifiziert ist.
      *
-     * ?pcreate[processor-class]=ProcessorAction&pcreate[processor-method]=noteRecover
+     * ?pcreate[instance-class]=ProcessorAction&pcreate[processor-method]=noteRecover
      *
      * @return string
      * @throws Exception

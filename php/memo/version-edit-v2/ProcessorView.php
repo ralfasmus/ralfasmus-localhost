@@ -135,7 +135,7 @@ final class ProcessorView extends Processor
      * @param string $processorString Properties, wie sie in einem View Platzhalter oder als Querystring einer URL
      * angegeben werden (aber nicht urlencoded).
      *
-     * z.B. pcreate[processor-class]=ProcessorView&pinit[view]=-items_note&pcreate[processor-method]=getHtml
+     * z.B. pcreate[instance-class]=ProcessorView&pinit[view]=-items_note&pcreate[processor-method]=getHtml
      *
      * @return array(Properties_Interface, Properties_Interface)
      * @throws Exception
@@ -145,8 +145,8 @@ final class ProcessorView extends Processor
         $result = array();
 
         // Shortcuts ersetzen:
-        $processorString = str_replace('CONFIG', 'pcreate[processor-class]=ProcessorThis&pcreate[processor-method]=getConfigValue', $processorString);
-        $processorString = str_replace('PROPERTY', 'pcreate[processor-class]=ProcessorThis&pcreate[processor-method]=getPropertyDefault', $processorString);
+        $processorString = str_replace('CONFIG', 'pcreate[instance-class]=ProcessorThis&pcreate[processor-method]=getConfigValue', $processorString);
+        $processorString = str_replace('PROPERTY', 'pcreate[instance-class]=ProcessorThis&pcreate[processor-method]=getPropertyDefault', $processorString);
         $processorString = str_replace('~', '&pcreate[pexec][]=', $processorString);
 
         // als Querystring parsen und daraus ein assoziatives array erzeugen

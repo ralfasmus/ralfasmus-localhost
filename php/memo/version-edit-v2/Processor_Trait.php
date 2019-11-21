@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Properties eines Processors koennen im view/*.html mit pcreate[processor-class]=this&pcreate[processor-method]=getPropertyDefault
+ * Properties eines Processors koennen im view/*.html mit pcreate[instance-class]=this&pcreate[processor-method]=getPropertyDefault
  * eingebunden werden.
  * Class Processor
  */

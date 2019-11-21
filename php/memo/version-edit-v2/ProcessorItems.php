@@ -29,7 +29,7 @@ final class ProcessorItems extends Processor
                     . ' und kann deshalb nicht die Properties zur Initialisierung eines Processors liefern.');
             $processorCreateProperties = new Properties(array(
                 //'ProcessorThis' => $this->getPropertyMandatory( 'ProcessorThis'),
-                'processor-class' => 'ProcessorView',
+                'instance-class' => 'ProcessorView',
                 'pexec' => array()
             ));
 
@@ -49,7 +49,7 @@ final class ProcessorItems extends Processor
     /**
      * Liefert das HTML fuer die Liste der sichtbaren Notes des Requests.
      *
-     * pcreate[processor-class]=ProcessorItems&pcreate[processor-method]=getHtmlNotes
+     * pcreate[instance-class]=ProcessorItems&pcreate[processor-method]=getHtmlNotes
      *
      * @return string
      */
@@ -62,7 +62,7 @@ final class ProcessorItems extends Processor
     /**
      * Liefert das HTML fuer die Liste der 'art' Werte der sichtbaren Notes des Requests.
      *
-     * pcreate[processor-class]=ProcessorItems&pcreate[processor-method]=getHtmlArts
+     * pcreate[instance-class]=ProcessorItems&pcreate[processor-method]=getHtmlArts
      *
      * @return string
      */
@@ -76,7 +76,7 @@ final class ProcessorItems extends Processor
     /**
      * Liefert das HTML fuer die EDIT Seite der Note Instance, die in den Request Daten spezifiziert ist.
      *
-     * pcreate[processor-class]=ProcessorItems&pcreate[processor-method]=getHtmlEditUpdatedActionNote
+     * pcreate[instance-class]=ProcessorItems&pcreate[processor-method]=getHtmlEditUpdatedActionNote
      *
      * @return string
      * @throws Exception

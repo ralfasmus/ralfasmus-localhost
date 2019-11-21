@@ -105,6 +105,7 @@ final class Request implements Properties_Interface, Request_Interface
         }, ARRAY_FILTER_USE_KEY ));
 
         // Initialisierung der Persistence Schicht, bevor sie mittels ::getSingleInstance() genutzt werden kann
+        NoteFactory::createSingleInstance();
         PersistenceActive::createSingleInstance();
         PersistenceBackup::createSingleInstance();
         PersistenceDeleted::createSingleInstance();

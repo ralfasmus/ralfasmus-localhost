@@ -173,7 +173,7 @@ trait Persistence_Trait
         try {
             $properties = json_decode($noteString, true);
             $view = isset($properties['view']) ? $properties['view'] : 'NoteDefault';
-            $note = Note::createForView($properties["id"], $view);
+            $note = NoteFactory::getSingleInstance()->createNote(new Properties(array('instance-class' => $view)), new Properties($properties));
             foreach($properties as $name => $value) {
                 if(stripos($name,'filter') === false) {
                     $properties["$name"] = str_replace('"', '&quot;', $value);
@@ -214,7 +214,7 @@ trait Persistence_Trait
         assert(!is_null($view) && $view != '', '$view Parameter ist leer oder null.');
         $note = $this->loadNoteById($id);
         if (is_null($note)) {
-            $note = Note::createForView($id, $view);
+            $note = NoteFactory::getSingleInstance()->createNote(new Properties(array('instance-class' => $view)), new Properties(array('id' => $id)));
             $this->noteSave($note);
         }
         return $note;

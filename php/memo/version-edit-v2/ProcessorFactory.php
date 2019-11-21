@@ -8,7 +8,6 @@
 final class ProcessorFactory
 {
     use InstanceFactory_Trait;
-    use SingleInstance_Trait;
 
     /**
      * Erzeugt einen Processor aus den $processorCreateProperties und ruft die angegebene Methode auf, um das Ergebnis daraus
@@ -21,7 +20,7 @@ final class ProcessorFactory
      */
     public function createProcessor(Properties_Interface $processorCreateProperties, Properties_Interface $processorInitProperties) : Processor_Interface {
         $processorInstanceProperty = $processorCreateProperties->getPropertyDefault('ProcessorThis', $processorCreateProperties, true);
-        $processorClassProperty = $processorCreateProperties->getPropertyDefault('processor-class', 'ProcessorView', true);
+        $processorClassProperty = $processorCreateProperties->getPropertyDefault('instance-class', 'ProcessorView', true);
         switch ($processorClassProperty) {
             case 'ProcessorThis' :
                 $processorInstance = $processorInstanceProperty;
