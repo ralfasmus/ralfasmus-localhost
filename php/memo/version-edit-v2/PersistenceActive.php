@@ -3,9 +3,9 @@
  * Alle Funktionen zum persistenten Laden und Speichern von Notes im Status PersistenceActive.
  * Class PersistenceActive
  */
-class PersistenceActive implements Persistence_Interface
+class PersistenceActive extends Persistence
 {
-    use SingleInstance_Trait { createSingleInstance as public; }
+    use SingleInstance_Trait;
     use Persistence_Trait { noteSave as private noteSaveDefault; }
 
     /**

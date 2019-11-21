@@ -4,8 +4,8 @@
  *
  * Class PersistenceBackup
  */
-class PersistenceBackup implements Persistence_Interface
+class PersistenceBackup extends Persistence
 {
-    use SingleInstance_Trait { createSingleInstance as public; }
+    use SingleInstance_Trait;
     use Persistence_Trait;
 }

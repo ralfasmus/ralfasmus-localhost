@@ -5,8 +5,9 @@
  *
  * Class ProcessorRoot
  */
-class ProcessorFactory
+final class ProcessorFactory
 {
+    use InstanceFactory_Trait;
     use SingleInstance_Trait;
 
     /**
@@ -29,6 +30,7 @@ class ProcessorFactory
             //    $processorInstance = new $processorClassProperty($processorInitProperties);
             $processorInstance = $processorClassProperty::createInstance($processorInitProperties);
         }
+        $processorInstance = $this->createInstance($processorCreateProperties, $processorInitProperties);
         $this->setProcessorMethodAndParameter($processorInstance, $processorCreateProperties);
         return $processorInstance;
     }

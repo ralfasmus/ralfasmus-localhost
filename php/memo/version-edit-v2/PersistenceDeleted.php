@@ -3,9 +3,9 @@
  * Alle Funktionen zum persistenten Laden und Speichern von Notes im Status deleted.
  * Class PersistenceDeleted
  */
-class PersistenceDeleted implements Persistence_Interface
+class PersistenceDeleted extends Persistence
 {
-    use SingleInstance_Trait { createSingleInstance as public; }
+    use SingleInstance_Trait;
     use Persistence_Trait;
 
     /**
