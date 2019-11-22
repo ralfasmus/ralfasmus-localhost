@@ -21,6 +21,7 @@ Trait Note_Trait
      */
     private function initializeNoteTrait(Properties_Interface $properties) : void {
         $this->initializePropertiesTrait();
+        $this->setProperties($properties->getProperties());
         $this->setProperty(static::class, 'view');
     }
 

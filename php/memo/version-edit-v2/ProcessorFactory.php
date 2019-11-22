@@ -19,17 +19,7 @@ final class ProcessorFactory
      * @throws Exception
      */
     public function createProcessor(Properties_Interface $processorCreateProperties, Properties_Interface $processorInitProperties) : Processor_Interface {
-        $processorInstanceProperty = $processorCreateProperties->getPropertyDefault('ProcessorThis', $processorCreateProperties, true);
-        $processorClassProperty = $processorCreateProperties->getPropertyDefault('instance-class', 'ProcessorView', true);
-        switch ($processorClassProperty) {
-            case 'ProcessorThis' :
-                $processorInstance = $processorInstanceProperty;
-                break;
-            default :
-            //    $processorInstance = new $processorClassProperty($processorInitProperties);
-            $processorInstance = $processorClassProperty::createInstance($processorInitProperties);
-        }
-        $processorInstance = $this->createInstance($processorCreateProperties, $processorInitProperties);
+        $processorInstance = $this->getOrCreateInstance($processorCreateProperties, $processorInitProperties);
         $this->setProcessorMethodAndParameter($processorInstance, $processorCreateProperties);
         return $processorInstance;
     }

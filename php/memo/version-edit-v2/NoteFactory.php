@@ -13,8 +13,9 @@ final class NoteFactory
      * @return mixed
      * @throws Exception
      */
-    public function createNote(Properties_Interface $noteCreateProperties, Properties_Interface $noteInitProperties) : Note_Interface {
-        return  $this->createInstance($noteCreateProperties, $noteInitProperties);
+    public function createNote(Properties_Interface $noteInitProperties) : Note_Interface {
+        $view = $noteInitProperties->getPropertyDefault('view','NoteDefault', true);
+        return $this->getOrCreateInstance(new Properties(array('instance-class' => $view)), $noteInitProperties);
     }
 
 }

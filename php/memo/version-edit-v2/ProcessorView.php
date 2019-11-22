@@ -45,7 +45,7 @@ final class ProcessorView extends Processor
                 list($processorCreateProperties, $processorInitProperties) = self::propertiesFromString($foundPlaceHolder);
                 $processorInitProperties->setProperty($this->getView(), 'ParentView');
                 $processorInitProperties->setProperty($this->pmGetCssClasses(), 'ParentCssClasses');
-                $processorCreateProperties->setProperty( $this,'ProcessorThis');
+                $processorCreateProperties->setProperty( $this,'InstanceThis');
                 $processorPlaceHolderHtml = ProcessorFactory::getSingleInstance()->createProcessor($processorCreateProperties, $processorInitProperties)->execute();
                 if(is_array($processorPlaceHolderHtml)) {
                     $processorPlaceHolderHtml = "";
@@ -145,8 +145,8 @@ final class ProcessorView extends Processor
         $result = array();
 
         // Shortcuts ersetzen:
-        $processorString = str_replace('CONFIG', 'pcreate[instance-class]=ProcessorThis&pcreate[processor-method]=getConfigValue', $processorString);
-        $processorString = str_replace('PROPERTY', 'pcreate[instance-class]=ProcessorThis&pcreate[processor-method]=getPropertyDefault', $processorString);
+        $processorString = str_replace('CONFIG', 'pcreate[instance-class]=InstanceThis&pcreate[processor-method]=getConfigValue', $processorString);
+        $processorString = str_replace('PROPERTY', 'pcreate[instance-class]=InstanceThis&pcreate[processor-method]=getPropertyDefault', $processorString);
         $processorString = str_replace('~', '&pcreate[pexec][]=', $processorString);
 
         // als Querystring parsen und daraus ein assoziatives array erzeugen

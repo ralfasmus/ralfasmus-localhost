@@ -28,7 +28,7 @@ final class ProcessorItems extends Processor
                     'Ein item implementiert nicht das Interface ' . Properties_Interface::class
                     . ' und kann deshalb nicht die Properties zur Initialisierung eines Processors liefern.');
             $processorCreateProperties = new Properties(array(
-                //'ProcessorThis' => $this->getPropertyMandatory( 'ProcessorThis'),
+                //'InstanceThis' => $this->getPropertyMandatory( 'InstanceThis'),
                 'instance-class' => 'ProcessorView',
                 'pexec' => array()
             ));
