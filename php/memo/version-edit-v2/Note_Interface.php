@@ -5,5 +5,5 @@
  */
 interface Note_Interface
 {
-
+    public function getPropertiesPersistent() : array;
 }

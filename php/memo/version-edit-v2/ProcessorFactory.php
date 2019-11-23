@@ -12,13 +12,13 @@ final class ProcessorFactory
     /**
      * Erzeugt einen Processor aus den $processorCreateProperties und ruft die angegebene Methode auf, um das Ergebnis daraus
      * zurueck zu liefern.
-    /**
+    * /**
      * @param Properties_Interface $processorCreateProperties Properties, die die Bestimmung/Erzeugung einer Processor Instance steuern.
      * @param Properties_Interface $processorInitProperties Properties, die einer neu instantiierten Processor Instance initial gesetzt werden.
      * @return mixed
      * @throws Exception
      */
-    public function createProcessor(Properties_Interface $processorCreateProperties, Properties_Interface $processorInitProperties) : Processor_Interface {
+    public function createProcessor(Properties_Interface $processorCreateProperties, PropertiesStatic_Interface $processorInitProperties) : Processor_Interface {
         $processorInstance = $this->getOrCreateInstance($processorCreateProperties, $processorInitProperties);
         $this->setProcessorMethodAndParameter($processorInstance, $processorCreateProperties);
         return $processorInstance;

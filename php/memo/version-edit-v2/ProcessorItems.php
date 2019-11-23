@@ -27,21 +27,21 @@ final class ProcessorItems extends Processor
             assert(in_array(Properties_Interface::class, class_implements($item)),
                     'Ein item implementiert nicht das Interface ' . Properties_Interface::class
                     . ' und kann deshalb nicht die Properties zur Initialisierung eines Processors liefern.');
-            $processorCreateProperties = new Properties(array(
+            $processorCreateProperties = new PropertiesStatic(array(
                 //'InstanceThis' => $this->getPropertyMandatory( 'InstanceThis'),
                 'instance-class' => 'ProcessorView',
                 'pexec' => array()
             ));
 
-            $processorInitProperties = new Properties(array(
+            $processorInitProperties = new PropertiesStatic(array(
                     'ParentView' => $this->getPropertyDefault('ParentView', ''),
                     'view' => $item->getPropertyDefault('view', ''),
                     'ParentCssClasses' => $this->getPropertyDefault('ParentCssClasses', ''),
                 )
             );
-            $processorInitProperties->setDynamicPropertiesItem($item);
-
-            $html .= ProcessorFactory::getSingleInstance()->createProcessor($processorCreateProperties, $processorInitProperties)->execute();
+            $processor = ProcessorFactory::getSingleInstance()->createProcessor($processorCreateProperties, $processorInitProperties);
+            $processor->setPropertiesExtender($item);
+            $html .= $processor->execute();
         }
         return $html;
     }

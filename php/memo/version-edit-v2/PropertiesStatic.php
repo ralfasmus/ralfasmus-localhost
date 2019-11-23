@@ -1,17 +1,18 @@
 <?php
 /**
  * Implementation von @see Properties_Interface
- * Class Properties
+ * Class PropertiesStatic
  */
-Class Properties implements Properties_Interface
+class PropertiesStatic implements PropertiesStatic_Interface
 {
-    use Properties_Trait;
+    use PropertiesStatic_Trait;
     /**
      * Properties constructor.
      * @param array $properties
      */
     public function __construct(array $properties = array())
     {
+        assert(is_array($properties));
         $this->initializePropertiesTrait()->setProperties($properties);
     }
 }

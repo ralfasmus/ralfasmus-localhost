@@ -11,7 +11,7 @@ final class Request implements Properties_Interface, Request_Interface
      * $propertiesNoteBerechnet noch in $propertiesNotePersistent enthalten sind. Das sind Parameter, die also nicht der
      * zu bearbeitenden Note zugeordnet sind, sondern dem Request.
      */
-    use Properties_Trait,
+    use PropertiesStatic_Trait,
         SingleInstance_Trait {
             createSingleInstance as private trait_createSingleInstance;
             getSingleInstance as trait_getSingleInstance;
@@ -81,7 +81,7 @@ final class Request implements Properties_Interface, Request_Interface
     private function initialize(array $requestProperties) : Request_Interface
     {
         $this->initializePropertiesTrait();
-        $this->propertiesAll = new Properties($requestProperties);
+        $this->propertiesAll = new PropertiesStatic($requestProperties);
         $propertiesGet = $this->getPropertiesAll()->getPropertyDefault('get', array(), true);
         $propertiesPost = $this->getPropertiesAll()->getPropertyDefault('post', array(), true);
 
@@ -89,12 +89,12 @@ final class Request implements Properties_Interface, Request_Interface
         $parameters = array_merge($propertiesGet, $propertiesPost);
 
         // Persistent Note-Instanz Parameter extrahieren
-        $this->propertiesNotePersistent = new Properties(static::removeParameterPrefix(
+        $this->propertiesNotePersistent = new PropertiesStatic(static::removeParameterPrefix(
                 array_filter($parameters, function($key) { return stripos($key, static::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT) === 0; }, ARRAY_FILTER_USE_KEY ),
                 static::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT));
 
         // Berechnete Note-Instanz Parameter extrahieren
-        $this->propertiesNoteBerechnet = new Properties(static::removeParameterPrefix(
+        $this->propertiesNoteBerechnet = new PropertiesStatic(static::removeParameterPrefix(
                 array_filter($parameters, function($key) { return stripos($key, static::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET) === 0; }, ARRAY_FILTER_USE_KEY ),
                 static::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET));
 
@@ -121,13 +121,13 @@ final class Request implements Properties_Interface, Request_Interface
         return $this->propertiesAll;
     }
     private function getPropertiesCookie() : Properties_Interface {
-        return new Properties($this->propertiesAll->getPropertyMandatory('cookie', 'Request wurde nicht richtig initialisiert. $_COOKIE steht nicht im Request Object bereit.'));
+        return new PropertiesStatic($this->propertiesAll->getPropertyMandatory('cookie', 'Request wurde nicht richtig initialisiert. $_COOKIE steht nicht im Request Object bereit.'));
     }
     private function getPropertiesFiles() : Properties_Interface {
-        return new Properties($this->propertiesAll->getPropertyMandatory('files', 'Request wurde nicht richtig initialisiert. $_FILES steht nicht im Request Object bereit.'));
+        return new PropertiesStatic($this->propertiesAll->getPropertyMandatory('files', 'Request wurde nicht richtig initialisiert. $_FILES steht nicht im Request Object bereit.'));
     }
     private function getPropertiesServer() : Properties_Interface {
-        return new Properties($this->propertiesAll->getPropertyMandatory('server', 'Request wurde nicht richtig initialisiert. $_SERVER steht nicht im Request Object bereit.'));
+        return new PropertiesStatic($this->propertiesAll->getPropertyMandatory('server', 'Request wurde nicht richtig initialisiert. $_SERVER steht nicht im Request Object bereit.'));
     }
     /**
      * @return Properties_Interface
@@ -178,8 +178,8 @@ final class Request implements Properties_Interface, Request_Interface
             //echo '<br>GET properties: ' . var_export($this->propertiesRequest->getProperties(), true);
             // Browser: index.php?filter-views=NoteText&pcreate[processor_class]=ProcessorView&pcreate[processor_method]=getHtml&pinit[view]=notelist&config-id=default-PersistenceActive
             // AJAX: index.php?processor.class=ProcessorView&processor.method=saveItem&status=PersistenceActive
-            $processorCreateProperties = new Properties($this->getPropertiesRequest()->getPropertyDefault('pcreate', array()));
-            $processorInitProperties = new Properties($this->getPropertiesRequest()->getPropertyDefault('pinit', array()));
+            $processorCreateProperties = new PropertiesStatic($this->getPropertiesRequest()->getPropertyDefault('pcreate', array()));
+            $processorInitProperties = new PropertiesStatic($this->getPropertiesRequest()->getPropertyDefault('pinit', array()));
             $html .= ProcessorFactory::createSingleInstance()->createProcessor($processorCreateProperties, $processorInitProperties)->execute();
             Log::info("Done!!!");
         } catch (Throwable $throwable) {

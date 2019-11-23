@@ -8,7 +8,7 @@
 final class Config implements Properties_Interface
 {
     use SingleInstance_Trait { createSingleInstance as private trait_createSingleInstance; }
-    use Properties_Trait;
+    use PropertiesStatic_Trait;
 
     /**
      * Request Property, die die ID zum Laden der Config-Note definiert.
@@ -46,7 +46,7 @@ final class Config implements Properties_Interface
             //$persistenceForConfigs->loadOrCreateNote($configId, 'NoteDefault');
             //#asm MyThrowable::throw("Kann keine Config fuer diesen Request laden mit config-id=$configId");
         } else {
-            $this->setProperties($configNote->getProperties());
+            $this->setProperties($configNote->getPropertiesPersistent());
         }
         return $this;
     }

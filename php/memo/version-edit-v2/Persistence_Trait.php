@@ -177,7 +177,7 @@ trait Persistence_Trait
                     $properties["$name"] = str_replace('"', '&quot;', $value);
                 }
             }
-            $note = NoteFactory::getSingleInstance()->createNote(new Properties($properties));
+            $note = NoteFactory::getSingleInstance()->createNote(new PropertiesStatic($properties));
 
         } catch (Throwable $throwable) {
             MyThrowable::handleThrowable($throwable, 'Kann note nicht instantiieren durch json_decode von diesem String: ' . $noteString, true);
@@ -204,7 +204,6 @@ trait Persistence_Trait
      *
      * @param string $id
      * @param string $view
-     * @param Properties_Interface $notePropertiesFromRequest
      * @return Note
      * @throws Throwable
      */
@@ -213,7 +212,7 @@ trait Persistence_Trait
         assert(!is_null($view) && $view != '', '$view Parameter ist leer oder null.');
         $note = $this->loadNoteById($id);
         if (is_null($note)) {
-            $note = NoteFactory::getSingleInstance()->createNote(new Properties(array('id' => $id, 'view' => $view)));
+            $note = NoteFactory::getSingleInstance()->createNote(new PropertiesStatic(array('id' => $id, 'view' => $view)));
             $this->noteSave($note);
         }
         return $note;
@@ -267,7 +266,7 @@ trait Persistence_Trait
             }
             $note->setProperty(implode(' ', $noteFiles), 'files');
         }
-        $props = $note->getProperties();
+        $props = $note->getPropertiesPersistent();
         file_put_contents("${filename}", json_encode($props, JSON_HEX_QUOT | JSON_HEX_TAG));
         Log::debug('Writing ' . Log::objectString($note) . ' to file: ' . $filename);
     }

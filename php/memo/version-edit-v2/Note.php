@@ -6,15 +6,7 @@
  */
 abstract class Note implements Note_Interface, Properties_Interface
 {
-    use Note_Trait { getDynamicProperty as private trait_getDynamicProperty; }
-
-    final public function getDynamicProperty(string $key)
-    {
-        $special = $this->getDynamicPropertySpecial($key);
-        return ($special == 'unDEfineeD') ? $this->trait_getDynamicProperty($key) : $special;
-    }
-
-    abstract protected function getDynamicPropertySpecial(string $key);
+    use Note_Trait;
 
     /**
      * Property, die die eineindeutige ID der Note-Instanz enthaelt.

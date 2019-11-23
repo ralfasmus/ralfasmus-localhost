@@ -154,9 +154,9 @@ final class ProcessorView extends Processor
         if(empty($result)) {
             throw new Exception('Kann Processor-Properties from String nicht verarbeiten:'. var_export($processorString));
         }
-        $properties = new Properties($result);
-        $processorCreateProperties = new Properties($properties->getPropertyDefault('pcreate', array()));
-        $processorInitProperties = new Properties($properties->getPropertyDefault('pinit', array()));
+        $properties = new PropertiesStatic($result);
+        $processorCreateProperties = new PropertiesStatic($properties->getPropertyDefault('pcreate', array()));
+        $processorInitProperties = new PropertiesStatic($properties->getPropertyDefault('pinit', array()));
         return array($processorCreateProperties, $processorInitProperties);
     }
 }

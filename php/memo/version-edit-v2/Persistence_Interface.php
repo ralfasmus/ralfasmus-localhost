@@ -33,7 +33,6 @@ interface Persistence_Interface
      *
      * @param string $id
      * @param string $view NoteText|NoteConfig
-     * @param Properties_Interface $notePropertiesFromRequest
      * @return Note
      * @throws Throwable
      */

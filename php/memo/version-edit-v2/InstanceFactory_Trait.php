@@ -16,7 +16,7 @@ Trait InstanceFactory_Trait
      * @param Properties_Interface $initProperties
      * @return mixed
      */
-    private function getOrCreateInstance(Properties_Interface $createProperties, Properties_Interface $initProperties) {
+    private function getOrCreateInstance(Properties_Interface $createProperties, PropertiesStatic_Interface $initProperties) {
         $instanceThis = $createProperties->getPropertyDefault('InstanceThis', $createProperties, true);
         $instanceClass = $createProperties->getPropertyMandatory('instance-class', true, 'Kann Instanz nicht erzeugen, weil instance-class "" ist.');
         $instanceClassMethod = $createProperties->getPropertyDefault('instance-class-method', 'createInstance', true);

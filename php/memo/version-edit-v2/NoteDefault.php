@@ -14,23 +14,23 @@ final class NoteDefault extends Note
     const DEFAULT_PROPERTIES = array('id', 'name', 'art', 'view', 'possible-views', 'datetimesaved', 'datetimecreated', 'files');
 
     /**
-     * @see Properties_Trait::getDynamicProperty()
+     * @see PropertiesDynamic_Trait::getPropertyDynamic()
      *
      * @param string $key
      * @return |null
      */
-    protected function getDynamicPropertySpecial(string $key) {
-        $result = 'unDEfineeD';
+    protected function getPropertyDynamic(string $key, $default) {
         switch ($key) {
             case "other-properties-edit-html" :
                 $result = $this->getPropertiesHtmlEdit();
                 break;
+            default: $result = parent::getPropertyDynamic($key, $default);
         }
         return $result;
     }
 
     /**
-     * @see getDynamicProperty()
+     * @see getPropertyDynamic()
      *
      * @param string $key
      * @return |null

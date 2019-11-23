@@ -7,7 +7,7 @@
  */
 Trait Processor_Trait
 {
-    use Properties_Trait;
+    use PropertiesExtended_Trait;
 
     /**
      * @var string Processor Method to execute via
@@ -41,12 +41,12 @@ Trait Processor_Trait
 
     /**
      * Erzeugt eine Instance eines Processors.
-     * Wird aufgerufen in @see ProcessorFactory::createProcessor().
-     *
-     * @param Properties_Interface $properties
+     * Wird aufgerufen in @param Properties_Interface $properties
      * @return Processor_Interface
+     * @see ProcessorFactory::createProcessor().
+     *
      */
-    static public function createInstance(Properties_Interface $properties) : Processor_Interface {
+    static public function createInstance(PropertiesStatic_Interface $properties) : Processor_Interface {
         $instance = new static;
         $instance->initializeProcessorTrait($properties);
         Log::logInstanceCreated($instance);
@@ -59,8 +59,8 @@ Trait Processor_Trait
      * @param Properties_Interface $properties
      * @return $this
      */
-    private function initializeProcessorTrait(Properties_Interface $properties) : void {
-        $this->initializePropertiesTrait()->setDynamicPropertiesItem($properties);
+    private function initializeProcessorTrait(PropertiesStatic_Interface $properties) : void {
+        $this->initializePropertiesTrait()->setProperties($properties->getProperties());
     }
 
     /**

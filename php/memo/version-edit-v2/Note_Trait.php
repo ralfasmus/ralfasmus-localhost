@@ -5,9 +5,9 @@
  */
 Trait Note_Trait
 {
-    use Properties_Trait { getPropertyDefault as private trait_getPropertyDefault; }
+    use PropertiesDynamic_Trait;
 
-    static public function createInstance(Properties_Interface $properties) : Note_Interface {
+    static public function createInstance(PropertiesStatic_Interface $properties) : Note_Interface {
         $instance = new static;
         $instance->initializeNoteTrait($properties);
         return $instance;
@@ -19,7 +19,7 @@ Trait Note_Trait
      * @param Properties_Interface $properties
      * @return $this
      */
-    private function initializeNoteTrait(Properties_Interface $properties) : void {
+    private function initializeNoteTrait(PropertiesStatic_Interface $properties) : void {
         $this->initializePropertiesTrait();
         $this->setProperties($properties->getProperties());
         $this->setProperty(static::class, 'view');
@@ -49,10 +49,10 @@ Trait Note_Trait
     /**
      * Liefert die alphabetisch sortierte Liste der "art" Werte aus den uebergebenen Note-Instanzen. Jede art ist nur
      * einmal enthalten. Es werden fuer arts der Form .a.b.c zusaetzlich die arts .a und .a.b aufgenommen.
-     * Die Liste ist ein Array von @see Properties_Interface mit den Werten "name" = art und "view" = "art".
-     *
-     * @param array $notes
+     * Die Liste ist ein Array von @param array $notes
      * @return array Liste von Properties_Interface
+     *@see Properties_Interface mit den Werten "name" = art und "view" = "art".
+     *
      */
     final static public function getArtsList(array $notes): array
     {
@@ -75,7 +75,7 @@ Trait Note_Trait
         $artProperties = array();
         foreach (array_keys($arts) as $art) {
             if ($art != "") {
-                $artProp = new Properties();
+                $artProp = new PropertiesStatic();
                 $artProp->setProperty($art, self::ART_LIST_PROPERTY_ART);
                 $artProp->setProperty(self::ART_LIST_PROPERTY_VIEW_DEFAULT, self::PROPERTY_VIEW);
                 $artProperties[] = $artProp;
@@ -86,22 +86,21 @@ Trait Note_Trait
 
 
     /**
-     * @see Properties_Trait::getDynamicProperty()
+     * @see PropertiesDynamic_Trait::getPropertyDynamic()
      *
      * @param string $key
      * @return |null
      */
-    protected function getDynamicProperty(string $key) {
-        $result = 'unDEfineeD';
+    protected function getPropertyDynamic(string $key, $default) {
         switch ($key) {
             // zur Verwendung im data-text Attribute der DUPlicate Url
             case "data-text" :
-                $result .= $this->getValueDoubleQuote2singleQuote($this->getPropertyDefault('text', ''));
+                $result = $this->getValueDoubleQuote2singleQuote($this->getPropertyDefault('text', ''));
                 break;
             // zur Verwendung in einem Filter-Input Feld im Formular
             case "data-filter-any" :
                 $result = "";
-                foreach ($this->getProperties() as $name => $value) {
+                foreach ($this->getPropertiesStatic() as $name => $value) {
                     if(!is_array($value)) {
                         $result .= strtolower($this->getValueDoubleQuote2singleQuote($value, '')) . ' ';//htmlspecialchars("$value "));
                     }
@@ -109,7 +108,7 @@ Trait Note_Trait
                 break;
             // zur Verwendung in einem Filter-Input Feld im Formular
             case "data-filter-views" :
-                $result = strtolower($this->getDynamicProperty('all-views'));
+                $result = strtolower($this->getPropertyDynamic('all-views', ''));
                 break;
             // zur Verwendung u.a. beim Laden von Notes.
             case "all-views" :
@@ -126,9 +125,15 @@ Trait Note_Trait
                         $linkTags[] = '<a class="dvz-note-download" href="' . "$downloadHrefBase/$filename" . '" target="_blank">' . "$name ($timestamp)</a>";
                     }
                 }
-                $result .= implode('<br/>', $linkTags);
+                $result = implode('<br/>', $linkTags);
                 break;
+            default:
+                $result = $default;
         }
         return $result;
+    }
+
+    final public function getPropertiesPersistent() : array {
+        return $this->getPropertiesStatic();
     }
 }

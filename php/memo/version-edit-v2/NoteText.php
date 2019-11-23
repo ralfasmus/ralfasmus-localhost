@@ -8,18 +8,18 @@ final class NoteText extends Note
 {
 
     /**
-     * @see Properties_Trait::getDynamicProperty()
+     * @see PropertiesDynamic_Trait::getPropertyDynamic()
      *
      * @param string $key
      * @return |null
      */
-    protected function getDynamicPropertySpecial(string $key) {
-        $result = 'unDEfineeD';
+    protected function getPropertyDynamic(string $key, $default) {
         switch ($key) {
             case "data-tooltip-html" :
-                $text = $this->getPropertyDefault("text");
+                $text = $this->getPropertyDefault("text", '');
                 $result = str_replace('"', "'", $text);
                 break;
+            default: $result = parent::getPropertyDynamic($key, $default);
         }
         return $result;
     }
