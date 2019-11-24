@@ -1,6 +1,8 @@
 <?php
 /**
- * Zugriff auf ein statisches Set von Properties der Form name => wert. Keine dynamisch generierten Properties.
+ * Zugriff auf ein Set von Properties. Der Wert einer Property kann statisch, dynamisch oder durch einen PropertyExtender
+ * definiert sein.
+ *
  * Interface Properties_Interface
  */
 interface Properties_Interface
@@ -9,7 +11,7 @@ interface Properties_Interface
     /**
      * Liefert eine berechnete oder gespeicherte Property.
      * Wenn die Property nicht gesetzt ist, wird $default geliefert.
-     * Ist $defaultOnEmpty == true, so wird im Falle dass der Property Wert gesetzt aber leer oder null ist,
+     * Ist $defaultOnEmpty == true, so wird im Falle dass der Property Wert gesetzt aber '' oder null ist,
      * der $default geliefert.
      *
      * @param string $key
@@ -22,6 +24,7 @@ interface Properties_Interface
     /**
      * Liefert eine berechnete oder gespeicherte Property.
      * Wenn die Property nicht gesetzt ist, wird eine Exception geworfen.
+     *
      * @param string $key
      * @param bool $exceptionOnEmpty wenn true (=default), wird eine Exception auch geworfen, wenn die Property zwar
      * gesetzt, aber ein leerer String oder null ist.

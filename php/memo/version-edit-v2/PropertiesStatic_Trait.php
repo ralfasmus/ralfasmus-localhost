@@ -1,18 +1,12 @@
 <?php
 /**
- * Implementation von @see Properties_Interface
- *
- * trait PropertiesStatic_Trait
+ * trait PropertiesStatic_Trait Implementation der Funktionalitaet fuer eine Klasse, die statische Properties hat
+ * (und keine dynamischen oder ueber propertiesExtender definierten).
  */
 trait PropertiesStatic_Trait
 {
-    use Properties_Trait;
     /**
-     * @return array
-     * @see Properties_Interface::getProperties()
+     * Um das PropertiesStatic_Interface zu erfuellen, wird getProperties() veroeffentlicht.
      */
-    final public function getProperties(): array
-    {
-        return $this->properties;
-    }
+    use Properties_Trait { getProperties as public; }
 }

@@ -60,7 +60,7 @@ Trait Processor_Trait
      * @return $this
      */
     private function initializeProcessorTrait(PropertiesStatic_Interface $properties) : void {
-        $this->initializePropertiesTrait()->setProperties($properties->getProperties());
+        $this->initializeProperties($properties->getProperties());
     }
 
     /**

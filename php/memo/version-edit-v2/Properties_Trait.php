@@ -1,6 +1,6 @@
 <?php
 /**
- * Implementation von @see Properties_Interface
+ * Implementation der Basis-Funktionalitaet des @see Properties_Interface.
  *
  * trait Properties_Trait
  */
@@ -10,15 +10,27 @@ trait Properties_Trait
      * Meine Properties in der Form name => wert.
      * @var type array
      */
-    private $properties = array();
+    private $properties = null;
 
-    private $propertiesInitialized = false;
-
-    private function initializePropertiesTrait() : self {
-        assert(!$this->propertiesInitialized, __CLASS__ . '->propertiesInitialized ist schon TRUE. Nochmal initialisieren nicht erlaubt.');
-        $this->propertiesInitialized = true;
+    final private function initializeProperties(array $properties = array()) : self {
+        assert(is_null($this->properties), __CLASS__ . '->properties koennen nicht zweimal initialisiert werden!');
+        assert(is_array($properties), 'Parameter $properties ist kein Array!');
+        $this->setProperties($properties);
         return $this;
     }
+
+
+    /**
+     * The Properties container itself can access its non-dynamic, non-extended set of properties via this private
+     * method.
+     *
+     * @return array set of my static (non-dynamic, non-extended) properties.
+     */
+    final private function getProperties() : array {
+        assert(!is_null($this->properties), __CLASS__ . '->properties wurden noch nicht initialisiert!');
+        return $this->properties;
+    }
+
     /**
      * @param string $key
      * @param string $default
@@ -30,8 +42,7 @@ trait Properties_Trait
      */
     final public function getPropertyDefault(string $key, $default = '', bool $defaultOnEmpty = false)
     {
-        assert($this->propertiesInitialized, __CLASS__ . '->propertiesInitialized ist FALSE.');
-        $result = isset($this->properties[$key]) ? $this->properties[$key] : $default;
+        $result = isset($this->getProperties()[$key]) ? $this->getProperties()[$key] : $default;
         return $defaultOnEmpty ? $this->defaultOnEmpty($result, $default) : $result;
     }
 

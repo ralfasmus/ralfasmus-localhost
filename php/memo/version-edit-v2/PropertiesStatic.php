@@ -1,7 +1,6 @@
 <?php
 /**
- * Implementation von @see Properties_Interface
- * Class PropertiesStatic
+ * class PropertiesStatic Instanzen dieser Klasse dienen ausschliesslich zum Ablegen und Auslesen von Properties.
  */
 class PropertiesStatic implements PropertiesStatic_Interface
 {
@@ -12,7 +11,6 @@ class PropertiesStatic implements PropertiesStatic_Interface
      */
     public function __construct(array $properties = array())
     {
-        assert(is_array($properties));
-        $this->initializePropertiesTrait()->setProperties($properties);
+        $this->initializeProperties($properties);
     }
 }

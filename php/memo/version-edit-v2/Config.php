@@ -37,9 +37,8 @@ final class Config implements Properties_Interface
      */
     private function initialize() : self
     {
-        $this->initializePropertiesTrait();
         $configId = Request::getSingleInstance()->getPropertyDefault(static::REQUEST_PROPERTY_CONFIG_ID, static::REQUEST_PROPERTY_CONFIG_ID_DEFAULT, true);
-        $this->setProperties(array('config-id' => $configId));
+        $this->initializeProperties(array('config-id' => $configId));
         $persistenceForConfigs = PersistenceActive::getSingleInstance();
         $configNote = $persistenceForConfigs->loadNoteById($configId);
         if(is_null($configNote)) {

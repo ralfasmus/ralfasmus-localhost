@@ -11,8 +11,8 @@ final class Request implements Properties_Interface, Request_Interface
      * $propertiesNoteBerechnet noch in $propertiesNotePersistent enthalten sind. Das sind Parameter, die also nicht der
      * zu bearbeitenden Note zugeordnet sind, sondern dem Request.
      */
-    use PropertiesStatic_Trait,
-        SingleInstance_Trait {
+    use PropertiesStatic_Trait;
+    use SingleInstance_Trait {
             createSingleInstance as private trait_createSingleInstance;
             getSingleInstance as trait_getSingleInstance;
     }
@@ -80,7 +80,6 @@ final class Request implements Properties_Interface, Request_Interface
      */
     private function initialize(array $requestProperties) : Request_Interface
     {
-        $this->initializePropertiesTrait();
         $this->propertiesAll = new PropertiesStatic($requestProperties);
         $propertiesGet = $this->getPropertiesAll()->getPropertyDefault('get', array(), true);
         $propertiesPost = $this->getPropertiesAll()->getPropertyDefault('post', array(), true);
@@ -99,10 +98,12 @@ final class Request implements Properties_Interface, Request_Interface
                 static::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET));
 
         // Request Parameter extrahieren
-        $this->setProperties(array_filter($parameters, function($key) {
+        $properties = array_filter($parameters, function($key) {
             return stripos($key, static::REQUEST_PROPERTY_INDICATOR_NOTE_BERECHNET) === false
                     && stripos($key, static::REQUEST_PROPERTY_INDICATOR_NOTE_PERSISTENT) === false;
-        }, ARRAY_FILTER_USE_KEY ));
+        }, ARRAY_FILTER_USE_KEY );
+
+        $this->initializeProperties($properties);
 
         // Initialisierung der Persistence Schicht, bevor sie mittels ::getSingleInstance() genutzt werden kann
         NoteFactory::createSingleInstance();

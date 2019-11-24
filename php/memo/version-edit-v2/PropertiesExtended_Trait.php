@@ -1,24 +1,24 @@
 <?php
 /**
- * Implementation von @see PropertiesExtended_Interface
- *
- * trait PropertiesExtended_Trait
+ * trait PropertiesExtended_Trait Implementation der Funktionalitaet fuer eine Klasse, die statische Properties hat
+ * und ueber propertiesExtender weitere Properties liefern kann.
  */
 trait PropertiesExtended_Trait
 {
     use Properties_Trait {
-        initializePropertiesTrait as trait_initializePropertiesTrait;
+        initializeProperties as trait_initializeProperties;
         getPropertyDefault as trait_getPropertyDefault;
     }
 
     /**
-     * @var Properties_Interface|null Dynamische Properties werden ggf von einem Item (dem persistenten Note Item) geliefert.
+     * @var Properties_Interface|null Dynamische Properties werden ggf von diesem Object
+     * (z.B. dem persistenten Note Item) geliefert.
      */
     private $propertiesExtender = null;
 
-    final private function initializePropertiesTrait() : self {
+    final private function initializeProperties(array $properties = array()) : self {
         $this->propertiesExtender = $this;
-        return $this->trait_initializePropertiesTrait();
+        return $this->trait_initializeProperties($properties);
     }
     /**
      * @param string $key
@@ -37,30 +37,24 @@ trait PropertiesExtended_Trait
         return $defaultOnEmpty ? $this->defaultOnEmpty($result, $default) : $result;
     }
 
-    final private function getPropertyExtended(string $key, $default = '') {
+    /**
+     * Returns the Property $key of my propertiesExtender object.
+     *
+     * @param string $key
+     * @param string $default
+     * @return mixed|string
+     */
+    final private function getPropertyExtended(string $key, $default) {
         return (is_null($this->propertiesExtender) || $this === $this->propertiesExtender)
             ? $default
             : $this->propertiesExtender->getPropertyDefault($key, $default);
     }
 
     /**
-     * @param Properties_Interface|null $dynamicPropertyItem
-     *@see PropertiesExtendet_Interface::setPropertiesExtender().
+     * @param Properties_Interface|null $propertiesExtender
+     *@see PropertiesExtended_Interface::setPropertiesExtender().
      */
     final public function setPropertiesExtender(?Properties_Interface $propertiesExtender) : void {
         $this->propertiesExtender = $propertiesExtender;
     }
-
-    /**
-     * The Properties container itself can access its non-dynamic, non-extended set of properties. By doing so,
-     * one should carefully remember that there might be these other dynamic + extended properties which are not
-     * included in the result of this getPropertiesStatic() method.
-     *
-     * @return array set of the objects non-dynamic, non-extended properties.
-     */
-    final private function getPropertiesStatic(): array
-    {
-        return $this->properties;
-    }
-
 }

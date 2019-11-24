@@ -20,8 +20,7 @@ Trait Note_Trait
      * @return $this
      */
     private function initializeNoteTrait(PropertiesStatic_Interface $properties) : void {
-        $this->initializePropertiesTrait();
-        $this->setProperties($properties->getProperties());
+        $this->initializeProperties($properties->getProperties());
         $this->setProperty(static::class, 'view');
     }
 
@@ -100,7 +99,8 @@ Trait Note_Trait
             // zur Verwendung in einem Filter-Input Feld im Formular
             case "data-filter-any" :
                 $result = "";
-                foreach ($this->getPropertiesStatic() as $name => $value) {
+                // Att: getProperties() includes only the static properties.
+                foreach ($this->getProperties() as $name => $value) {
                     if(!is_array($value)) {
                         $result .= strtolower($this->getValueDoubleQuote2singleQuote($value, '')) . ' ';//htmlspecialchars("$value "));
                     }
@@ -134,6 +134,7 @@ Trait Note_Trait
     }
 
     final public function getPropertiesPersistent() : array {
-        return $this->getPropertiesStatic();
+        // Att: getProperties() includes only the static properties.
+        return $this->getProperties();
     }
 }
